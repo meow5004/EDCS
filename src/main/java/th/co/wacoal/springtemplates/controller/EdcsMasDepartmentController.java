@@ -69,7 +69,7 @@ public class EdcsMasDepartmentController {
         ModelAndView mv = new ModelAndView("master/departments/add");
         //list branch
         List<EdcsMasBranch> branchs = branchDAO.findByFlag(0);
-        branchs.add(0, new EdcsMasBranch());
+     
         mv.addObject("department", department);
         mv.addObject("branchs", branchs);
         return mv;
@@ -109,8 +109,8 @@ public class EdcsMasDepartmentController {
 
         //list branch
         List<EdcsMasBranch> branchs = branchDAO.findByFlag(0);
-        //add empty branch in case of deleted branch
-        branchs.add(0, new EdcsMasBranch());
+       // add empty branch in case of deleted branch
+       //branchs.add(0, new EdcsMasBranch()); (comment out because validation check before delete branch)
         mv.addObject("branchs", branchs);
         return mv;
     }
@@ -337,7 +337,7 @@ public class EdcsMasDepartmentController {
         String edit = messageSource.getMessage("branch.edit", null, thaiLocale);
         // Create JSON
         JSONObject json = new JSONObject();
-        json.put("total", departments.size());
+        
         List<Map> departmentMap = new ArrayList<Map>();
         for (EdcsMasDepartment row : departments) {
             Map p = new HashMap();
@@ -359,7 +359,7 @@ public class EdcsMasDepartmentController {
             departmentMap.add(p);
         }
         JSONArray jsonString = JSONArray.fromObject(departmentMap);
-        json.put("data", jsonString);
+        
         //Go to view
         out.print("{" + "\"size\":\"" + departments.size() + "\",\"data\":" + jsonString + "}");
     }
@@ -370,7 +370,7 @@ public class EdcsMasDepartmentController {
         List<EdcsMasDepartment> departments = departmentDAO.findByFlag(1);
         // Create JSON
         JSONObject json = new JSONObject();
-        json.put("total", departments.size());
+        
         List<Map> departmentMap = new ArrayList<Map>();
         for (EdcsMasDepartment row : departments) {
             Map p = new HashMap();
@@ -395,7 +395,7 @@ public class EdcsMasDepartmentController {
             departmentMap.add(p);
         }
         JSONArray jsonString = JSONArray.fromObject(departmentMap);
-        json.put("data", jsonString);
+        
         //Go to view
         out.print("{" + "\"size\":\"" + departments.size() + "\",\"data\":" + jsonString + "}");
     }

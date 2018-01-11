@@ -31,6 +31,10 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "EdcsMasMeasure.findAll", query = "SELECT e FROM EdcsMasMeasure e")})
 public class EdcsMasMeasure implements Serializable {
 
+    @Size(max = 50)
+    @Column(name = "DEP_ID")
+    private String depId;
+
     @Column(name = "MEASURE_GROUP_ID")
     private Integer measureGroupId;
 
@@ -306,6 +310,14 @@ public class EdcsMasMeasure implements Serializable {
 
     public void setMeasureGroupId(Integer measureGroupId) {
         this.measureGroupId = measureGroupId;
+    }
+
+    public String getDepId() {
+        return depId;
+    }
+
+    public void setDepId(String depId) {
+        this.depId = depId;
     }
 
 }

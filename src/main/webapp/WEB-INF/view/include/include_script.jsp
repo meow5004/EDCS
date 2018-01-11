@@ -58,7 +58,7 @@
                 return false;
             }
         });
-        
+
     });
     function getDate(element) {
         var date;
@@ -74,6 +74,15 @@
 </script>
 
 <style>
+    .warning{
+        background-color:#ffdb99!important;
+    }
+    .danger-alert{
+        background-color:red;
+    }
+    .alert{
+         background-color:#e4b9c0;
+    }
 
     /*add red color if link = #*/
     a[href="#"]{
@@ -97,15 +106,26 @@
         font-size: 20px;
         color:#0275d8;
     }
-    table[id^="unavailable"]>thead>tr> th{
+    table[id^="unavailable"] th{
         background-color: lightcoral;
     }
-    table[id^="available"]>thead>tr> th{
+    div[id^="unavailable"] th{
+        background-color: lightcoral;
+    }
+
+
+    table[id^="available"] th{
         background-color:#006600;
     }
-    input{
-        box-sizing:border-box;
-        width: 100%;
+    /*for scrollX enabled table*/
+    div[id^="unavailable"] th{
+        background-color: lightcoral;
+    }
+
+
+    div[class*="col"] > input{
+        box-sizing:border-box!important;
+        width: 100%!important;
     } 
 
 

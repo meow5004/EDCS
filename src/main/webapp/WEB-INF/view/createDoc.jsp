@@ -1,4 +1,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>   
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <jsp:include page="include/include_header.jsp" flush="true"></jsp:include>
 
     <div class="row">
@@ -11,6 +13,7 @@
                     <h3 class="box-title">รายงานผลการสอบเทียบ</h3>
                 </div><!-- /.box-header -->
                 <div class="box-body no-padding">
+                <form:form id="addForm"  class="form-inline" action="add.htm" method="post" modelAttribute="calibration" onsubmit="return false;">
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="pad">
@@ -52,15 +55,19 @@
                                     <div style="width:40%; float: left;">รายงานเลขที่</div>
                                     <div style="width:60%; float: left;"><input type="text" style="width:100%;"></div>
                                     <div style="width:40%; float: left;">แม่แบบ รหัส</div>
-                                    <div style="width:60%; float: left;"><input type="text" style="width:100%;" value="CRM 0207" disabled></div>
+                                    <div style="width:60%; float: left;"> 
+                                        <form:select path="modelId" class="form-control" required="required" >
+                                            <form:options items="${models}" itemLabel="modelCode" itemValue="modelId" />
+                                        </form:select>
+                                    </div>
                                     <div style="width:40%; float: left;">การสอบกลับ</div>
-                                    <div style="width:60%; float: left;"><input type="text" style="width:100%;" value="สมาคมส่งเสริมเทคโนโลยี (ไทย-ญี่ปุ่น)" disabled></div>
+                                    <div style="width:60%; float: left;"><input type="text" name="locationReturn" style="width:100%;" value="สมาคมส่งเสริมเทคโนโลยี (ไทย-ญี่ปุ่น)" disabled></div>
                                 </div>
                                 <div class="col-sm-6">
                                     <div style="width:40%; float: left;">โดย</div>
-                                    <div style="width:60%; float: left;"><input type="text" style="width:100%;" value="สมาคมส่งเสริมเทคโนโลยี (ไทย-ญี่ปุ่น)" disabled></div>
+                                    <div style="width:60%; float: left;"><input type="text" name="locationBy" style="width:100%;" value="สมาคมส่งเสริมเทคโนโลยี (ไทย-ญี่ปุ่น)" disabled></div>
                                     <div style="width:40%; float: left;">ชื่อ</div>
-                                    <div style="width:60%; float: left;"><input type="text" style="width:100%;" value="STEEL RULE 7" disabled></div>
+                                    <div style="width:60%; float: left;"><input type="text" name="measureName" style="width:100%;" value="STEEL RULE 7" disabled></div>
                                     <div style="width:40%; float: left;">CER.NO</div>
                                     <div style="width:60%; float: left;"><input type="text" style="width:100%;"></div>
                                 </div>
@@ -112,25 +119,51 @@
                             </div><!-- /.pad -->
                         </div>
                     </div><!-- /.row - inside box -->
-                </div><!-- /.box-body -->
-                <div class="box-footer">
-                    <div class="row">
-                        <div class="col-xs-4 text-center" style="border-right: 1px solid #f4f4f4">
-                            <div class="col-sm-6">
-                                <button class="btn btn-primary btn-lg" id="cancelSubmit">บันทึกรายการสอบเทียบ</button>
-                            </div>
+                </form:form>
+            </div><!-- /.box-body -->
+            <div class="box-footer">
+                <div class="row">
+                    <div class="col-xs-4 text-center" style="border-right: 1px solid #f4f4f4">
+                        <div class="col-sm-6">
+                            <button class="btn btn-primary btn-lg" id="cancelSubmit">บันทึกรายการสอบเทียบ</button>
                         </div>
-                    </div><!-- /.row -->
-                </div><!-- /.box-footer -->
-            </div><!-- /.box -->        
+                    </div>
+                </div><!-- /.row -->
+            </div><!-- /.box-footer -->
+        </div><!-- /.box -->        
 
-        </div>
     </div>
-    <script>
-        $(document).ready(function () {
-            $('.selectpicker').selectpicker();
-            $('.selectpicker').selectpicker('refresh');
+</div>
+<script>
+    $(document).ready(function () {
+        $('.selectpicker').selectpicker();
+        $('.selectpicker').selectpicker('refresh');
+
+        $("#modelId").on("change", function () {
+            var id = $(this).find('option:selected').val();
+            $.ajax({
+                url: "../ajaxHelper/findModel.htm",
+                data: {"modelId": id}, // serializes the form's elements.
+                success: function (result)
+                {
+                    var obj = JSON.parse(result);
+                    $("input[name='locationBy']").val(obj.locationBy);
+                    $("input[name='locationReturn']").val(obj.locationReturn);
+                    
+                    $.ajax({
+                        url: "../ajaxHelper/findMeasure.htm",
+                        data: {"measureId": obj.measureId}, // serializes the form's elements.
+                        success: function (result)
+                        {
+                            var obj = JSON.parse(result);
+                            $("input[name='measureName']").val(obj.fullName);
+
+                        }
+                    });
+                }
+            });
         });
-    </script>
+    });
+</script>
 <jsp:include page="include/include_footer.jsp" flush="true"></jsp:include>
 

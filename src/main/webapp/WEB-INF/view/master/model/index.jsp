@@ -28,10 +28,11 @@
                 <table id="availableModelTable" class="datatable hover cell-border">
                     <thead>
                         <tr>
-                            <th colspan="9" style="text-align: center"><spring:message code="model.table.avaliable" text="message not found"/></th>
+                            <th colspan="10" style="text-align: center"><spring:message code="model.table.avaliable" text="message not found"/></th>
                         </tr>
                         <tr class="alt" >
-                            <th><spring:message code="model.model" text="message not found"/></th>
+                            <th><spring:message code="model.modelId" text="message not found"/></th>
+                            <th><spring:message code="model.modelCode" text="message not found"/></th>
                             <th><spring:message code="model.measureId" text="message not found"/></th>
                             <th><spring:message code="model.measureCode" text="message not found"/></th>
                             <th><spring:message code="model.measureName" text="message not found"/></th>
@@ -49,10 +50,11 @@
                 <table id="unavailableModelGroup" class="datatable hover cell-border ">
                     <thead>
                         <tr>
-                            <th colspan="9" style="text-align: center"><spring:message code="model.table.unavaliable" text="message not found"/></th>
+                            <th colspan="10" style="text-align: center"><spring:message code="model.table.unavaliable" text="message not found"/></th>
                         </tr>
                         <tr class="alt" >
-                            <th><spring:message code="model.model" text="message not found"/></th>
+                            <th><spring:message code="model.modelId" text="message not found"/></th>
+                            <th><spring:message code="model.modelCode" text="message not found"/></th>
                             <th><spring:message code="model.measureId" text="message not found"/></th>
                             <th><spring:message code="model.measureCode" text="message not found"/></th>
                             <th><spring:message code="model.measureName" text="message not found"/></th>
@@ -84,14 +86,15 @@
         availableTable = $('#availableModelTable').DataTable({
             "columns": [
                 {"data": "model", "target": 0},
-                     {"data": "measureId", "target": 1},
-                {"data": "measureCode", "target": 2},
-                {"data": "measureName", "target": 3},
-                {"data": "cerOn", "target": 4},
-                {"data": "locationBy", "target": 5},
-                {"data": "locationReturn", "target": 6},
-                {"data": "actionLink", "target": 7, "searchable": false, "orderable": false},
-                {"data": "deleteCheck", "target": 8, "className": "dt-center", "searchable": false, "orderable": false}
+                {"data": "modelCode", "target": 1},
+                {"data": "measureId", "target": 2},
+                {"data": "measureCode", "target": 3},
+                {"data": "measureName", "target": 4},
+                {"data": "cerOn", "target": 5},
+                {"data": "locationBy", "target": 6},
+                {"data": "locationReturn", "target": 7},
+                {"data": "actionLink", "target": 8, "searchable": false, "orderable": false},
+                {"data": "deleteCheck", "target": 9, "className": "dt-center", "searchable": false, "orderable": false}
             ],
             "ajax": "./getAvailableModel.htm",
             "dom": '<lf<t>ip>',
@@ -100,14 +103,15 @@
         unAvailableTable = $('#unavailableModelGroup').DataTable({
             "columns": [
                 {"data": "model", "target": 0},
-                  {"data": "measureId", "target": 1},
-                {"data": "measureCode", "target": 2},
-                {"data": "measureName", "target": 3},
-                {"data": "cerOn", "target": 4},
-                {"data": "locationBy", "target": 5},
-                {"data": "locationReturn", "target": 6},
-                {"data": "reuseCheck", "target": 7, "className": "dt-center", "searchable": false, "orderable": false},
-                {"data": "realDeleteCheck", "target":8, "className": "dt-center", "searchable": false, "orderable": false}
+                {"data": "modelCode", "target": 1},
+                {"data": "measureId", "target": 2},
+                {"data": "measureCode", "target": 3},
+                {"data": "measureName", "target": 4},
+                {"data": "cerOn", "target": 5},
+                {"data": "locationBy", "target": 6},
+                {"data": "locationReturn", "target": 7},
+                {"data": "reuseCheck", "target": 8, "className": "dt-center", "searchable": false, "orderable": false},
+                {"data": "realDeleteCheck", "target": 9, "className": "dt-center", "searchable": false, "orderable": false}
             ],
             "ajax": "./getUnavailableModel.htm",
             "dom": '<lf<t>ip>',
@@ -294,56 +298,7 @@
         return 1;
     }
 
-    function refreshDataAndJumpTo(jumpTo, searchColumn) {
-        availableTable.ajax.reload(function () {
-            //relaod before jump
-            if (jumpTo !== null) {
-                if (jumpTo === "lastest") {
-                    var maxId = availableTable
-                            .column(searchColumn)
-                            .data()
-                            .sort(function (a, b) {
-                                return a - b;
-                            }).reverse()[0];
-                    availableTable.page.jumpToData(maxId, searchColumn);
-                } else {
-                    var toInt = parseInt(jumpTo);
-                    availableTable.page.jumpToData(toInt, searchColumn);
-                }
-            }
-        }, false);
-        unAvailableTable.ajax.reload(function () {
-            //relaod before jump
-            if (jumpTo !== null) {
-                if (jumpTo === "lastest") {
-                    var maxId = unAvailableTable
-                            .column(searchColumn)
-                            .data()
-                            .sort(function (a, b) {
-                                return a - b;
-                            }).reverse()[0];
-                    unAvailableTable.page.jumpToData(maxId, searchColumn);
-                } else {
-                    var toInt = parseInt(jumpTo);
-                    unAvailableTable.page.jumpToData(toInt, searchColumn);
-                }
-            }
-        }, false);
-        //start by show add form
-        showFrom("add.htm");
-    }
 
-    function highlightData(/*array of object*/ ids, columnToSearch, table) {
-        table.ajax.reload(function () {
-            for (var i = 0; i < ids.length; i++) {
-                var pos = table.column(columnToSearch, {order: 'index'}).data().indexOf(ids[i]);
-                if (pos >= 0) {
-                    $(table.row(pos).nodes()).addClass("lastModifiedRow");
-                }
-            }
-        }, false);
-        return this;
-    }
 
 </script>
 

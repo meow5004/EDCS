@@ -9,7 +9,7 @@
                     <!-- tools box -->
                     <i class="fa fa-cloud"></i>
 
-                    <h3 class="box-title">รับอุปกรณ์สอบเทียบ</h3>
+                    <h3 class="box-title">อนุมัติส่งอุปกรณ์สอบเทียบ</h3>
                     <div style="float: right;"><div style="float: left; margin-top: 10px; margin-right: 5px;"><b>เลือกทั้งหมด</b></div><input type="checkbox" name="selectAllCalId" style="width: 35px; height: 35px;"></div>
                 </div><!-- /.box-header -->
                 <div class="box-body no-padding">
@@ -70,7 +70,7 @@
                     <div class="row">
                         <div class="col-xs-12 text-center" style="border-right: 1px solid #f4f4f4">
                             <div class="col-sm-12">
-                                <button class="btn btn-primary btn-lg" id="receivceDevice" style="width: 100%;">รับอุปกรณ์</button>
+                                <button class="btn btn-primary btn-lg" id="sendRequestedCalibToApprove" style="width: 100%;">ส่งอุปกรณ์</button>
                             </div>
                         </div>
                     </div><!-- /.row -->
@@ -103,13 +103,13 @@
                 }
             },
             "ajax": {
-                "url": "../ajaxHelper/getApprovedDevice.htm"
+                "url": "../ajaxHelper/getRequestedCalibration.htm"
             },
             "dom": '<lf<t>ip>',
             "order": [[0, 'asc']],
             "displayLength": 10});
 
-        $("#receivceDevice").on("click", function () {
+        $("#sendRequestedCalibToApprove").on("click", function () {
             var checkedValues = [];
             $("input[type='checkbox'][name='calId[]']:checked").each(function (i) {
                 checkedValues[i] = $(this).val();
@@ -118,7 +118,7 @@
             $.ajax({
                 type: "POST",
                 async: false,
-                url: "../calibration/receivedDevice.htm",
+                url: "../calibration/approveRequestedApprover.htm",
                 data: {"checkedValues": checkedValues.toString()},
                 success: function (result)
                 {

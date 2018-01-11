@@ -52,7 +52,7 @@
                 </thead>
             </table>
             <br/>
-            <table id="unavailableMeasure" class="datatable hover cell-border ">
+            <table id="unavailableMeasureTable" class="datatable hover cell-border ">
                 <thead>
                     <tr>
                         <th colspan="12" style="text-align: center"><spring:message code="measure.table.unavaliable" text="message not found"/></th>
@@ -99,16 +99,24 @@
                 {"data": "useRange", "target": 6},
                 {"data": "description", "target": 7},
                 {"data": "measureTime", "target": 8},
-                {"data": "abtype", "target": 9},
+                {"data": "abtype", "target": 9, "render": function (data, type, row, meta) {
+                        if (data === "A") {
+                            return "วัดหน้าเดียว";
+                        } else if (data === "AB") {
+                            return "วัดสองหน้า";
+                        } else {
+                            return 'ไม่ได้ระบุ';
+                        }
+                    }},
                 {"data": "actionLink", "target": 10, "searchable": false, "orderable": false},
                 {"data": "deleteCheck", "target": 11, "className": "dt-center", "searchable": false, "orderable": false}
             ],
+            scrollX: true,
             "ajax": "./getAvailableMeasure.htm",
             "dom": '<lf<t>ip>',
             "order": [[0, 'asc']],
-            "scrollX": true,
             "displayLength": 10});
-        unAvailableTable = $('#unavailableMeasure').DataTable({
+        unAvailableTable = $('#unavailableMeasureTable').DataTable({
             "columns": [
                 {"data": "measure", "target": 0},
                 {"data": "measureCode", "target": 1},
@@ -119,14 +127,23 @@
                 {"data": "useRange", "target": 6},
                 {"data": "description", "target": 7},
                 {"data": "measureTime", "target": 8},
-                {"data": "abtype", "target": 9},
+                {"data": "abtype", "target": 9, render: function (data, type, row, meta) {
+                        if (data === "A") {
+                            return "วัดหน้าเดียว";
+                        } else if (data === "AB") {
+                            return "วัดสองหน้า";
+                        } else {
+                            return 'ไม่ได้ระบุ';
+                        }
+                    }
+                },
                 {"data": "reuseCheck", "target": 10, "className": "dt-center", "searchable": false, "orderable": false},
                 {"data": "realDeleteCheck", "target": 11, "className": "dt-center", "searchable": false, "orderable": false}
             ],
             "ajax": "./getUnavailableMeasure.htm",
             "dom": '<lf<t>ip>',
             "order": [[0, 'asc']],
-            "scrollX": true,
+            scrollX: true,
             "displayLength": 10});
         $(document).on("click", ".addData,.editData", showFormByClick);
         $(document).on("submit", "#addForm,#editForm", sendDataPOSTByAction);
@@ -138,20 +155,18 @@
         // rangeMin rangeMax   useRangeMin useRangeMax
         //
         $(document).on("change", "#calpointId", function () {
-            console.log($(this).val());
             var point = $(this).find("option:selected").text();
-            console.log(point);
             var min = point.split("-")[0].trim();
             var max = point.split("-")[1].trim();
             $("#rangeMin,#useRangeMin").filter(function () {
-                var val = parseInt($(this).val());
-                var pass = (val <= 0 || isNaN(val));
+                var defaultVal = parseInt($(this).prop("defaultValue"));
+                var pass = defaultVal <= 0 || isNaN(defaultVal);
                 return pass;
             }).val(min);
 
             $("#useRangeMax,#rangeMax").filter(function () {
-                var val = parseInt($(this).val());
-                var pass = (val <= 0 || isNaN(val));
+                var defaultVal = parseInt($(this).prop("defaultValue"));
+                var pass = defaultVal <= 0 || isNaN(defaultVal);
                 return pass;
             }).val(max);
 
@@ -360,7 +375,6 @@
             }
         }
         if (valid === 1) {
-            console.log(valid);
             var form = $(this); //wrap this in jQuery
             var url = form.prop('action'); // the script where you handle the form input.
             $.ajax({
@@ -420,56 +434,7 @@
         return valid;
     }
 
-    function refreshDataAndJumpTo(jumpTo, searchColumn) {
-        availableTable.ajax.reload(function () {
-            //relaod before jump
-            if (jumpTo !== null) {
-                if (jumpTo === "lastest") {
-                    var maxId = availableTable
-                            .column(searchColumn)
-                            .data()
-                            .sort(function (a, b) {
-                                return a - b;
-                            }).reverse()[0];
-                    availableTable.page.jumpToData(maxId, searchColumn);
-                } else {
-                    var toInt = parseInt(jumpTo);
-                    availableTable.page.jumpToData(toInt, searchColumn);
-                }
-            }
-        }, false);
-        unAvailableTable.ajax.reload(function () {
-            //relaod before jump
-            if (jumpTo !== null) {
-                if (jumpTo === "lastest") {
-                    var maxId = unAvailableTable
-                            .column(searchColumn)
-                            .data()
-                            .sort(function (a, b) {
-                                return a - b;
-                            }).reverse()[0];
-                    unAvailableTable.page.jumpToData(maxId, searchColumn);
-                } else {
-                    var toInt = parseInt(jumpTo);
-                    unAvailableTable.page.jumpToData(toInt, searchColumn);
-                }
-            }
-        }, false);
-        //start by show add form
-        showFrom("add.htm");
-    }
 
-    function highlightData(/*array of object*/ ids, columnToSearch, table) {
-        table.ajax.reload(function () {
-            for (var i = 0; i < ids.length; i++) {
-                var pos = table.column(columnToSearch, {order: 'index'}).data().indexOf(ids[i]);
-                if (pos >= 0) {
-                    $(table.row(pos).nodes()).addClass("lastModifiedRow");
-                }
-            }
-        }, false);
-        return this;
-    }
 
 </script>
 

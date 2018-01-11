@@ -19,23 +19,29 @@
                 <div class="col-md-8">
                     <div class="row">
                         <div class="col-md-6">
-                            <div class="form-group">
-                                <form:input path="calAgeId"   type = "hidden" class="form-control" required="required" />
+                            <div class="col-md-6">
                                 <spring:message code="calage.calage" text="message not found"/>:
+                            </div>
+                            <div class="col-md-6">
+                                <form:input path="calAgeId"   type = "hidden" class="form-control" required="required" />
                                 <form:input path="calAge"   type = "number" class="form-control" required="required" />
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6">
-                            <div class="form-group">
+                            <div class="col-md-6">
                                 <spring:message code="calage.startDate" text="message not found"/>:
+                            </div>
+                            <div class="col-md-6">
                                 <form:input path="startDate" class="form-control" required="required" />
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="form-group"> 
+                            <div class="col-md-6">
                                 <spring:message code="calage.endDate" text="message not found"/>:
+                            </div>
+                            <div class="col-md-6">
                                 <form:input path="endDate" class="form-control" required="required" />
                             </div>
                         </div>

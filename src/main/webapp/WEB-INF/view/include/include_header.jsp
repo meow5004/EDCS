@@ -38,10 +38,84 @@
                     if (pos >= 0) {
                         var page = Math.floor(pos / this.page.info().length);
                         this.page(page).draw(false);
-                        $(this.row(pos).nodes()).addClass("lastModifiedRow");
+                        //$(this.row(pos).nodes()).addClass("lastModifiedRow");
                     }
                     return this;
                 });
+
+                function refreshDataAndJumpTo(jumpTo, searchColumn) {
+                    availableTable.ajax.reload(function () {
+                        //relaod before jump
+                        if (jumpTo !== null) {
+                            if (jumpTo === "lastest") {
+                                var maxId = availableTable
+                                        .column(searchColumn)
+                                        .data()
+                                        .sort(function (a, b) {
+                                            return a - b;
+                                        }).reverse()[0];
+                                availableTable.page.jumpToData(maxId, searchColumn);
+                            } else {
+                                var toInt = parseInt(jumpTo);
+                                availableTable.page.jumpToData(toInt, searchColumn);
+                            }
+                        }
+                    }, false);
+
+                    unAvailableTable.ajax.reload(function () {
+                        //relaod before jump
+                        if (jumpTo !== null) {
+                            if (jumpTo === "lastest") {
+                                var maxId = unAvailableTable
+                                        .column(searchColumn)
+                                        .data()
+                                        .sort(function (a, b) {
+                                            return a - b;
+                                        }).reverse()[0];
+                                unAvailableTable.page.jumpToData(maxId, searchColumn);
+                            } else {
+                                var toInt = parseInt(jumpTo);
+                                unAvailableTable.page.jumpToData(toInt, searchColumn);
+                            }
+                        }
+                    }, false);
+                    //start by show add form
+                    showFrom("add.htm");
+                }
+
+                function highlightData(/*array of object*/ ids, columnToSearch, table) {
+                    table.ajax.reload(function () {
+                        console.log("length=" + ids.length);
+                        for (var i = 0; i < ids.length; i++) {
+                            var pos = table.column(columnToSearch, {order: 'index'}).data().indexOf(ids[0]);
+                            if (pos >= 0) {
+                                $(table.row(pos).nodes()).addClass("lastModifiedRow");
+                            } else {
+                                var posInt = table.column(columnToSearch, {order: 'index'}).data().indexOf(parseInt(ids[0]));
+                                if (posInt >= 0) {
+                                    $(table.row(posInt).nodes()).addClass("lastModifiedRow");
+                                }
+                            }
+                        }
+                    }, false);
+                    return this;
+                }
+
+                function highlightDatum(id, columnToSearch, table) {
+                    table.ajax.reload(function () {
+                        var pos = table.column(columnToSearch, {order: 'index'}).data().indexOf(id);
+                        if (pos >= 0) {
+                            $(table.row(pos).nodes()).addClass("lastModifiedRow");
+                        } else {
+                            var posInt = table.column(columnToSearch, {order: 'index'}).data().indexOf(parseInt(id));
+                            if (posInt >= 0) {
+                                $(table.row(posInt).nodes()).addClass("lastModifiedRow");
+                            }
+                        }
+
+                    }, false);
+                    return this;
+                }
             </script>
         </head>
         <body class="skin-blue fixed sidebar-collapse"> 

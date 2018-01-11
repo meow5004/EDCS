@@ -266,7 +266,7 @@ public class EdcsMasCalageController {
 
         // Create JSON
         JSONObject json = new JSONObject();
-        json.put("total", calage.size());
+        
         List<Map> calageMap = new ArrayList<Map>();
         String edit = messageSource.getMessage("calage.edit", null, thaiLocale);
         String delete = messageSource.getMessage("calage.delete", null, thaiLocale);
@@ -291,7 +291,7 @@ public class EdcsMasCalageController {
             calageMap.add(p);
         }
         JSONArray jsonString = JSONArray.fromObject(calageMap);
-        json.put("data", jsonString);
+        
         //Go to view
         out.print("{" + "\"size\":\"" + calage.size() + "\",\"data\":" + jsonString + "}");
     }
@@ -304,7 +304,7 @@ public class EdcsMasCalageController {
         String reuse = messageSource.getMessage("calage.reuse", null, thaiLocale);
         // Create JSON
         JSONObject json = new JSONObject();
-        json.put("total", calage.size());
+        
         List<Map> calageMap = new ArrayList<Map>();
         for (EdcsMasCalage row : calage) {
             Map p = new HashMap();
@@ -328,7 +328,7 @@ public class EdcsMasCalageController {
             calageMap.add(p);
         }
         JSONArray jsonString = JSONArray.fromObject(calageMap);
-        json.put("data", jsonString);
+        
         //Go to view
         out.print("{" + "\"size\":\"" + calage.size() + "\",\"data\":" + jsonString + "}");
     }

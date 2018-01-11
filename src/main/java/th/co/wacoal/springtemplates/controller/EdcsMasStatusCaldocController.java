@@ -264,7 +264,7 @@ public class EdcsMasStatusCaldocController {
 
         // Create JSON
         JSONObject json = new JSONObject();
-        json.put("total", statusCaldocs.size());
+        
         List<Map> statusCaldocMap = new ArrayList<Map>();
         String edit = messageSource.getMessage("statusCaldoc.edit", null, thaiLocale);
         String delete = messageSource.getMessage("statusCaldoc.delete", null, thaiLocale);
@@ -287,7 +287,7 @@ public class EdcsMasStatusCaldocController {
             statusCaldocMap.add(p);
         }
         JSONArray jsonString = JSONArray.fromObject(statusCaldocMap);
-        json.put("data", jsonString);
+        
         //Go to view
         out.print("{" + "\"size\":\"" + statusCaldocs.size() + "\",\"data\":" + jsonString + "}");
     }
@@ -299,7 +299,7 @@ public class EdcsMasStatusCaldocController {
         String reuse = messageSource.getMessage("statusCaldoc.reuse", null, thaiLocale);
         // Create JSON
         JSONObject json = new JSONObject();
-        json.put("total", statusCaldocs.size());
+        
         List<Map> statusCaldocMap = new ArrayList<Map>();
         for (EdcsMasStatusCaldoc row : statusCaldocs) {
             Map p = new HashMap();
@@ -321,7 +321,7 @@ public class EdcsMasStatusCaldocController {
             statusCaldocMap.add(p);
         }
         JSONArray jsonString = JSONArray.fromObject(statusCaldocMap);
-        json.put("data", jsonString);
+        
         //Go to view
         out.print("{" + "\"size\":\"" + statusCaldocs.size() + "\",\"data\":" + jsonString + "}");
     }

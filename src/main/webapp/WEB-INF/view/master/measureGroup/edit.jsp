@@ -15,11 +15,11 @@
     <body>
         <div align="center container">
             <form:form id="editForm"  class="form-inline" action="edit.htm" method="post" modelAttribute="measureGroup">
-                <form:hidden path="measureGroup"></form:hidden>
+                <form:hidden path="measureGroupId"></form:hidden>
                     <div class="col-md-2">
                         <div class="form-group">
                         <spring:message code="measureGroup.measureGroup" text="message not found"/>:
-                        ${measureGroup.measureGroup}
+                        ${measureGroup.measureGroupId}
                     </div>
                 </div>
                 <div class="col-md-8">

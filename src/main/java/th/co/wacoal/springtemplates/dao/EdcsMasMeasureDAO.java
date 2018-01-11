@@ -6,6 +6,7 @@
 package th.co.wacoal.springtemplates.dao;
 
 import java.util.List;
+import java.util.Map;
 import th.co.wacoal.springtemplates.domain.EdcsMasMeasure;
 
 /**
@@ -36,9 +37,9 @@ public interface EdcsMasMeasureDAO {
 
     public int isExistCount(String nameTh, String nameEn, String id);
 
-    public List<EdcsMasMeasure> findByEquipconIdByFlag(int id, String flag);
-
     public List<EdcsMasMeasure> findByCalpointIdByFlag(int id, String flag);
-    
+
     public List<EdcsMasMeasure> findByGroupIdByFlag(int id, String flag);
+
+    public Map<Integer, EdcsMasMeasure> findByFlagListMappingById(int flag);
 }

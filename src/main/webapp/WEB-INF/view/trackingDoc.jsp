@@ -42,7 +42,7 @@
                     <div class="row">
                         <div class="col-sm-12">
 
-                            <table style="width: 90%;">
+                            <table style="width: 90%;" id="trackingTable">
                                 <thead>
                                     <tr>
                                         <th style="text-align: center;">เลขที่</th>
@@ -59,7 +59,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
+<!--                                    <tr>
                                         <th>7200007</th>
                                         <td>ชิ้นส่วน</td>
                                         <td>RI0001</td>
@@ -97,7 +97,7 @@
                                         <td style="text-align: center;"><img src="../images/icons/BallIconCheck.png" alt="" style="width: 40px; height: 40px;"/></td>
                                         <td style="text-align: center;"><img src="../images/icons/BallIconCheck.png" alt="" style="width: 40px; height: 40px;"/></td>
                                         <td style="text-align: center;"><img src="../images/icons/BallIconCheck.png" alt="" style="width: 40px; height: 40px;"/></td>
-                                    </tr>  
+                                    </tr>  -->
                                 </tbody>
                             </table>
 
@@ -110,4 +110,98 @@
 
     </div>
 <jsp:include page="include/include_footer.jsp" flush="true"></jsp:include>
+<script>
+    $(document).ready(function () {
+        availableTable = $('#trackingTable').DataTable({
+            "columns": [
+                {"data": "calCode", "target": 0},
+                {"data": "requestCommnet", "target": 1},
+                {"data": "measureId", "target": 2},
+                {"data": "associateMeasure.fullName", "target": 3},
+                {"data": "approveStatusOn", "target": 4},
+                {"data": "calAgeId", "target": 5},
+                {"data": "requestApproverStatus", "target": 6, render: function (data, type, row, meta) {
+                        if (data == 1) {
+                            return "<img src='../images/icons/BallIconCheck.png' alt='' style='width: 40px; height: 40px;'/>";
+                        } else {
+                            return "<img src='../images/icons/BallIconCancel.png' alt='' style='width: 40px; height: 40px;'/>";
+                        }
+                    }},
+                {"data": "receiveStatus", "target": 7, render: function (data, type, row, meta) {
+                        if (data == 1) {
+                            return "<img src='../images/icons/BallIconCheck.png' alt='' style='width: 40px; height: 40px;'/>";
+                        } else {
+                            return "<img src='../images/icons/BallIconCancel.png' alt='' style='width: 40px; height: 40px;'/>";
+                        }
+                    }},
+                {"data": "calibrationStatus", "target": 8, render: function (data, type, row, meta) {
+                        if (data == 1) {
+                            return "<img src='../images/icons/BallIconCheck.png' alt='' style='width: 40px; height: 40px;'/>";
+                        } else {
+                            return "<img src='../images/icons/BallIconCancel.png' alt='' style='width: 40px; height: 40px;'/>";
+                        }
+                    }},
+                {"data": "returnStatus", "target": 9, render: function (data, type, row, meta) {
+                        var choice = "<input type='checkbox' name='measureId[]' value='" + data + "'>";
+                        return choice
+                    }}, {"data": "ApproveStatus", "target": 9, render: function (data, type, row, meta) {
+                        if (data == 1) {
+                            return "<img src='../images/icons/BallIconCheck.png' alt='' style='width: 40px; height: 40px;'/>";
+                        } else {
+                            return "<img src='../images/icons/BallIconCancel.png' alt='' style='width: 40px; height: 40px;'/>";
+                        }
+                    }}
+            ],
+            "createdRow": function (row, data, index) {
+                if (data.calId < 1) {
+                    $(row).addClass('warning');
+                }
+            },
+            "ajax": {
+                "url": "../ajaxHelper/getApprovedAndReceiverdDevice.htm",
+            },
+            "dom": '<lf<t>ip>',
+            "order": [[0, 'asc']],
+            "displayLength": 10});
+
+        $("#sendMeasureToApprove").on("click", function () {
+            var checkedValues = [];
+            $("input[type='checkbox'][name='measureId[]']:checked").each(function (i) {
+                checkedValues[i] = $(this).val();
+            });
+            console.log(checkedValues);
+            $.ajax({
+                type: "POST",
+                async: false,
+                url: "../calibration/createCalibration.htm",
+                data: {"checkedValues": checkedValues.toString()},
+                success: function (result)
+                {
+                    bootbox.alert({
+                        backdrop: true,
+                        className: "dangerFont",
+                        message: result,
+                        callback: function () { /* your callback code */
+                        }
+                    });
+                    location.reload();
+                }
+            });
+        });
+
+    });
+
+    $("input[name='selectAllMeasureId'][type='checkbox']").on("click", function (event) {
+        if (this.checked) {
+            // Iterate each checkbox
+            $("input[type='checkbox'][name='measureId[]']").each(function () {
+                this.checked = true;
+            });
+        } else {
+            $("input[type='checkbox'][name='measureId[]']").each(function () {
+                this.checked = false;
+            });
+        }
+    });
+</script>
 

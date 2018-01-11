@@ -267,7 +267,7 @@ public class EdcsMasEquipconController {
 
         // Create JSON
         JSONObject json = new JSONObject();
-        json.put("total", equipcons.size());
+        
         List<Map> equipconMap = new ArrayList<Map>();
         // Do something
         for (EdcsMasEquipcon row : equipcons) {
@@ -295,16 +295,14 @@ public class EdcsMasEquipconController {
             //+ "<button class='deleteData' value='./delete.htm?id=" + row.getEquipConId() + "'>"+delete+"</button>";
             p.put("actionLink", actionLink);
 
-            String deleteCheckbox = "<font color='red'>มีเครื่องวัดใช้งานอยู่ <br/>ไม่สามารถลบได้</font>";
-            if (measureDAO.findByEquipconIdByFlag(row.getEquipConId(), "0").size() <= 0) {
-                deleteCheckbox = " <input type=\"checkbox\" name=\"deletedEquipcon\" value=\"" + row.getEquipConId() + "\">";
-            }
+            String   deleteCheckbox = " <input type=\"checkbox\" name=\"deletedEquipcon\" value=\"" + row.getEquipConId() + "\">";
+            
 
             p.put("deleteCheck", deleteCheckbox);
             equipconMap.add(p);
         }
         JSONArray jsonString = JSONArray.fromObject(equipconMap);
-        json.put("data", jsonString);
+        
         //Go to view
         out.print("{" + "\"size\":\"" + equipcons.size() + "\",\"data\":" + jsonString + "}");
     }
@@ -316,7 +314,7 @@ public class EdcsMasEquipconController {
         String reuse = messageSource.getMessage("equipcon.reuse", null, thaiLocale);
         // Create JSON
         JSONObject json = new JSONObject();
-        json.put("total", equipcons.size());
+        
         List<Map> equipconMap = new ArrayList<Map>();
         for (EdcsMasEquipcon row : equipcons) {
             Map p = new HashMap();
@@ -333,17 +331,15 @@ public class EdcsMasEquipconController {
             String reuseCheckbox = " <input type=\"checkbox\" name=\"reuseEquipcon\" value=\"" + row.getEquipConId() + "\">";
             p.put("reuseCheck", reuseCheckbox);
 
-            String realDeleteCheckbox = "<font color='red'>มีเครื่องวัดใช้ในระบบอยู่ <br/>ไม่สามารถลบได้</font>";
-            if (measureDAO.findByEquipconIdByFlag(row.getEquipConId(), "1").size() <= 0) {
-                realDeleteCheckbox = " <input type=\"checkbox\" name=\"realDeletedEquipcon\" value=\"" + row.getEquipConId() + "\">";
-            }
+            String   realDeleteCheckbox = " <input type=\"checkbox\" name=\"realDeletedEquipcon\" value=\"" + row.getEquipConId() + "\">";
+            
 
             p.put("realDeleteCheck", realDeleteCheckbox);
             equipconMap.add(p);
 
         }
         JSONArray jsonString = JSONArray.fromObject(equipconMap);
-        json.put("data", jsonString);
+        
         //Go to view
         out.print("{" + "\"size\":\"" + equipcons.size() + "\",\"data\":" + jsonString + "}");
     }

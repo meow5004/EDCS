@@ -6,6 +6,7 @@
 package th.co.wacoal.springtemplates.domain;
 
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,6 +14,8 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -28,139 +31,127 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "EdcsCalibration.findAll", query = "SELECT e FROM EdcsCalibration e")})
 public class EdcsCalibration implements Serializable {
 
+    @Size(max = 50)
+    @Column(name = "REQUEST_STATUS")
+    private String requestStatus;
+    @Size(max = 50)
+    @Column(name = "REQUEST_APPROVER_STATUS")
+    private String requestApproverStatus;
+
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
     @NotNull
     @Column(name = "CAL_ID")
     private Integer calId;
-    @Size(max = 10)
+    @Size(max = 20)
+    @Column(name = "CAL_CODE")
+    private String calCode;
     @Column(name = "CREATE_ON")
-    private String createOn;
-    @Size(max = 10)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createOn;
+    @Size(max = 50)
     @Column(name = "CREATE_BY")
     private String createBy;
-    @Size(max = 10)
     @Column(name = "DEP_ID")
-    private String depId;
-    @Size(max = 10)
-    @Column(name = "DEVICE_ID")
-    private String deviceId;
-    @Size(max = 10)
-    @Column(name = "ARCHETYPE_ID")
-    private String archetypeId;
-    @Size(max = 10)
+    private Integer depId;
+    @Column(name = "MEASURE_ID")
+    private Integer measureId;
+    @Column(name = "MODEL_ID")
+    private Integer modelId;
     @Column(name = "PROCESS_ID")
-    private String processId;
-    @Size(max = 10)
+    private Integer processId;
     @Column(name = "UNIT_ID")
-    private String unitId;
-    @Size(max = 10)
-    @Column(name = "CONDITION_ID")
-    private String conditionId;
-    @Size(max = 10)
+    private Integer unitId;
+    @Column(name = "EQUIP_CON_ID")
+    private Integer equipConId;
+    @Size(max = 200)
     @Column(name = "CONDITION_COMMENT")
     private String conditionComment;
-    @Size(max = 10)
-    @Column(name = "STATUS_ID")
-    private String statusId;
-    @Size(max = 10)
+    @Column(name = "STATUS_CALDOC_ID")
+    private Integer statusCaldocId;
     @Column(name = "DUE_DATE")
-    private String dueDate;
-    @Size(max = 10)
-    @Column(name = "TEMPERATURE")
-    private String temperature;
-    @Size(max = 10)
-    @Column(name = "HUMIDITY")
-    private String humidity;
-    @Size(max = 10)
-    @Column(name = "COORDINATE")
-    private String coordinate;
-    @Size(max = 10)
-    @Column(name = "RANGE")
-    private String range;
-    @Size(max = 10)
-    @Column(name = "CALIBRATOR_BY")
-    private String calibratorBy;
-    @Size(max = 10)
-    @Column(name = "CALIBRATOR_ON")
-    private String calibratorOn;
-    @Size(max = 10)
-    @Column(name = "APPROVER_BY")
-    private String approverBy;
-    @Size(max = 10)
-    @Column(name = "APPROVER_ON")
-    private String approverOn;
-    @Size(max = 10)
-    @Column(name = "RECEIVE_STATUS")
-    private String receiveStatus;
-    @Size(max = 10)
-    @Column(name = "RECEIVE_STATUS_ON")
-    private String receiveStatusOn;
-    @Size(max = 10)
-    @Column(name = "RECEIVE_STATUS_BY")
-    private String receiveStatusBy;
-    @Size(max = 10)
-    @Column(name = "CALIBRATION_STATUS")
-    private String calibrationStatus;
-    @Size(max = 10)
-    @Column(name = "CALIBRATION_STATUS_ON")
-    private String calibrationStatusOn;
-    @Size(max = 10)
-    @Column(name = "CALIBRATION_STATUS_BY")
-    private String calibrationStatusBy;
-    @Size(max = 10)
-    @Column(name = "APPROVE_STATUS")
-    private String approveStatus;
-    @Size(max = 10)
-    @Column(name = "APPROVE_STATUS_ON")
-    private String approveStatusOn;
-    @Size(max = 10)
-    @Column(name = "APPROVE_STATUS_BY")
-    private String approveStatusBy;
-    @Size(max = 10)
-    @Column(name = "STICKER_STATUS")
-    private String stickerStatus;
-    @Size(max = 10)
-    @Column(name = "STICKER_STATUS_ON")
-    private String stickerStatusOn;
-    @Size(max = 10)
-    @Column(name = "STICKER_STATUS_BY")
-    private String stickerStatusBy;
-    @Size(max = 10)
-    @Column(name = "STICKER_PRINT")
-    private String stickerPrint;
-    @Size(max = 10)
-    @Column(name = "RETURN_STATUS")
-    private String returnStatus;
-    @Size(max = 10)
-    @Column(name = "RETURN_STATUS_ON")
-    private String returnStatusOn;
-    @Size(max = 10)
-    @Column(name = "RETURN_STATUS_BY")
-    private String returnStatusBy;
-    @Size(max = 10)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dueDate;
+    @Size(max = 50)
     @Column(name = "REQUEST_BY")
     private String requestBy;
-    @Size(max = 10)
+    @Size(max = 200)
     @Column(name = "REQUEST_COMMNET")
     private String requestCommnet;
-    @Size(max = 10)
     @Column(name = "REQUEST_ON")
-    private String requestOn;
-    @Size(max = 10)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date requestOn;
+    @Size(max = 50)
     @Column(name = "REQUEST_APPROVER_BY")
     private String requestApproverBy;
-    @Size(max = 10)
     @Column(name = "REQUEST_APPROVER_ON")
-    private String requestApproverOn;
-    @Size(max = 10)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date requestApproverOn;
+    @Size(max = 50)
+    @Column(name = "CALIBRATOR_BY")
+    private String calibratorBy;
+    @Column(name = "CALIBRATOR_ON")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date calibratorOn;
+    @Size(max = 50)
+    @Column(name = "RECEIVE_STATUS")
+    private String receiveStatus;
+    @Column(name = "RECEIVE_STATUS_ON")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date receiveStatusOn;
+    @Size(max = 50)
+    @Column(name = "RECEIVE_STATUS_BY")
+    private String receiveStatusBy;
+    @Size(max = 50)
+    @Column(name = "CALIBRATION_STATUS")
+    private String calibrationStatus;
+    @Column(name = "CALIBRATION_STATUS_ON")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date calibrationStatusOn;
+    @Size(max = 50)
+    @Column(name = "CALIBRATION_STATUS_BY")
+    private String calibrationStatusBy;
+    @Size(max = 50)
+    @Column(name = "APPROVE_STATUS")
+    private String approveStatus;
+    @Column(name = "APPROVE_STATUS_ON")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date approveStatusOn;
+    @Size(max = 50)
+    @Column(name = "APPROVE_STATUS_BY")
+    private String approveStatusBy;
+    @Size(max = 50)
+    @Column(name = "STICKER_STATUS")
+    private String stickerStatus;
+    @Column(name = "STICKER_STATUS_ON")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date stickerStatusOn;
+    @Size(max = 50)
+    @Column(name = "STICKER_STATUS_BY")
+    private String stickerStatusBy;
+    @Column(name = "STICKER_PRINT")
+    private Integer stickerPrint;
+    @Size(max = 50)
+    @Column(name = "RETURN_STATUS")
+    private String returnStatus;
+    @Column(name = "RETURN_STATUS_ON")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date returnStatusOn;
+    @Size(max = 50)
+    @Column(name = "RETURN_STATUS_BY")
+    private String returnStatusBy;
+    @Size(max = 200)
     @Column(name = "COMMENT")
     private String comment;
-    @Size(max = 10)
     @Column(name = "CAL_AGE_ID")
-    private String calAgeId;
+    private Integer calAgeId;
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Column(name = "CAL_ERROR")
+    private Double calError;
 
+    //extended propeties
+    private EdcsMasMeasure associateMeasure;
     public EdcsCalibration() {
     }
 
@@ -176,11 +167,19 @@ public class EdcsCalibration implements Serializable {
         this.calId = calId;
     }
 
-    public String getCreateOn() {
+    public String getCalCode() {
+        return calCode;
+    }
+
+    public void setCalCode(String calCode) {
+        this.calCode = calCode;
+    }
+
+    public Date getCreateOn() {
         return createOn;
     }
 
-    public void setCreateOn(String createOn) {
+    public void setCreateOn(Date createOn) {
         this.createOn = createOn;
     }
 
@@ -192,52 +191,52 @@ public class EdcsCalibration implements Serializable {
         this.createBy = createBy;
     }
 
-    public String getDepId() {
+    public Integer getDepId() {
         return depId;
     }
 
-    public void setDepId(String depId) {
+    public void setDepId(Integer depId) {
         this.depId = depId;
     }
 
-    public String getDeviceId() {
-        return deviceId;
+    public Integer getMeasureId() {
+        return measureId;
     }
 
-    public void setDeviceId(String deviceId) {
-        this.deviceId = deviceId;
+    public void setMeasureId(Integer measureId) {
+        this.measureId = measureId;
     }
 
-    public String getArchetypeId() {
-        return archetypeId;
+    public Integer getModelId() {
+        return modelId;
     }
 
-    public void setArchetypeId(String archetypeId) {
-        this.archetypeId = archetypeId;
+    public void setModelId(Integer modelId) {
+        this.modelId = modelId;
     }
 
-    public String getProcessId() {
+    public Integer getProcessId() {
         return processId;
     }
 
-    public void setProcessId(String processId) {
+    public void setProcessId(Integer processId) {
         this.processId = processId;
     }
 
-    public String getUnitId() {
+    public Integer getUnitId() {
         return unitId;
     }
 
-    public void setUnitId(String unitId) {
+    public void setUnitId(Integer unitId) {
         this.unitId = unitId;
     }
 
-    public String getConditionId() {
-        return conditionId;
+    public Integer getEquipConId() {
+        return equipConId;
     }
 
-    public void setConditionId(String conditionId) {
-        this.conditionId = conditionId;
+    public void setEquipConId(Integer equipConId) {
+        this.equipConId = equipConId;
     }
 
     public String getConditionComment() {
@@ -248,52 +247,60 @@ public class EdcsCalibration implements Serializable {
         this.conditionComment = conditionComment;
     }
 
-    public String getStatusId() {
-        return statusId;
+    public Integer getStatusCaldocId() {
+        return statusCaldocId;
     }
 
-    public void setStatusId(String statusId) {
-        this.statusId = statusId;
+    public void setStatusCaldocId(Integer statusCaldocId) {
+        this.statusCaldocId = statusCaldocId;
     }
 
-    public String getDueDate() {
+    public Date getDueDate() {
         return dueDate;
     }
 
-    public void setDueDate(String dueDate) {
+    public void setDueDate(Date dueDate) {
         this.dueDate = dueDate;
     }
 
-    public String getTemperature() {
-        return temperature;
+    public String getRequestBy() {
+        return requestBy;
     }
 
-    public void setTemperature(String temperature) {
-        this.temperature = temperature;
+    public void setRequestBy(String requestBy) {
+        this.requestBy = requestBy;
     }
 
-    public String getHumidity() {
-        return humidity;
+    public String getRequestCommnet() {
+        return requestCommnet;
     }
 
-    public void setHumidity(String humidity) {
-        this.humidity = humidity;
+    public void setRequestCommnet(String requestCommnet) {
+        this.requestCommnet = requestCommnet;
     }
 
-    public String getCoordinate() {
-        return coordinate;
+    public Date getRequestOn() {
+        return requestOn;
     }
 
-    public void setCoordinate(String coordinate) {
-        this.coordinate = coordinate;
+    public void setRequestOn(Date requestOn) {
+        this.requestOn = requestOn;
     }
 
-    public String getRange() {
-        return range;
+    public String getRequestApproverBy() {
+        return requestApproverBy;
     }
 
-    public void setRange(String range) {
-        this.range = range;
+    public void setRequestApproverBy(String requestApproverBy) {
+        this.requestApproverBy = requestApproverBy;
+    }
+
+    public Date getRequestApproverOn() {
+        return requestApproverOn;
+    }
+
+    public void setRequestApproverOn(Date requestApproverOn) {
+        this.requestApproverOn = requestApproverOn;
     }
 
     public String getCalibratorBy() {
@@ -304,28 +311,12 @@ public class EdcsCalibration implements Serializable {
         this.calibratorBy = calibratorBy;
     }
 
-    public String getCalibratorOn() {
+    public Date getCalibratorOn() {
         return calibratorOn;
     }
 
-    public void setCalibratorOn(String calibratorOn) {
+    public void setCalibratorOn(Date calibratorOn) {
         this.calibratorOn = calibratorOn;
-    }
-
-    public String getApproverBy() {
-        return approverBy;
-    }
-
-    public void setApproverBy(String approverBy) {
-        this.approverBy = approverBy;
-    }
-
-    public String getApproverOn() {
-        return approverOn;
-    }
-
-    public void setApproverOn(String approverOn) {
-        this.approverOn = approverOn;
     }
 
     public String getReceiveStatus() {
@@ -336,11 +327,11 @@ public class EdcsCalibration implements Serializable {
         this.receiveStatus = receiveStatus;
     }
 
-    public String getReceiveStatusOn() {
+    public Date getReceiveStatusOn() {
         return receiveStatusOn;
     }
 
-    public void setReceiveStatusOn(String receiveStatusOn) {
+    public void setReceiveStatusOn(Date receiveStatusOn) {
         this.receiveStatusOn = receiveStatusOn;
     }
 
@@ -360,11 +351,11 @@ public class EdcsCalibration implements Serializable {
         this.calibrationStatus = calibrationStatus;
     }
 
-    public String getCalibrationStatusOn() {
+    public Date getCalibrationStatusOn() {
         return calibrationStatusOn;
     }
 
-    public void setCalibrationStatusOn(String calibrationStatusOn) {
+    public void setCalibrationStatusOn(Date calibrationStatusOn) {
         this.calibrationStatusOn = calibrationStatusOn;
     }
 
@@ -384,11 +375,11 @@ public class EdcsCalibration implements Serializable {
         this.approveStatus = approveStatus;
     }
 
-    public String getApproveStatusOn() {
+    public Date getApproveStatusOn() {
         return approveStatusOn;
     }
 
-    public void setApproveStatusOn(String approveStatusOn) {
+    public void setApproveStatusOn(Date approveStatusOn) {
         this.approveStatusOn = approveStatusOn;
     }
 
@@ -408,11 +399,11 @@ public class EdcsCalibration implements Serializable {
         this.stickerStatus = stickerStatus;
     }
 
-    public String getStickerStatusOn() {
+    public Date getStickerStatusOn() {
         return stickerStatusOn;
     }
 
-    public void setStickerStatusOn(String stickerStatusOn) {
+    public void setStickerStatusOn(Date stickerStatusOn) {
         this.stickerStatusOn = stickerStatusOn;
     }
 
@@ -424,11 +415,11 @@ public class EdcsCalibration implements Serializable {
         this.stickerStatusBy = stickerStatusBy;
     }
 
-    public String getStickerPrint() {
+    public Integer getStickerPrint() {
         return stickerPrint;
     }
 
-    public void setStickerPrint(String stickerPrint) {
+    public void setStickerPrint(Integer stickerPrint) {
         this.stickerPrint = stickerPrint;
     }
 
@@ -440,11 +431,11 @@ public class EdcsCalibration implements Serializable {
         this.returnStatus = returnStatus;
     }
 
-    public String getReturnStatusOn() {
+    public Date getReturnStatusOn() {
         return returnStatusOn;
     }
 
-    public void setReturnStatusOn(String returnStatusOn) {
+    public void setReturnStatusOn(Date returnStatusOn) {
         this.returnStatusOn = returnStatusOn;
     }
 
@@ -456,46 +447,6 @@ public class EdcsCalibration implements Serializable {
         this.returnStatusBy = returnStatusBy;
     }
 
-    public String getRequestBy() {
-        return requestBy;
-    }
-
-    public void setRequestBy(String requestBy) {
-        this.requestBy = requestBy;
-    }
-
-    public String getRequestCommnet() {
-        return requestCommnet;
-    }
-
-    public void setRequestCommnet(String requestCommnet) {
-        this.requestCommnet = requestCommnet;
-    }
-
-    public String getRequestOn() {
-        return requestOn;
-    }
-
-    public void setRequestOn(String requestOn) {
-        this.requestOn = requestOn;
-    }
-
-    public String getRequestApproverBy() {
-        return requestApproverBy;
-    }
-
-    public void setRequestApproverBy(String requestApproverBy) {
-        this.requestApproverBy = requestApproverBy;
-    }
-
-    public String getRequestApproverOn() {
-        return requestApproverOn;
-    }
-
-    public void setRequestApproverOn(String requestApproverOn) {
-        this.requestApproverOn = requestApproverOn;
-    }
-
     public String getComment() {
         return comment;
     }
@@ -504,14 +455,31 @@ public class EdcsCalibration implements Serializable {
         this.comment = comment;
     }
 
-    public String getCalAgeId() {
+    public Integer getCalAgeId() {
         return calAgeId;
     }
 
-    public void setCalAgeId(String calAgeId) {
+    public void setCalAgeId(Integer calAgeId) {
         this.calAgeId = calAgeId;
     }
 
+    public Double getCalError() {
+        return calError;
+    }
+
+    public void setCalError(Double calError) {
+        this.calError = calError;
+    }
+
+    public EdcsMasMeasure getAssociateMeasure() {
+        return associateMeasure;
+    }
+
+    public void setAssociateMeasure(EdcsMasMeasure associateMeasure) {
+        this.associateMeasure = associateMeasure;
+    }
+
+    
     @Override
     public int hashCode() {
         int hash = 0;
@@ -535,6 +503,22 @@ public class EdcsCalibration implements Serializable {
     @Override
     public String toString() {
         return "th.co.wacoal.springtemplates.domain.EdcsCalibration[ calId=" + calId + " ]";
+    }
+
+    public String getRequestStatus() {
+        return requestStatus;
+    }
+
+    public void setRequestStatus(String requestStatus) {
+        this.requestStatus = requestStatus;
+    }
+
+    public String getRequestApproverStatus() {
+        return requestApproverStatus;
+    }
+
+    public void setRequestApproverStatus(String requestApproverStatus) {
+        this.requestApproverStatus = requestApproverStatus;
     }
     
 }

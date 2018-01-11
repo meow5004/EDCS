@@ -23,31 +23,43 @@
                     </div>
                 </div>
                 <div class="col-md-8">
-                    <div class="form-group">
-                        <spring:message code="process.processNameTh" text="message not found"/>:
-                        <form:input path="processNameTh"  class="form-control" required="required" />
+                    <div class="row">
+                        <div class="col-md-2">
+                            <spring:message code="process.processNameTh" text="message not found"/>:
+                        </div>
+                        <div class="col-md-3">
+                            <form:input path="processNameTh"  class="form-control" required="required" />
+                        </div>
+                        <div class="col-md-2">
+                            <spring:message code="process.processNameEn" text="message not found"/>:
+                        </div>
+                        <div class="col-md-3">
+                            <form:input path="processNameEn"  class="form-control" required="required" />
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <spring:message code="process.processNameEn" text="message not found"/>:
-                        <form:input path="processNameEn"  class="form-control" required="required" />
-                    </div>
-                    <div class="form-group">
-                        <spring:message code="process.processSubjectTh" text="message not found"/>:
-                        <form:input path="processSubjectTh" class="form-control"  required="required" />
-                    </div>
-                    <div class="form-group">
-                        <spring:message code="process.processSubjectEn" text="message not found"/>:
-                        <form:input path="processSubjectEn"  class="form-control" required="required" />
+                    <div class="row">
+                        <div class="col-md-2">
+                            <spring:message code="process.processSubjectTh" text="message not found"/>:
+                        </div>
+                        <div class="col-md-3">
+                            <form:input path="processSubjectTh" class="form-control"  required="required" />
+                        </div>
+                        <div class="col-md-2">
+                            <spring:message code="process.processSubjectEn" text="message not found"/>:
+                        </div>
+                        <div class="col-md-3">
+                            <form:input path="processSubjectEn"  class="form-control" required="required" />
+                        </div>
                     </div>
                 </div>
                 <button class="btn btn-primary editSubmitButton" type="submit" ><spring:message code="process.fulledit" text="message not found"/></button>
 
                 <!--                        cancel edit goto add mode-->
-             <button class="addData" value="./add.htm"><spring:message code="cancel" text="message not found"/><i class="fa fa-ban" aria-hidden="true"></i></button>
+                <button class="addData" value="./add.htm"><spring:message code="cancel" text="message not found"/><i class="fa fa-ban" aria-hidden="true"></i></button>
 
             </form:form>
         </div>
-        
+
         <script>
 
         </script>

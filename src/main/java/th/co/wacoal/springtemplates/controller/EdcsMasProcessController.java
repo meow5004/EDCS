@@ -270,7 +270,7 @@ public class EdcsMasProcessController {
 
         // Create JSON
         JSONObject json = new JSONObject();
-        json.put("total", process.size());
+        
         List<Map> processMap = new ArrayList<Map>();
         String edit = messageSource.getMessage("process.edit", null, thaiLocale);
         String delete = messageSource.getMessage("process.delete", null, thaiLocale);
@@ -294,7 +294,7 @@ public class EdcsMasProcessController {
             processMap.add(p);
         }
         JSONArray jsonString = JSONArray.fromObject(processMap);
-        json.put("data", jsonString);
+        
         //Go to view
         out.print("{" + "\"size\":\"" + process.size() + "\",\"data\":" + jsonString + "}");
     }
@@ -306,7 +306,7 @@ public class EdcsMasProcessController {
         String reuse = messageSource.getMessage("process.reuse", null, thaiLocale);
         // Create JSON
         JSONObject json = new JSONObject();
-        json.put("total", process.size());
+        
         List<Map> processMap = new ArrayList<Map>();
         for (EdcsMasProcess row : process) {
             Map p = new HashMap();
@@ -329,7 +329,7 @@ public class EdcsMasProcessController {
             processMap.add(p);
         }
         JSONArray jsonString = JSONArray.fromObject(processMap);
-        json.put("data", jsonString);
+        
         //Go to view
         out.print("{" + "\"size\":\"" + process.size() + "\",\"data\":" + jsonString + "}");
     }

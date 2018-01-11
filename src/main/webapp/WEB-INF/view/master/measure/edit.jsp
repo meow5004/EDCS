@@ -27,16 +27,14 @@
                         <div class="col-md-3">
                             <spring:message code="measure.measureCode" text="message not found"/>:
                         </div>
-                        <div class="col-md-9">
+                        <div class="col-md-3">
                             <form:input path="measureCode"  class="form-control" required="required" />
                         </div>
-                    </div>
-                    <div class="row">
                         <div class="col-md-3">
 
                             <spring:message code="measure.measureGroup" text="message not found"/>:
                         </div>
-                        <div class="col-md-9">
+                        <div class="col-md-3">
                             <form:select path="measureGroupId" class="form-control" required="required" >
                                 <form:options items="${measureGroups}" itemLabel="fullName" itemValue="measureGroupId" />
                             </form:select>
@@ -73,9 +71,13 @@
                         <div class="col-md-3">
                             <spring:message code="measure.range" text="message not found"/>:
                         </div>
-                        <div class="col-md-9">
-                            <form:input path="rangeMin" type="number" min="0" class="form-control positiveNum" required="required" />
-                            -
+                        <div class="col-md-2">
+                            <form:input path="rangeMin" type="number" min="0" class="form-control positiveNum" required="required" /> 
+                        </div>
+                        <div class="col-md-1">
+                            ถึง
+                        </div>
+                        <div class="col-md-2">
                             <form:input path="rangeMax"  type="number" min="0" class="form-control positiveNum" required="required" />
                         </div>
                     </div>
@@ -83,11 +85,14 @@
                         <div class="col-md-3 ">
                             <spring:message code="measure.useRange" text="message not found"/>:
                         </div>
-                        <div class="col-md-9">
+                        <div class="col-md-2">
                             <form:input path="useRangeMin"  type="number" min="0" class="form-control positiveNum" required="required" />
-                            -
+                        </div>
+                        <div class="col-md-1">
+                            ถึง
+                        </div>
+                        <div class="col-md-2">
                             <form:input path="useRangeMax"  type="number" min="0" class="form-control positiveNum" required="required" />
-
                         </div>
                     </div>
                     <div class="row">
@@ -106,8 +111,8 @@
                         <div class="col-md-9">
 
                             <form:select path="abType" class="form-control" required="required" >
-                                <form:option value="A" label="A"/>
-                                <form:option  value="AB" label="AB" />
+                                <form:option value="A" label="วัดหน้าเดียว"/>
+                                <form:option  value="AB" label="วัดสองหน้า" />
                             </form:select>
                         </div>
                     </div>

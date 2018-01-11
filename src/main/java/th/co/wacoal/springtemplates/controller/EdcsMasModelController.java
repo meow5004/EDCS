@@ -54,8 +54,8 @@ public class EdcsMasModelController {
     private MessageSource messageSource;
     Locale thaiLocale = new Locale.Builder().setLanguage("th").build();
 
-   DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss",Locale.US);
-    DateFormat dfnt = new SimpleDateFormat("MM/dd/yyyy",Locale.US);
+    DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss", Locale.US);
+    DateFormat dfnt = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
 
     @RequestMapping("/index")
     public ModelAndView modelCRUD(Model model, HttpSession session) {
@@ -269,11 +269,6 @@ public class EdcsMasModelController {
             responseMessage = "please enter location";
         }
 
-        Integer id = Entitymodel.getModelId();
-        if (id == null) {
-            id = 0;
-        }
-
 //        if (Entitymodel.getModelId() != null && (modelDAO.isExistCount(Entitymodel.getModelId().toString())) > 0) {
 //            valid = 0;
 //        }
@@ -288,7 +283,7 @@ public class EdcsMasModelController {
 
         // Create JSON
         JSONObject json = new JSONObject();
-        json.put("total", Entitymodel.size());
+        
         List<Map> modelMap = new ArrayList<Map>();
         String edit = messageSource.getMessage("model.edit", null, thaiLocale);
         String delete = messageSource.getMessage("model.delete", null, thaiLocale);
@@ -298,6 +293,7 @@ public class EdcsMasModelController {
             thisMeasure = measueDAO.find(row.getMeasureId());
             Map p = new HashMap();
             p.put("model", row.getModelId());
+            p.put("modelCode", row.getModelCode());
             p.put("measureId", thisMeasure.getMeasureId());
             p.put("measureCode", thisMeasure.getMeasureCode());
             p.put("measureName", thisMeasure.getFullName());
@@ -319,7 +315,7 @@ public class EdcsMasModelController {
             modelMap.add(p);
         }
         JSONArray jsonString = JSONArray.fromObject(modelMap);
-        json.put("data", jsonString);
+        
         //Go to view
         out.print("{" + "\"size\":\"" + Entitymodel.size() + "\",\"data\":" + jsonString + "}");
     }
@@ -331,13 +327,14 @@ public class EdcsMasModelController {
         String reuse = messageSource.getMessage("model.reuse", null, thaiLocale);
         // Create JSON
         JSONObject json = new JSONObject();
-        json.put("total", Entitymodels.size());
+        
         List<Map> modelMap = new ArrayList<Map>();
         for (EdcsMasModel row : Entitymodels) {
             EdcsMasMeasure thisMeasure = new EdcsMasMeasure();
             thisMeasure = measueDAO.find(row.getMeasureId());
             Map p = new HashMap();
             p.put("model", row.getModelId());
+            p.put("modelCode", row.getModelCode());
             p.put("measureId", thisMeasure.getMeasureId());
             p.put("measureName", thisMeasure.getFullName());
             p.put("cerOn", row.getCerOn());
@@ -363,7 +360,7 @@ public class EdcsMasModelController {
             modelMap.add(p);
         }
         JSONArray jsonString = JSONArray.fromObject(modelMap);
-        json.put("data", jsonString);
+        
         //Go to view
         out.print("{" + "\"size\":\"" + Entitymodels.size() + "\",\"data\":" + jsonString + "}");
     }

@@ -5,10 +5,25 @@
  */
 package th.co.wacoal.springtemplates.controller;
 
+import java.util.List;
 import javax.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import th.co.wacoal.springtemplates.dao.EdcsCalibrationDAO;
+import th.co.wacoal.springtemplates.dao.EdcsMasCalpointDAO;
+import th.co.wacoal.springtemplates.dao.EdcsMasEquipconDAO;
+import th.co.wacoal.springtemplates.dao.EdcsMasMeasureDAO;
+import th.co.wacoal.springtemplates.dao.EdcsMasMeasureGroupDAO;
+import th.co.wacoal.springtemplates.dao.EdcsMasModelDAO;
+import th.co.wacoal.springtemplates.dao.impl.EdcsCalibrationDAOImpI;
+import th.co.wacoal.springtemplates.dao.impl.EdcsMasCalpointDAOImpl;
+import th.co.wacoal.springtemplates.dao.impl.EdcsMasEquipconDAOImpl;
+import th.co.wacoal.springtemplates.dao.impl.EdcsMasMeasureDAOImpI;
+import th.co.wacoal.springtemplates.dao.impl.EdcsMasMeasureGroupDAOImpI;
+import th.co.wacoal.springtemplates.dao.impl.EdcsMasModelDAOImpI;
+import th.co.wacoal.springtemplates.db.Database;
+import th.co.wacoal.springtemplates.domain.EdcsCalibration;
 
 /**
  *
@@ -17,11 +32,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class IndexController {
 
+    Database db = new Database("sqlServer");
+    EdcsMasMeasureDAO measureDAO = new EdcsMasMeasureDAOImpI(db);
+    EdcsMasCalpointDAO calpointDAO = new EdcsMasCalpointDAOImpl(db);
+    EdcsMasEquipconDAO equipConDAO = new EdcsMasEquipconDAOImpl(db);
+    EdcsMasModelDAO modelDAO = new EdcsMasModelDAOImpI(db);
+    EdcsMasMeasureGroupDAO measureGroupDAO = new EdcsMasMeasureGroupDAOImpI(db);
+    EdcsCalibrationDAO calibDAO = new EdcsCalibrationDAOImpI(db);
+
     @RequestMapping("/home.htm")
     public String home(Model model, HttpSession session) {
         //Database db = null;
         try {
-            session.setAttribute("userId","92612");
+            session.setAttribute("userId", "92612");
             // Model
             //db = new Database("sqlServer");
             //ChkMasBoxcodeDAO chkMasBoxcodeDAO = new ChkMasBoxcodeDAOImpl(db);
@@ -40,7 +63,15 @@ public class IndexController {
 
     @RequestMapping("/createDoc.htm")
     public String createDoc(Model model, HttpSession session) {
+        EdcsCalibration calibration = new EdcsCalibration();
+        model.addAttribute("models", modelDAO.findByFlag(0));
+        model.addAttribute("calibration", calibration);
         return "createDoc";
+    }
+
+    @RequestMapping("/approveDoc.htm")
+    public String approveDoc(Model model, HttpSession session) {
+        return "approveDoc";
     }
 
     @RequestMapping("/createDetail.htm")
@@ -57,27 +88,29 @@ public class IndexController {
     public String deviceReceivce(Model model, HttpSession session) {
         return "deviceReceivce";
     }
-    
+
     @RequestMapping("/deviceSend.htm")
     public String deviceSend(Model model, HttpSession session) {
         return "deviceSend";
     }
-    
+
     @RequestMapping("/labApprove.htm")
     public String labApprove(Model model, HttpSession session) {
         return "labApprove";
     }
-    
+
     @RequestMapping("/checkDoc.htm")
     public String checkDoc(Model model, HttpSession session) {
+        List<EdcsCalibration> dueCalibs = calibDAO.getNewAndNearExpireCalibrationMoreThanDays(30);
+        model.addAttribute("dueCalibrations", dueCalibs);
         return "checkDoc";
     }
-    
+
     @RequestMapping("/printSticker.htm")
     public String printSticker(Model model, HttpSession session) {
         return "printSticker";
     }
-    
+
     @RequestMapping("/createSearch.htm")
     public String createSearch(Model model, HttpSession session) {
         return "createSearch";

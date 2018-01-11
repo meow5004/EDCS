@@ -7,6 +7,7 @@ package th.co.wacoal.springtemplates.dao.impl;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.lang.StringUtils;
@@ -25,6 +26,8 @@ public class EdcsMasMeasureDAOImpI implements EdcsMasMeasureDAO {
     public EdcsMasMeasureDAOImpI(Database db) {
         this.db = db;
     }
+
+   
 
     @Override
     public List<EdcsMasMeasure> findAll() {
@@ -131,6 +134,7 @@ public class EdcsMasMeasureDAOImpI implements EdcsMasMeasureDAO {
     @Override
     public int add(EdcsMasMeasure measure) {
         // insert
+
         String sql = "INSERT INTO EDCS_MAS_MEASURE "
                 + "(MEASURE_NAME_TH,MEASURE_NAME_EN,"
                 + "CREATE_BY,CREATE_ON,"
@@ -142,12 +146,13 @@ public class EdcsMasMeasureDAOImpI implements EdcsMasMeasureDAO {
                 + "AB_TYPE,"
                 + "CALPOINT_ID,"
                 + "MEASURE_GROUP_ID,"
+                + "MEASURE_TIMES,"
                 + "FLAG_DEL)"
                 + " VALUES (?,?,"
                 + "?,(getdate()),"
                 + "?,(getdate()),"
-                + "?,?,?,?,?,?,?,?,?"
-                + ",0)";
+                + "?,?,?,?,?,?,?,?,?,"
+                + "1,0)";
         int res = db.add(sql, measure.getMeasureNameTh(), measure.getMeasureNameEn(),
                 measure.getCreateBy(), measure.getChangeBy(),
                 measure.getMeasureCode(),
@@ -155,7 +160,8 @@ public class EdcsMasMeasureDAOImpI implements EdcsMasMeasureDAO {
                 measure.getUseRangeMin(), measure.getUseRangeMax(),
                 measure.getDescription(),
                 measure.getAbType(),
-                measure.getCalpointId()
+                measure.getCalpointId(),
+                measure.getMeasureGroupId()
         );
         return res;
     }
@@ -223,14 +229,15 @@ public class EdcsMasMeasureDAOImpI implements EdcsMasMeasureDAO {
     }
 
     @Override
-    public List<EdcsMasMeasure> findByEquipconIdByFlag(int id, String flag) {
-        String sql = "select * from EDCS_MAS_MEASURE where EQUIP_CON_ID=? AND FLAG_DEL=?";
-        List<Map<String, Object>> rs = db.queryList(sql, id, flag);
-        List<EdcsMasMeasure> ret = new ArrayList<>();
+    public Map<Integer, EdcsMasMeasure> findByFlagListMappingById(int flag) {
+        String sql = "select * from EDCS_MAS_MEASURE where FLAG_DEL=?";
+        List<Map<String, Object>> rs = db.queryList(sql, flag);
+        Map<Integer, EdcsMasMeasure> ret = new HashMap<>();
         for (Map<String, Object> map : rs) {
             EdcsMasMeasure p = new EdcsMasMeasure();
+            int id = (int) map.get("MEASURE_ID");
+            p.setMeasureId(id);
             p.setMeasureGroupId((int) map.get("MEASURE_GROUP_ID"));
-            p.setMeasureId((int) map.get("MEASURE_ID"));
             p.setMeasureCode((String) map.get("MEASURE_CODE"));
             p.setMeasureNameTh((String) map.get("MEASURE_NAME_TH"));
             p.setMeasureNameEn((String) map.get("MEASURE_NAME_EN"));
@@ -249,8 +256,7 @@ public class EdcsMasMeasureDAOImpI implements EdcsMasMeasureDAO {
             p.setChangeBy((String) map.get("CHANGE_BY"));
             p.setChangeOn((Date) map.get("CHANGE_ON"));
             p.setFlagDel((String) map.get("FLAG_DEL"));
-
-            ret.add(p);
+            ret.put(id, p);
         }
         return ret;
     }

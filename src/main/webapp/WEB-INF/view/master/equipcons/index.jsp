@@ -343,57 +343,6 @@
         return valid;
     }
 
-    function refreshDataAndJumpTo(jumpTo, searchColumn) {
-        availableTable.ajax.reload(function () {
-            //relaod before jump
-            if (jumpTo !== null) {
-                if (jumpTo === "lastest") {
-                    var maxId = availableTable
-                            .column(searchColumn)
-                            .data()
-                            .sort(function (a, b) {
-                                return a - b;
-                            }).reverse()[0];
-                    availableTable.page.jumpToData(maxId, searchColumn);
-                } else {
-                    var toInt = parseInt(jumpTo);
-                    availableTable.page.jumpToData(toInt, searchColumn);
-                }
-            }
-        }, false);
-
-        unAvailableTable.ajax.reload(function () {
-            //relaod before jump
-            if (jumpTo !== null) {
-                if (jumpTo === "lastest") {
-                    var maxId = unAvailableTable
-                            .column(searchColumn)
-                            .data()
-                            .sort(function (a, b) {
-                                return a - b;
-                            }).reverse()[0];
-                    unAvailableTable.page.jumpToData(maxId, searchColumn);
-                } else {
-                    var toInt = parseInt(jumpTo);
-                    unAvailableTable.page.jumpToData(toInt, searchColumn);
-                }
-            }
-        }, false);
-        //start by show add form
-        showFrom("add.htm");
-    }
-
-    function highlightData(/*array of object*/ ids, columnToSearch, table) {
-        table.ajax.reload(function () {
-            for (var i = 0; i < ids.length; i++) {
-                var pos = table.column(columnToSearch, {order: 'index'}).data().indexOf(ids[i]);
-                if (pos >= 0) {
-                    $(table.row(pos).nodes()).addClass("lastModifiedRow");
-                }
-            }
-        }, false);
-        return this;
-    }
 
 </script>
 

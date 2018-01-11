@@ -31,6 +31,10 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "EdcsMasProcess.findAll", query = "SELECT e FROM EdcsMasProcess e")})
 public class EdcsMasProcess implements Serializable {
 
+    @Size(max = 50)
+    @Column(name = "PROCESS_CODE")
+    private String processCode;
+
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -229,6 +233,14 @@ public class EdcsMasProcess implements Serializable {
     @Override
     public String toString() {
         return "th.co.wacoal.springtemplates.domain.EdcsMasProcess[ processId=" + processId + " ]";
+    }
+
+    public String getProcessCode() {
+        return processCode;
+    }
+
+    public void setProcessCode(String processCode) {
+        this.processCode = processCode;
     }
 
 }

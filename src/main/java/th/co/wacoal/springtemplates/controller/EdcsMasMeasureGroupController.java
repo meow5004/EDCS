@@ -265,7 +265,7 @@ public class EdcsMasMeasureGroupController {
 
         // Create JSON
         JSONObject json = new JSONObject();
-        json.put("total", measureGroup.size());
+        
         List<Map> measureGroupMap = new ArrayList<Map>();
         String edit = messageSource.getMessage("measureGroup.edit", null, thaiLocale);
         String delete = messageSource.getMessage("measureGroup.delete", null, thaiLocale);
@@ -288,7 +288,7 @@ public class EdcsMasMeasureGroupController {
             measureGroupMap.add(p);
         }
         JSONArray jsonString = JSONArray.fromObject(measureGroupMap);
-        json.put("data", jsonString);
+        
         //Go to view
         out.print("{" + "\"size\":\"" + measureGroup.size() + "\",\"data\":" + jsonString + "}");
     }
@@ -300,7 +300,7 @@ public class EdcsMasMeasureGroupController {
         String reuse = messageSource.getMessage("measureGroup.reuse", null, thaiLocale);
         // Create JSON
         JSONObject json = new JSONObject();
-        json.put("total", measureGroup.size());
+        
         List<Map> measureGroupMap = new ArrayList<Map>();
         for (EdcsMasMeasureGroup row : measureGroup) {
             Map p = new HashMap();
@@ -322,7 +322,7 @@ public class EdcsMasMeasureGroupController {
             measureGroupMap.add(p);
         }
         JSONArray jsonString = JSONArray.fromObject(measureGroupMap);
-        json.put("data", jsonString);
+        
         //Go to view
         out.print("{" + "\"size\":\"" + measureGroup.size() + "\",\"data\":" + jsonString + "}");
     }

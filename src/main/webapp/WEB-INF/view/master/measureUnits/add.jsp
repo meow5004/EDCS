@@ -18,39 +18,47 @@
                 <div class="col-md-8">
                     <div class="row">
                         <div class="col-md-6">
-                            <div class="form-group">
-                                    <spring:message code="measureUnit.unitNameTh" text="message not found"/>:
-                                    <form:input path="unitNameTh"  class="form-control" required="required" />
+                            <div class="col-md-6">
+                                <spring:message code="measureUnit.unitNameTh" text="message not found"/>:
+                            </div>
+                            <div class="col-md-6">
+                                <form:input path="unitNameTh"  class="form-control" required="required" />
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="form-group">
-                                    <spring:message code="measureUnit.unitShortTh" text="message not found"/>:
-                                    <form:input path="unitShortTh"  class="form-control" required="required" />
+                            <div class="col-md-6">
+                                <spring:message code="measureUnit.unitShortTh" text="message not found"/>:
+                            </div>
+                            <div class="col-md-6">
+                                <form:input path="unitShortTh"  class="form-control" required="required" />
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6">
-                            <div class="form-group"> 
-                                    <spring:message code="measureUnit.unitNameEn" text="message not found"/>:
-                                    <form:input path="unitNameEn"  class="form-control" required="required" />
+                            <div class="col-md-6">
+                                <spring:message code="measureUnit.unitNameEn" text="message not found"/>:
+                            </div>
+                            <div class="col-md-6">
+                                <form:input path="unitNameEn"  class="form-control" required="required" />
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="form-group">
-                                    <spring:message code="measureUnit.unitShortEn" text="message not found"/>:
-                                    <form:input path="unitShortEn"  class="form-control" required="required" />
+                            <div class="col-md-6">
+                                <spring:message code="measureUnit.unitShortEn" text="message not found"/>:
+                            </div>
+                            <div class="col-md-6">
+                                <form:input path="unitShortEn"  class="form-control" required="required" />
                             </div>
                         </div>
 
                     </div>
                 </div>
 
-                                    <button type="submit" class="addSubmitButton btn btn-success" ><spring:message code="measureUnit.fulladd" text="message not found"/> </button>
+                <button type="submit" class="addSubmitButton btn btn-success" ><spring:message code="measureUnit.fulladd" text="message not found"/> </button>
             </form:form>
         </div>
-        
+
 
     </body>
 </html>

@@ -276,7 +276,6 @@ public class EdcsMasBranchController {
 
         // Create JSON
         JSONObject json = new JSONObject();
-        json.put("total", branchs.size());
         List<Map> branchMap = new ArrayList<Map>();
         String edit = messageSource.getMessage("branch.edit", null, thaiLocale);
         String delete = messageSource.getMessage("branch.delete", null, thaiLocale);
@@ -302,7 +301,6 @@ public class EdcsMasBranchController {
             branchMap.add(p);
         }
         JSONArray jsonString = JSONArray.fromObject(branchMap);
-        json.put("data", jsonString);
         //Go to view
         out.print("{" + "\"size\":\"" + branchs.size() + "\",\"data\":" + jsonString + "}");
     }
@@ -315,7 +313,6 @@ public class EdcsMasBranchController {
         String reuse = messageSource.getMessage("branch.reuse", null, thaiLocale);
         // Create JSON
         JSONObject json = new JSONObject();
-        json.put("total", branchs.size());
         List<Map> branchMap = new ArrayList<Map>();
         for (EdcsMasBranch row : branchs) {
             Map p = new HashMap();
@@ -341,7 +338,6 @@ public class EdcsMasBranchController {
             branchMap.add(p);
         }
         JSONArray jsonString = JSONArray.fromObject(branchMap);
-        json.put("data", jsonString);
         //Go to view
         out.print("{" + "\"size\":\"" + branchs.size() + "\",\"data\":" + jsonString + "}");
     }

@@ -264,7 +264,7 @@ public class EdcsMasMeasureUnitController {
 
         // Create JSON
         JSONObject json = new JSONObject();
-        json.put("total", measureUnits.size());
+        
         List<Map> measureUnitMap = new ArrayList<Map>();
         String edit = messageSource.getMessage("measureUnit.edit", null, thaiLocale);
         String delete = messageSource.getMessage("measureUnit.delete", null, thaiLocale);
@@ -290,7 +290,7 @@ public class EdcsMasMeasureUnitController {
             measureUnitMap.add(p);
         }
         JSONArray jsonString = JSONArray.fromObject(measureUnitMap);
-        json.put("data", jsonString);
+        
         //Go to view
         out.print("{" + "\"size\":\"" + measureUnits.size() + "\",\"data\":" + jsonString + "}");
 
@@ -303,7 +303,7 @@ public class EdcsMasMeasureUnitController {
         String reuse = messageSource.getMessage("measureUnit.reuse", null, thaiLocale);
         // Create JSON
         JSONObject json = new JSONObject();
-        json.put("total", measureUnits.size());
+        
         List<Map> measureUnitMap = new ArrayList<Map>();
         for (EdcsMasMeasureUnit row : measureUnits) {
             Map p = new HashMap();
@@ -328,7 +328,7 @@ public class EdcsMasMeasureUnitController {
             measureUnitMap.add(p);
         }
         JSONArray jsonString = JSONArray.fromObject(measureUnitMap);
-        json.put("data", jsonString);
+        
         //Go to view
         out.print("{" + "\"size\":\"" + measureUnits.size() + "\",\"data\":" + jsonString + "}");
     }

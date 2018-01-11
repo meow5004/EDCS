@@ -8,7 +8,10 @@
                 </div>
                 <div class="box-body">
                     <a href="checkDoc.htm" class="btn btn-app btn-primary" style="width: 160px; height: 150px;">
-                        <i class="fa fa-edit" style="font-size: 90px;"></i><b style="font-size: 14px;">ส่งรายงานสอบเทียบ</b>
+                        <i class="fa fa-edit" style="font-size: 90px;"></i><b style="font-size: 14px;">ส่งอุปกรณ์สอบเทียบ</b>
+                    </a>
+                    <a href="approveDoc.htm" class="btn btn-app btn-primary" style="width: 160px; height: 150px;">
+                        <i class="fa fa-edit" style="font-size: 90px;"></i><b style="font-size: 14px;">อนุมัติส่งอุปกรณ์สอบเทียบ</b>
                     </a>
                     <a href="trackingDoc.htm" class="btn btn-app btn-primary" style="width: 160px; height: 150px;">
                         <i class="fa fa-search" style="font-size: 90px;"></i><b style="font-size: 14px;">ติดตามรายงานสอบเทียบ</b>

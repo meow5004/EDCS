@@ -37,6 +37,9 @@ public class EdcsMasModel implements Serializable {
     @NotNull
     @Column(name = "MODEL_ID")
     private Integer modelId;
+    @Size(max = 20)
+    @Column(name = "MODEL_CODE")
+    private String modelCode;
     @Column(name = "MEASURE_ID")
     private Integer measureId;
     @Size(max = 200)
@@ -87,6 +90,14 @@ public class EdcsMasModel implements Serializable {
 
     public void setModelId(Integer modelId) {
         this.modelId = modelId;
+    }
+
+    public String getModelCode() {
+        return modelCode;
+    }
+
+    public void setModelCode(String modelCode) {
+        this.modelCode = modelCode;
     }
 
     public Integer getMeasureId() {

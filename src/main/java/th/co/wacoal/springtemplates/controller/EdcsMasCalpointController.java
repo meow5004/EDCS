@@ -258,7 +258,7 @@ public class EdcsMasCalpointController {
 
         // Create JSON
         JSONObject json = new JSONObject();
-        json.put("total", calpoints.size());
+        
         List<Map> calpointMap = new ArrayList<Map>();
 //        String edit = messageSource.getMessage("calpoint.edit", null, thaiLocale);
         String edit = messageSource.getMessage("calpoint.edit", null, thaiLocale);
@@ -287,7 +287,7 @@ public class EdcsMasCalpointController {
             calpointMap.add(p);
         }
         JSONArray jsonString = JSONArray.fromObject(calpointMap);
-        json.put("data", jsonString);
+        
         //Go to view
         out.print("{" + "\"size\":\"" + calpoints.size() + "\",\"data\":" + jsonString + "}");
     }
@@ -299,7 +299,7 @@ public class EdcsMasCalpointController {
         //String reuse = messageSource.getMessage("calpoint.reuse", null, thaiLocale);
         // Create JSON
         JSONObject json = new JSONObject();
-        json.put("total", calpoints.size());
+        
         List<Map> calpointMap = new ArrayList<Map>();
         for (EdcsMasCalpoint row : calpoints) {
             Map p = new HashMap();
@@ -325,7 +325,7 @@ public class EdcsMasCalpointController {
             calpointMap.add(p);
         }
         JSONArray jsonString = JSONArray.fromObject(calpointMap);
-        json.put("data", jsonString);
+        
         //Go to view
         out.print("{" + "\"size\":\"" + calpoints.size() + "\",\"data\":" + jsonString + "}");
     }

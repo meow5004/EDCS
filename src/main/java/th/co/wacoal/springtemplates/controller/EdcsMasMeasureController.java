@@ -275,7 +275,7 @@ public class EdcsMasMeasureController {
 
         // Create JSON
         JSONObject json = new JSONObject();
-        json.put("total", measure.size());
+        
         List<Map> measureMap = new ArrayList<Map>();
         String edit = messageSource.getMessage("measure.edit", null, thaiLocale);
         String delete = messageSource.getMessage("measure.delete", null, thaiLocale);
@@ -316,7 +316,7 @@ public class EdcsMasMeasureController {
             measureMap.add(p);
         }
         JSONArray jsonString = JSONArray.fromObject(measureMap);
-        json.put("data", jsonString);
+        
         //Go to view
         out.print("{" + "\"size\":\"" + measure.size() + "\",\"data\":" + jsonString + "}");
     }
@@ -329,7 +329,7 @@ public class EdcsMasMeasureController {
         String reuse = messageSource.getMessage("measure.reuse", null, thaiLocale);
         // Create JSON
         JSONObject json = new JSONObject();
-        json.put("total", measure.size());
+        
         List<Map> measureMap = new ArrayList<Map>();
         for (EdcsMasMeasure row : measure) {
             EdcsMasMeasureGroup measureGroup = measureGroupDAO.find(row.getMeasureGroupId());
@@ -366,11 +366,11 @@ public class EdcsMasMeasureController {
             int validReuse = 1;
 
             if (isDeletedCalpointExist) {
-                reuseCheckboxMessage += "<font color='red'>กรุณากู้คืนจุดสอบเทียบรหัส " + tempC.getCalpointId() + "<br/> ก่อนกู้คืนสถานะเครื่องวัดนี้</font><br/>";
+                reuseCheckboxMessage += "<font color='red'>กรุณากู้คืนจุดสอบเทียบรหัส " + tempC.getCalpointId() + "<br/> ก่อนกู้คืนเครื่องวัดนี้</font><br/>";
             }
 
             if (isDeletedMeasureGroupExist) {
-                reuseCheckboxMessage += "<font color='red'>กรุณากู้คืนกลุ่มเครื่องวัดรหัส " + tempG.getMeasureGroupId() + "<br/> ก่อนกู้คืนสถานะเครื่องวัดนี้</font><br/>";
+                reuseCheckboxMessage += "<font color='red'>กรุณากู้คืนกลุ่มเครื่องวัดรหัส " + tempG.getMeasureGroupId() + "<br/> ก่อนกู้คืนเครื่องวัดนี้</font><br/>";
             }
 
             if (isDeletedCalpointExist
@@ -388,7 +388,7 @@ public class EdcsMasMeasureController {
             measureMap.add(p);
         }
         JSONArray jsonString = JSONArray.fromObject(measureMap);
-        json.put("data", jsonString);
+        
         //Go to view
         out.print("{" + "\"size\":\"" + measure.size() + "\",\"data\":" + jsonString + "}");
     }
