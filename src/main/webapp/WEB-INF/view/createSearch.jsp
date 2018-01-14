@@ -42,39 +42,7 @@
                                         <td style="text-align: center;"><img src="../images/icons/BallIconCancel.png" alt="" style="width: 40px; height: 40px;"/></td>
                                         <td style="text-align: center;"><input type="checkbox" style="width: 35px; height: 35px;" disabled></td>
                                     </tr>
-                                    <tr>
-                                        <th>7200008</th>
-                                        <td>ชิ้นส่วน</td>
-                                        <td>RI0001</td>
-                                        <td>สายวัดสีดำ</td>
-                                        <td style="text-align: center;">12/06/2017</td>
-                                        <td style="text-align: center;"><a href="createDoc.htm"><img src="../images/icons/BallIconCheck.png" alt="" style="width: 40px; height: 40px;"/></a></td>
-                                        <td style="text-align: center;"><a href="createDoc.htm"><img src="../images/icons/BallIconCancel.png" alt="" style="width: 40px; height: 40px;"/></a></td>
-                                        <td style="text-align: center;"><img src="../images/icons/BallIconCancel.png" alt="" style="width: 40px; height: 40px;"/></td>
-                                        <td style="text-align: center;"><input type="checkbox" style="width: 35px; height: 35px;" disabled></td>
-                                    </tr>  
-                                    <tr>
-                                        <th>7200009</th>
-                                        <td>ชิ้นส่วน</td>
-                                        <td>RI0001</td>
-                                        <td>สายวัดสีดำ</td>
-                                        <td style="text-align: center;">12/06/2017</td>
-                                        <td style="text-align: center;"><a href="createDoc.htm"><img src="../images/icons/BallIconCheck.png" alt="" style="width: 40px; height: 40px;"/></a></td>
-                                        <td style="text-align: center;"><a href="createDoc.htm"><img src="../images/icons/BallIconCheck.png" alt="" style="width: 40px; height: 40px;"/></a></td>
-                                        <td style="text-align: center;"><img src="../images/icons/BallIconCancel.png" alt="" style="width: 40px; height: 40px;"/></td>
-                                        <td style="text-align: center;"><input type="checkbox" style="width: 35px; height: 35px;"></td>
-                                    </tr>
-                                    <tr>
-                                        <th>7200009</th>
-                                        <td>ชิ้นส่วน</td>
-                                        <td>RI0001</td>
-                                        <td>สายวัดสีดำ</td>
-                                        <td style="text-align: center;">12/06/2017</td>
-                                        <td style="text-align: center;"><a href="createDoc.htm"><img src="../images/icons/BallIconCheck.png" alt="" style="width: 40px; height: 40px;"/></a></td>
-                                        <td style="text-align: center;"><a href="createDoc.htm"><img src="../images/icons/BallIconCheck.png" alt="" style="width: 40px; height: 40px;"/></a></td>
-                                        <td style="text-align: center;"><img src="../images/icons/BallIconCheck.png" alt="" style="width: 40px; height: 40px;"/></td>
-                                        <td style="text-align: center;"><input type="checkbox" style="width: 35px; height: 35px;" disabled></td>
-                                    </tr>  
+
                                 </tbody>
                             </table>
 
@@ -95,5 +63,60 @@
         </div>
 
     </div>
+    <script>
+        $(document).ready(function () {
+            availableTable = $('#trackingTable').DataTable({
+                "columns": [
+                    {"data": "calCode", "target": 0},
+                    {"data": "requestCommnet", "target": 1},
+                    {"data": "measureId", "target": 2},
+                    {"data": "associateMeasure.fullName", "target": 3},
+                    {"data": "approveStatusOn", "target": 4},
+                    {"data": "calAgeId", "target": 5},
+                    {"data": "requestApproverStatus", "target": 6, render: function (data, type, row, meta) {
+                            if (data == 1) {
+                                return "<img src='../images/icons/BallIconCheck.png' alt='' style='width: 40px; height: 40px;'/>";
+                            } else {
+                                return "<img src='../images/icons/BallIconCancel.png' alt='' style='width: 40px; height: 40px;'/>";
+                            }
+                        }},
+                    {"data": "receiveStatus", "target": 7, render: function (data, type, row, meta) {
+                            if (data == 1) {
+                                return "<img src='../images/icons/BallIconCheck.png' alt='' style='width: 40px; height: 40px;'/>";
+                            } else {
+                                return "<img src='../images/icons/BallIconCancel.png' alt='' style='width: 40px; height: 40px;'/>";
+                            }
+                        }},
+                    {"data": "calibrationStatus", "target": 8, render: function (data, type, row, meta) {
+                            if (data == 1) {
+                                return "<img src='../images/icons/BallIconCheck.png' alt='' style='width: 40px; height: 40px;'/>";
+                            } else {
+                                return "<img src='../images/icons/BallIconCancel.png' alt='' style='width: 40px; height: 40px;'/>";
+                            }
+                        }},
+                    {"data": "returnStatus", "target": 9, render: function (data, type, row, meta) {
+                            var choice = "<input type='checkbox' name='measureId[]' value='" + data + "'>";
+                            return choice
+                        }}, {"data": "ApproveStatus", "target": 9, render: function (data, type, row, meta) {
+                            if (data == 1) {
+                                return "<img src='../images/icons/BallIconCheck.png' alt='' style='width: 40px; height: 40px;'/>";
+                            } else {
+                                return "<img src='../images/icons/BallIconCancel.png' alt='' style='width: 40px; height: 40px;'/>";
+                            }
+                        }}
+                ],
+                "createdRow": function (row, data, index) {
+                    if (data.calId < 1) {
+                        $(row).addClass('warning');
+                    }
+                },
+                "ajax": {
+                    "url": "../ajaxHelper/listNonFinishCalibration.htm",
+                },
+                "dom": '<lf<t>ip>',
+                "order": [[0, 'asc']],
+                "displayLength": 10});
+        });
+    </script>
 <jsp:include page="include/include_footer.jsp" flush="true"></jsp:include>
 

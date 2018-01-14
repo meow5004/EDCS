@@ -32,7 +32,7 @@
             <table id="availableMeasureTable" class="datatable hover cell-border">
                 <thead>
                     <tr>
-                        <th colspan="12" style="text-align: center"><spring:message code="measure.table.avaliable" text="message not found"/></th>
+                        <th colspan="13" style="text-align: center"><spring:message code="measure.table.avaliable" text="message not found"/></th>
                     </tr>
                     <tr class="alt" >
                         <th><spring:message code="measure.measure" text="message not found"/></th>
@@ -45,7 +45,7 @@
                         <th><spring:message code="measure.description" text="message not found"/></th>
                         <th><spring:message code="measure.measureTimes" text="message not found"/></th>
                         <th><spring:message code="measure.abtype" text="message not found"/></th>
-
+                        <th><spring:message code="measure.depName" text="message not found"/></th>
                         <th></th>
                         <th><button class="deleteMultiple btn btn-danger"><spring:message code="measure.delete" text="message not found"/><i class="fa fa-trash-o" aria-hidden="true"></i></button></th>
                     </tr> 
@@ -55,7 +55,7 @@
             <table id="unavailableMeasureTable" class="datatable hover cell-border ">
                 <thead>
                     <tr>
-                        <th colspan="12" style="text-align: center"><spring:message code="measure.table.unavaliable" text="message not found"/></th>
+                        <th colspan="13" style="text-align: center"><spring:message code="measure.table.unavaliable" text="message not found"/></th>
                     </tr>
                     <tr class="alt" >
                         <th><spring:message code="measure.measure" text="message not found"/></th>
@@ -68,6 +68,7 @@
                         <th><spring:message code="measure.description" text="message not found"/></th>
                         <th><spring:message code="measure.measureTimes" text="message not found"/></th>
                         <th><spring:message code="measure.abtype" text="message not found"/></th>
+                        <th><spring:message code="measure.depName" text="message not found"/></th>
                         <th><button class="reuseMultiple btn btn-success"><spring:message code="measure.reuse" text="message not found"/><i class="fa fa-recycle" aria-hidden="true"></i></button></th>
                         <th><button class="realDeleteMultiple btn btn-danger"><spring:message code="measure.realDelete" text="message not found"/><i class="fa fa-remove" aria-hidden="true"></i></button></th>
                     </tr> 
@@ -108,8 +109,9 @@
                             return 'ไม่ได้ระบุ';
                         }
                     }},
-                {"data": "actionLink", "target": 10, "searchable": false, "orderable": false},
-                {"data": "deleteCheck", "target": 11, "className": "dt-center", "searchable": false, "orderable": false}
+                {"data": "depName", "target": 10},
+                {"data": "actionLink", "target": 11, "searchable": false, "orderable": false},
+                {"data": "deleteCheck", "target": 12, "className": "dt-center", "searchable": false, "orderable": false}
             ],
             scrollX: true,
             "ajax": "./getAvailableMeasure.htm",
@@ -137,8 +139,9 @@
                         }
                     }
                 },
-                {"data": "reuseCheck", "target": 10, "className": "dt-center", "searchable": false, "orderable": false},
-                {"data": "realDeleteCheck", "target": 11, "className": "dt-center", "searchable": false, "orderable": false}
+                {"data": "depName", "target": 10},
+                {"data": "reuseCheck", "target": 11, "className": "dt-center", "searchable": false, "orderable": false},
+                {"data": "realDeleteCheck", "target": 12, "className": "dt-center", "searchable": false, "orderable": false}
             ],
             "ajax": "./getUnavailableMeasure.htm",
             "dom": '<lf<t>ip>',

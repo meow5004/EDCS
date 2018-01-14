@@ -252,6 +252,25 @@ public class EdcsCalibrationDAOImpI implements EdcsCalibrationDAO {
         return ret;
     }
 
+        @Override
+    public List<EdcsCalibration> listNonFinishCalibration() {
+        Database db = new Database("sqlServer");
+        EdcsMasMeasureDAO masDao = new EdcsMasMeasureDAOImpI(db);
+        //get measure Mapping data
+        Map<Integer, EdcsMasMeasure> measureList = masDao.findByFlagListMappingById(0);
+
+        String sql = "select * from EDCS_CALIBRATION WHERE RECEIVE_STATUS =1  AND APPROVE_STATUS IS NULL";
+        List<Map<String, Object>> rs = db.queryList(sql);
+        List<EdcsCalibration> ret = new ArrayList<>();
+        for (Map<String, Object> map : rs) {
+            EdcsCalibration temp = mappingResultSetToCalibration(map);
+            temp.setAssociateMeasure(measureList.get(temp.getMeasureId()));
+            ret.add(temp);
+        }
+
+        return ret;
+    }
+    
     @Override
     public List<EdcsCalibration> getApprovedAndReceiverdDevice() {
         Database db = new Database("sqlServer");

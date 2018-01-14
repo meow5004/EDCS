@@ -17,6 +17,16 @@
             <form:form id="addForm"  class="form-inline" action="add.htm" method="post" modelAttribute="measure" onsubmit="return false;">
                 <div class="col-md-10">
                     <div class="row">
+                          <div class="col-md-3">
+                            <spring:message code="measure.depId" text="message not found"/>:
+                        </div>
+                        <div class="col-md-6">
+                           <form:select path="depId" class="form-control" required="required" >
+                                <form:options items="${departments}" itemLabel="fullName" itemValue="depId" />
+                            </form:select>
+                           </div>
+                    </div>
+                    <div class="row">
                         <div class="col-md-3">
                             <spring:message code="measure.measureCode" text="message not found"/>:
                         </div>

@@ -5,7 +5,6 @@
  */
 package th.co.wacoal.springtemplates.controller;
 
-import java.util.List;
 import javax.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -101,8 +100,6 @@ public class IndexController {
 
     @RequestMapping("/checkDoc.htm")
     public String checkDoc(Model model, HttpSession session) {
-        List<EdcsCalibration> dueCalibs = calibDAO.getNewAndNearExpireCalibrationMoreThanDays(30);
-        model.addAttribute("dueCalibrations", dueCalibs);
         return "checkDoc";
     }
 

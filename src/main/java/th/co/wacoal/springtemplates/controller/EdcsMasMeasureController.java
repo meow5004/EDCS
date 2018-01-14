@@ -29,17 +29,20 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import th.co.wacoal.springtemplates.dao.EdcsMasCalpointDAO;
+import th.co.wacoal.springtemplates.dao.EdcsMasDepartmentDAO;
 import th.co.wacoal.springtemplates.dao.EdcsMasEquipconDAO;
 import th.co.wacoal.springtemplates.dao.EdcsMasMeasureDAO;
 import th.co.wacoal.springtemplates.dao.EdcsMasMeasureGroupDAO;
 import th.co.wacoal.springtemplates.dao.EdcsMasModelDAO;
 import th.co.wacoal.springtemplates.dao.impl.EdcsMasCalpointDAOImpl;
+import th.co.wacoal.springtemplates.dao.impl.EdcsMasDepartmentDAOImpl;
 import th.co.wacoal.springtemplates.dao.impl.EdcsMasEquipconDAOImpl;
 import th.co.wacoal.springtemplates.dao.impl.EdcsMasMeasureDAOImpI;
 import th.co.wacoal.springtemplates.dao.impl.EdcsMasMeasureGroupDAOImpI;
 import th.co.wacoal.springtemplates.dao.impl.EdcsMasModelDAOImpI;
 import th.co.wacoal.springtemplates.db.Database;
 import th.co.wacoal.springtemplates.domain.EdcsMasCalpoint;
+import th.co.wacoal.springtemplates.domain.EdcsMasDepartment;
 import th.co.wacoal.springtemplates.domain.EdcsMasMeasure;
 import th.co.wacoal.springtemplates.domain.EdcsMasMeasureGroup;
 
@@ -53,6 +56,7 @@ public class EdcsMasMeasureController {
 
     Database db = new Database("sqlServer");
     EdcsMasMeasureDAO measureDAO = new EdcsMasMeasureDAOImpI(db);
+    EdcsMasDepartmentDAO depDAO = new EdcsMasDepartmentDAOImpl(db);
     EdcsMasCalpointDAO calpointDAO = new EdcsMasCalpointDAOImpl(db);
     EdcsMasEquipconDAO equipConDAO = new EdcsMasEquipconDAOImpl(db);
     EdcsMasModelDAO modelDAO = new EdcsMasModelDAOImpI(db);
@@ -84,8 +88,10 @@ public class EdcsMasMeasureController {
     @RequestMapping(value = "/add", method = RequestMethod.GET)
     public ModelAndView add(Model model, HttpSession session) {
         EdcsMasMeasure measure = new EdcsMasMeasure();
+        depDAO = new EdcsMasDepartmentDAOImpl(db);
         ModelAndView mv = new ModelAndView("master/measure/add");
         mv.addObject("calpoints", calpointDAO.findByFlag(0));
+        mv.addObject("departments", depDAO.findByFlag(0));
         mv.addObject("measureGroups", measureGroupDAO.findByFlag(0));
         mv.addObject("measure", measure);
         return mv;
@@ -121,13 +127,14 @@ public class EdcsMasMeasureController {
         EdcsMasMeasure editingmeasureId = measureDAO.find(id);
         ModelAndView mv = new ModelAndView("master/measure/edit");
         mv.addObject("measure", editingmeasureId);
-
+        depDAO = new EdcsMasDepartmentDAOImpl(db);
         List<EdcsMasCalpoint> calpoints = calpointDAO.findByFlag(0);
 
         mv.addObject("calpoints", calpoints);
 
         List<EdcsMasMeasureGroup> measureGroups = measureGroupDAO.findByFlag(0);
         mv.addObject("measureGroups", measureGroups);
+        mv.addObject("departments", depDAO.findByFlag(0));
         return mv;
     }
 
@@ -272,10 +279,10 @@ public class EdcsMasMeasureController {
     public void getAvailablemeasureId(Model model, HttpSession session, HttpServletResponse response) throws IOException {
         PrintWriter out = response.getWriter();
         List<EdcsMasMeasure> measure = measureDAO.findByFlag(0);
-
+        depDAO = new EdcsMasDepartmentDAOImpl(db);
         // Create JSON
         JSONObject json = new JSONObject();
-        
+
         List<Map> measureMap = new ArrayList<Map>();
         String edit = messageSource.getMessage("measure.edit", null, thaiLocale);
         String delete = messageSource.getMessage("measure.delete", null, thaiLocale);
@@ -302,7 +309,9 @@ public class EdcsMasMeasureController {
             p.put("createOn", dfnt.format(row.getCreateOn()));
             p.put("changeBy", row.getChangeBy());
             p.put("changeOn", df.format(row.getChangeOn()));
-
+            p.put("depId", row.getDepId());
+            EdcsMasDepartment dept = depDAO.find(row.getDepId());
+            p.put("depName", dept.getFullName());
             String actionLink = "<button class='editData btn btn-primary btn-sm'  value='./edit.htm?id=" + row.getMeasureId() + "'></i>" + edit + "</button> ";
             //+ "<button class='deleteData' value='./delete.htm?id=" + row.getmeasureId() + "'>"+delete+"</button>";
             p.put("actionLink", actionLink);
@@ -316,7 +325,7 @@ public class EdcsMasMeasureController {
             measureMap.add(p);
         }
         JSONArray jsonString = JSONArray.fromObject(measureMap);
-        
+
         //Go to view
         out.print("{" + "\"size\":\"" + measure.size() + "\",\"data\":" + jsonString + "}");
     }
@@ -329,7 +338,7 @@ public class EdcsMasMeasureController {
         String reuse = messageSource.getMessage("measure.reuse", null, thaiLocale);
         // Create JSON
         JSONObject json = new JSONObject();
-        
+
         List<Map> measureMap = new ArrayList<Map>();
         for (EdcsMasMeasure row : measure) {
             EdcsMasMeasureGroup measureGroup = measureGroupDAO.find(row.getMeasureGroupId());
@@ -344,7 +353,8 @@ public class EdcsMasMeasureController {
             p.put("description", row.getDescription());
             p.put("measureTime", row.getMeasureTimes());
             p.put("abtype", row.getAbType());
-
+            EdcsMasDepartment dept = depDAO.find(row.getDepId());
+            p.put("depName", dept.getFullName());
             EdcsMasCalpoint tempC = calpointDAO.find(row.getCalpointId());
             EdcsMasMeasureGroup tempG = measureGroupDAO.find(row.getMeasureGroupId());
 
@@ -354,7 +364,7 @@ public class EdcsMasMeasureController {
             p.put("createOn", dfnt.format(row.getCreateOn()));
             p.put("changeBy", row.getChangeBy());
             p.put("changeOn", df.format(row.getChangeOn()));
-
+            p.put("depId", row.getDepId());
 //               String actionLink = "<button class='reuseData' value='./reuse.htm?id=" + row.getmeasureId() + "'>"+reuse+"</button> ";
 //            p.put("actionLink", actionLink);
             String reuseCheckbox = " <input type=\"checkbox\" name=\"reusemeasureId\" value=\"" + row.getMeasureId() + "\">";
@@ -388,7 +398,7 @@ public class EdcsMasMeasureController {
             measureMap.add(p);
         }
         JSONArray jsonString = JSONArray.fromObject(measureMap);
-        
+
         //Go to view
         out.print("{" + "\"size\":\"" + measure.size() + "\",\"data\":" + jsonString + "}");
     }

@@ -27,8 +27,6 @@ public class EdcsMasMeasureDAOImpI implements EdcsMasMeasureDAO {
         this.db = db;
     }
 
-   
-
     @Override
     public List<EdcsMasMeasure> findAll() {
         String sql = "select * from EDCS_MAS_MEASURE";
@@ -48,7 +46,7 @@ public class EdcsMasMeasureDAOImpI implements EdcsMasMeasureDAO {
             p.setDescription((String) map.get("DESCRIPTION"));
             p.setMeasureTimes((int) map.get("MEASURE_TIMES"));
             p.setAbType((String) map.get("AB_TYPE"));
-
+            p.setDepId((String) map.get("DEP_ID"));
             p.setCalpointId((int) map.get("CALPOINT_ID"));
             p.setCalpointId((int) map.get("MEASURE_GROUP_ID"));
             p.setCreateBy((String) map.get("CREATE_BY"));
@@ -111,7 +109,8 @@ public class EdcsMasMeasureDAOImpI implements EdcsMasMeasureDAO {
                 + "DESCRIPTION =?,"
                 + "AB_TYPE =?,"
                 + "CALPOINT_ID =?,"
-                + "MEASURE_GROUP_ID=? "
+                + "MEASURE_GROUP_ID=?, "
+                + "DEP_ID=?"
                 + " where MEASURE_ID=?";
 
         int rs = db.update(sql,
@@ -127,6 +126,7 @@ public class EdcsMasMeasureDAOImpI implements EdcsMasMeasureDAO {
                 measure.getAbType(),
                 measure.getCalpointId(),
                 measure.getMeasureGroupId(),
+                measure.getDepId(),
                 measure.getMeasureId());
         return rs;
     }
@@ -184,7 +184,7 @@ public class EdcsMasMeasureDAOImpI implements EdcsMasMeasureDAO {
             p.setDescription((String) map.get("DESCRIPTION"));
             p.setMeasureTimes((int) map.get("MEASURE_TIMES"));
             p.setAbType((String) map.get("AB_TYPE"));
-
+            p.setDepId((String) map.get("DEP_ID"));
             p.setCalpointId((int) map.get("CALPOINT_ID"));
             p.setCreateBy((String) map.get("CREATE_BY"));
             p.setCreateOn((Date) map.get("CREATE_ON"));
@@ -214,7 +214,7 @@ public class EdcsMasMeasureDAOImpI implements EdcsMasMeasureDAO {
             p.setDescription((String) map.get("DESCRIPTION"));
             p.setMeasureTimes((int) map.get("MEASURE_TIMES"));
             p.setAbType((String) map.get("AB_TYPE"));
-
+            p.setDepId((String) map.get("DEP_ID"));
             p.setCalpointId((int) map.get("CALPOINT_ID"));
 
             p.setCreateBy((String) map.get("CREATE_BY"));
@@ -248,7 +248,7 @@ public class EdcsMasMeasureDAOImpI implements EdcsMasMeasureDAO {
             p.setDescription((String) map.get("DESCRIPTION"));
             p.setMeasureTimes((int) map.get("MEASURE_TIMES"));
             p.setAbType((String) map.get("AB_TYPE"));
-
+            p.setDepId((String) map.get("DEP_ID"));
             p.setCalpointId((int) map.get("CALPOINT_ID"));
 
             p.setCreateBy((String) map.get("CREATE_BY"));
@@ -280,7 +280,7 @@ public class EdcsMasMeasureDAOImpI implements EdcsMasMeasureDAO {
             p.setDescription((String) map.get("DESCRIPTION"));
             p.setMeasureTimes((int) map.get("MEASURE_TIMES"));
             p.setAbType((String) map.get("AB_TYPE"));
-
+            p.setDepId((String) map.get("DEP_ID"));
             p.setCalpointId((int) map.get("CALPOINT_ID"));
 
             p.setCreateBy((String) map.get("CREATE_BY"));
@@ -315,7 +315,7 @@ public class EdcsMasMeasureDAOImpI implements EdcsMasMeasureDAO {
             p.setAbType((String) map.get("AB_TYPE"));
 
             p.setCalpointId((int) map.get("CALPOINT_ID"));
-
+            p.setDepId((String) map.get("DEP_ID"));
             p.setCreateBy((String) map.get("CREATE_BY"));
             p.setCreateOn((Date) map.get("CREATE_ON"));
             p.setChangeBy((String) map.get("CHANGE_BY"));

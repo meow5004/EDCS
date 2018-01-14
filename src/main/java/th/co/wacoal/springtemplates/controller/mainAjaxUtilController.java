@@ -92,7 +92,18 @@ public class mainAjaxUtilController {
         //Go to view
         out.print("{" + "\"size\":\"" + approveDevice.size() + "\",\"data\":" + jsonString + "}");
     }
-    
+
+    @RequestMapping("/listNonFinishCalibration.htm")
+    public void listNonFinishCalibration(Model model, HttpSession session, HttpServletResponse response) throws IOException {
+        PrintWriter out = response.getWriter();
+        List<EdcsCalibration> approveDevice = calibDAO.listNonFinishCalibration();
+        // Do somethin
+
+        JSONArray jsonString = JSONArray.fromObject(approveDevice);
+        //Go to view
+        out.print("{" + "\"size\":\"" + approveDevice.size() + "\",\"data\":" + jsonString + "}");
+    }
+
     @RequestMapping("/findModel.htm")
     public void findModel(@RequestParam("modelId") String modelId, Model model, HttpSession session, HttpServletResponse response) throws IOException {
         PrintWriter out = response.getWriter();

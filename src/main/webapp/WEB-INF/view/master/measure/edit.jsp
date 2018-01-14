@@ -17,8 +17,18 @@
             <form:form id="editForm"  class="form-inline" action="edit.htm" method="post" modelAttribute="measure">
                 <form:hidden path="measureId"></form:hidden>
                     <div class="col-md-10">
-                        <div class="row" style="margin-bottom:20px">
-                            <div class="form-group" style="border: 1px solid black;padding: 2px">
+                        <div class="row">
+                            <div class="col-md-3">
+                            <spring:message code="measure.depId" text="message not found"/>:
+                        </div>
+                        <div class="col-md-6">
+                            <form:select path="depId" class="form-control" required="required" >
+                                <form:options items="${departments}" itemLabel="fullName" itemValue="depId" />
+                            </form:select>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-bottom:20px">
+                        <div class="form-group" style="border: 1px solid black;padding: 2px">
                             <spring:message code="measure.measure" text="message not found"/>:
                             <span  style="font-weight: bolder"> ${measure.measureId} </span >
                         </div>

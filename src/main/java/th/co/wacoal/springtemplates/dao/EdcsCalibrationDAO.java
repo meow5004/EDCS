@@ -43,4 +43,6 @@ public interface EdcsCalibrationDAO {
 
     public List<EdcsCalibration> getApprovedAndReceiverdDevice();
 
+    public List<EdcsCalibration> listNonFinishCalibration();
+
 }

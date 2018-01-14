@@ -75,6 +75,9 @@ public class EdcsMasDepartment implements Serializable {
     @Column(name = "FLAG_DEL")
     private String flagDel;
 
+    //extended
+    private String fullName;
+
     public EdcsMasDepartment() {
     }
 
@@ -101,6 +104,7 @@ public class EdcsMasDepartment implements Serializable {
     }
 
     public void setDepNameTh(String depNameTh) {
+        this.fullName = getFullName();
         this.depNameTh = depNameTh;
     }
 
@@ -109,6 +113,7 @@ public class EdcsMasDepartment implements Serializable {
     }
 
     public void setDepNameEn(String depNameEn) {
+        this.fullName = getFullName();
         this.depNameEn = depNameEn;
     }
 
@@ -160,6 +165,21 @@ public class EdcsMasDepartment implements Serializable {
         this.flagDel = flagDel;
     }
 
+    public String getFullName() {
+
+        String name = " ";
+        if (depNameTh != null && depNameTh.trim().length() > 0) {
+            name += depNameTh;
+            if (depNameEn != null && depNameEn.trim().length() > 0) {
+                name += "( " + depNameEn + " )";
+            }
+        } else {
+            name += depNameEn;
+        }
+        this.fullName = name;
+        return name;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -184,5 +204,5 @@ public class EdcsMasDepartment implements Serializable {
     public String toString() {
         return "th.co.wacoal.springtemplates.domain.EdcsMasDepartment[ depId=" + depId + " ]";
     }
-    
+
 }
