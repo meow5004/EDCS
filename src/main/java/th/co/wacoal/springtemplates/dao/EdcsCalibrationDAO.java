@@ -15,6 +15,8 @@ import th.co.wacoal.springtemplates.domain.EdcsCalibration;
  */
 public interface EdcsCalibrationDAO {
 
+    public EdcsCalibration findByCode(int id);
+
     public List<EdcsCalibration> findAll();
 
     public int update(EdcsCalibration object);
@@ -44,5 +46,7 @@ public interface EdcsCalibrationDAO {
     public List<EdcsCalibration> getApprovedAndReceiverdDevice();
 
     public List<EdcsCalibration> listNonFinishCalibration();
+    
+    public void saveCalibrationHeader(EdcsCalibration calibration);
 
 }

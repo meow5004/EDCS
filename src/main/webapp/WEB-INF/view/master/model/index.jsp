@@ -36,7 +36,7 @@
                             <th><spring:message code="model.measureId" text="message not found"/></th>
                             <th><spring:message code="model.measureCode" text="message not found"/></th>
                             <th><spring:message code="model.measureName" text="message not found"/></th>
-                            <th><spring:message code="model.cerOn" text="message not found"/></th>
+                            <th><spring:message code="model.cerNo" text="message not found"/></th>
                             <th><spring:message code="model.locationBy" text="message not found"/></th>
                             <th><spring:message code="model.locationReturn" text="message not found"/></th>
 
@@ -58,7 +58,7 @@
                             <th><spring:message code="model.measureId" text="message not found"/></th>
                             <th><spring:message code="model.measureCode" text="message not found"/></th>
                             <th><spring:message code="model.measureName" text="message not found"/></th>
-                            <th><spring:message code="model.cerOn" text="message not found"/></th>
+                            <th><spring:message code="model.cerNo" text="message not found"/></th>
                             <th><spring:message code="model.locationBy" text="message not found"/></th>
                             <th><spring:message code="model.locationReturn" text="message not found"/></th>
 
@@ -85,12 +85,12 @@
     $(document).ready(function () {
         availableTable = $('#availableModelTable').DataTable({
             "columns": [
-                {"data": "model", "target": 0},
+                {"data": "modelId", "target": 0,"visible": false},
                 {"data": "modelCode", "target": 1},
-                {"data": "measureId", "target": 2},
+                {"data": "measureId", "target": 2,"visible": false},
                 {"data": "measureCode", "target": 3},
                 {"data": "measureName", "target": 4},
-                {"data": "cerOn", "target": 5},
+                {"data": "cerNo", "target": 5},
                 {"data": "locationBy", "target": 6},
                 {"data": "locationReturn", "target": 7},
                 {"data": "actionLink", "target": 8, "searchable": false, "orderable": false},
@@ -102,12 +102,12 @@
             "displayLength": 10});
         unAvailableTable = $('#unavailableModelGroup').DataTable({
             "columns": [
-                {"data": "model", "target": 0},
+                {"data": "modelId", "target": 0,"visible": false},
                 {"data": "modelCode", "target": 1},
-                {"data": "measureId", "target": 2},
+                {"data": "measureId", "target": 2,"visible": false},
                 {"data": "measureCode", "target": 3},
                 {"data": "measureName", "target": 4},
-                {"data": "cerOn", "target": 5},
+                {"data": "cerNo", "target": 5},
                 {"data": "locationBy", "target": 6},
                 {"data": "locationReturn", "target": 7},
                 {"data": "reuseCheck", "target": 8, "className": "dt-center", "searchable": false, "orderable": false},

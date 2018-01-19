@@ -35,10 +35,9 @@ public class EdcsMasProcessDAOImpI implements EdcsMasProcessDAO {
             EdcsMasProcess p = new EdcsMasProcess();
 
             p.setProcessId((int) map.get("PROCESS_ID"));
-            p.setProcessNameTh((String) map.get("PROCESS_NAME_TH"));
-            p.setProcessNameEn((String) map.get("PROCESS_NAME_EN"));
-            p.setProcessSubjectTh((String) map.get("PROCESS_SUBJECT_TH"));
-            p.setProcessSubjectEn((String) map.get("PROCESS_SUBJECT_EN"));
+            p.setProcessCode((String) map.get("PROCESS_CODE"));
+            p.setProcessBy((String) map.get("PROCESS_BY"));
+            p.setProcessSubject((String) map.get("PROCESS_SUBJECT"));
             p.setCreateBy((String) map.get("CREATE_BY"));
             p.setCreateOn((Date) map.get("CREATE_ON"));
             p.setChangeBy((String) map.get("CHANGE_BY"));
@@ -89,14 +88,13 @@ public class EdcsMasProcessDAOImpI implements EdcsMasProcessDAO {
 
     @Override
     public int update(EdcsMasProcess process) {
-        String sql = "update EDCS_MAS_PROCESS  SET PROCESS_NAME_TH = ? , PROCESS_NAME_EN = ?,PROCESS_SUBJECT_TH = ? ,PROCESS_SUBJECT_EN = ?, CHANGE_BY=?,CHANGE_ON=(getdate())"
+        String sql = "update EDCS_MAS_PROCESS  SET PROCESS_CODE=?,PROCESS_BY=?,PROCESS_SUBJECT=?, CHANGE_BY=?,CHANGE_ON=(getdate())"
                 + "where PROCESS_ID=?";
 
         int rs = db.update(sql,
-                process.getProcessNameTh(),
-                process.getProcessNameEn(),
-                process.getProcessSubjectTh(),
-                process.getProcessSubjectEn(),
+                process.getProcessCode(),
+                process.getProcessBy(),
+                process.getProcessSubject(),
                 process.getChangeBy(),
                 process.getProcessId());
         return rs;
@@ -105,13 +103,12 @@ public class EdcsMasProcessDAOImpI implements EdcsMasProcessDAO {
     @Override
     public int add(EdcsMasProcess process) {
         // insert
-        String sql = "INSERT INTO EDCS_MAS_PROCESS (PROCESS_NAME_TH,PROCESS_NAME_EN,PROCESS_SUBJECT_TH,PROCESS_SUBJECT_EN,CREATE_BY,CHANGE_BY,CREATE_ON,CHANGE_ON,FLAG_DEL)"
-                + " VALUES (?,?,?,?,?,?,(getdate()),(getdate()),0)";
+        String sql = "INSERT INTO EDCS_MAS_PROCESS (PROCESS_CODE,PROCESS_BY,PROCESS_SUBJECT,CREATE_BY,CHANGE_BY,CREATE_ON,CHANGE_ON,FLAG_DEL)"
+                + " VALUES (?,?,?,?,?,(getdate()),(getdate()),0)";
         int res = db.add(sql,
-                process.getProcessNameTh(),
-                process.getProcessNameEn(),
-                process.getProcessSubjectTh(),
-                process.getProcessSubjectEn(),
+                process.getProcessCode(),
+                process.getProcessBy(),
+                process.getProcessSubject(),
                 process.getCreateBy(),
                 process.getChangeBy());
         return res;
@@ -124,10 +121,9 @@ public class EdcsMasProcessDAOImpI implements EdcsMasProcessDAO {
         EdcsMasProcess p = new EdcsMasProcess();
         if (map != null) {
             p.setProcessId((Integer) map.get("PROCESS_ID"));
-            p.setProcessNameTh((String) map.get("PROCESS_NAME_TH"));
-            p.setProcessNameEn((String) map.get("PROCESS_NAME_EN"));
-            p.setProcessSubjectTh((String) map.get("PROCESS_SUBJECT_TH"));
-            p.setProcessSubjectEn((String) map.get("PROCESS_SUBJECT_EN"));
+            p.setProcessBy((String) map.get("PROCESS_BY"));
+            p.setProcessCode((String) map.get("PROCESS_CODE"));
+            p.setProcessSubject((String) map.get("PROCESS_SUBJECT"));
             p.setCreateBy((String) map.get("CREATE_BY"));
             p.setCreateOn((Date) map.get("CREATE_ON"));
             p.setChangeBy((String) map.get("CHANGE_BY"));
@@ -146,10 +142,9 @@ public class EdcsMasProcessDAOImpI implements EdcsMasProcessDAO {
             EdcsMasProcess p = new EdcsMasProcess();
 
             p.setProcessId((int) map.get("PROCESS_ID"));
-            p.setProcessNameTh((String) map.get("PROCESS_NAME_TH"));
-            p.setProcessNameEn((String) map.get("PROCESS_NAME_EN"));
-            p.setProcessSubjectTh((String) map.get("PROCESS_SUBJECT_TH"));
-            p.setProcessSubjectEn((String) map.get("PROCESS_SUBJECT_EN"));
+            p.setProcessCode((String) map.get("PROCESS_CODE"));
+            p.setProcessBy((String) map.get("PROCESS_BY"));
+            p.setProcessSubject((String) map.get("PROCESS_SUBJECT"));
             p.setCreateBy((String) map.get("CREATE_BY"));
             p.setCreateOn((Date) map.get("CREATE_ON"));
             p.setChangeBy((String) map.get("CHANGE_BY"));
@@ -162,13 +157,10 @@ public class EdcsMasProcessDAOImpI implements EdcsMasProcessDAO {
     }
 
     @Override
-    public int isExistCount(String processNameTh,String processNameEn,String subjectNameTh,String subjectNameEn, String id) {
-        if (id == null) {
-            id = "0";
-        }
-        int idInt = Integer.parseInt(id);
-        String sql = "select count(*) as count from EDCS_MAS_PROCESS where PROCESS_NAME_TH=? AND PROCESS_NAME_EN=? AND PROCESS_SUBJECT_TH = ? AND PROCESS_SUBJECT_EN = ?  AND PROCESS_ID !=?";
-        Map<String, Object> map = db.querySingle(sql, processNameTh,processNameEn,subjectNameTh,subjectNameEn, idInt);
+    public int isExistCount(EdcsMasProcess process) {
+
+        String sql = "select count(*) as count from EDCS_MAS_PROCESS where PROCESS_CODE=?  AND PROCESS_ID !=?";
+        Map<String, Object> map = db.querySingle(sql, process.getProcessCode(), process.getProcessId());
         int count = 0;
         if (map != null) {
             count = (int) map.get("count");

@@ -96,7 +96,7 @@ public class EdcsMasModelController {
 
                 modelDAO.add(Entitymodel);
                 EdcsMasMeasure added = measueDAO.find(Entitymodel.getMeasureId());
-                responseMessage = "succesfully add model measurement " + added.getFullName() + " Cert id" + Entitymodel.getCerOn() + " by" + Entitymodel.getLocationBy();;
+                responseMessage = "succesfully add model measurement " + added.getFullName() + " Cert id" + Entitymodel.getcerNo() + " by" + Entitymodel.getLocationBy();;
             }
 
             out.print(responseMessage);
@@ -254,7 +254,7 @@ public class EdcsMasModelController {
     private int validateInput(EdcsMasModel Entitymodel) {
         responseMessage = "";
         int valid = 1;
-        if (Entitymodel.getCerOn() == null) {
+        if (Entitymodel.getcerNo() == null) {
             valid = 0;
             responseMessage = "please enter certificated day";
         }
@@ -292,12 +292,12 @@ public class EdcsMasModelController {
             EdcsMasMeasure thisMeasure = new EdcsMasMeasure();
             thisMeasure = measueDAO.find(row.getMeasureId());
             Map p = new HashMap();
-            p.put("model", row.getModelId());
+            p.put("modelId", row.getModelId());
             p.put("modelCode", row.getModelCode());
             p.put("measureId", thisMeasure.getMeasureId());
             p.put("measureCode", thisMeasure.getMeasureCode());
             p.put("measureName", thisMeasure.getFullName());
-            p.put("cerOn", row.getCerOn());
+            p.put("cerNo", row.getcerNo());
             p.put("locationBy", row.getLocationBy());
             p.put("locationReturn", row.getLocationReturn());
 
@@ -333,11 +333,11 @@ public class EdcsMasModelController {
             EdcsMasMeasure thisMeasure = new EdcsMasMeasure();
             thisMeasure = measueDAO.find(row.getMeasureId());
             Map p = new HashMap();
-            p.put("model", row.getModelId());
+            p.put("modelId", row.getModelId());
             p.put("modelCode", row.getModelCode());
             p.put("measureId", thisMeasure.getMeasureId());
             p.put("measureName", thisMeasure.getFullName());
-            p.put("cerOn", row.getCerOn());
+            p.put("cerNo", row.getcerNo());
             p.put("locationBy", row.getLocationBy());
             p.put("locationReturn", row.getLocationReturn());
             p.put("measureCode", thisMeasure.getMeasureCode());

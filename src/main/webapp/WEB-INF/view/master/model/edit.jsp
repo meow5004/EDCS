@@ -38,37 +38,39 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="col-md-6">
-                                <spring:message code="model.measureId" text="message not found"/>:
+                                <spring:message code="model.measureCode" text="message not found"/>:
                             </div>
                             <div class="col-md-6">
                                 <form:select path="measureId" class="form-control" required="required" >
-                                    <form:options items="${measures}" itemLabel="measureId" itemValue="measureId" />
+                                    <form:options items="${measures}" itemLabel="measureCode" itemValue="measureId" />
                                 </form:select>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="col-md-6">
-                                <spring:message code="model.cerOn" text="message not found"/>:
+                                <spring:message code="model.cerNo" text="message not found"/>:
                             </div>
                             <div class="col-md-6">
-                                <form:input path="cerOn"  class="form-control" required="required" />
+                                <form:input path="cerNo"  class="form-control" required="required" />
                             </div>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-6">
-                            <div class="col-md-6">
+                        <div class="col-md-12">
+                            <div class="col-md-3">
                                 <spring:message code="model.locationBy" text="message not found"/>:
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-9">
                                 <form:input path="locationBy"  class="form-control" required="required" />
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="col-md-6">
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="col-md-3">
                                 <spring:message code="model.locationReturn" text="message not found"/>:
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-9">
                                 <form:input path="locationReturn"  class="form-control" required="required" />
                             </div>
                         </div>

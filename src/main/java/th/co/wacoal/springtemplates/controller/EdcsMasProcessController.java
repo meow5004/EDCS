@@ -50,8 +50,8 @@ public class EdcsMasProcessController {
     private MessageSource messageSource;
     Locale thaiLocale = new Locale.Builder().setLanguage("th").build();
 
-   DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss",Locale.US);
-    DateFormat dfnt = new SimpleDateFormat("MM/dd/yyyy",Locale.US);
+    DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss", Locale.US);
+    DateFormat dfnt = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
 
     @RequestMapping("/index")
     public ModelAndView processCRUD(Model model, HttpSession session) {
@@ -87,7 +87,7 @@ public class EdcsMasProcessController {
                 process.setChangeBy(userId);
 
                 processDAO.add(process);
-                responseMessage = "succesfully add PROCESS " + process.getFullName();
+                responseMessage = "เพิ่มวิธีทดสอบรหัส " + process.getProcessCode();
             }
 
             out.print(responseMessage);
@@ -119,7 +119,7 @@ public class EdcsMasProcessController {
                 process.setChangeBy(userId);
 
                 processDAO.update(process);
-                responseMessage = "succesfully edit PROCESS " + process.getFullName();
+                responseMessage = "แก้ไขวิธีทดสอบรหัส  " + process.getProcessCode();
             }
 
             out.print(responseMessage);
@@ -240,23 +240,17 @@ public class EdcsMasProcessController {
     private int validateInput(EdcsMasProcess process) {
         responseMessage = "";
         int valid = 1;
-        if (process.getProcessNameTh() == null && process.getProcessNameTh().trim().length() <= 0
-                && process.getProcessNameEn() == null && process.getProcessNameEn().trim().length() <= 0) {
+        if (process.getProcessCode() == null && process.getProcessCode().trim().length() <= 0) {
             valid = 0;
-            responseMessage = "please enter at least one process name";
+            responseMessage = "code input required";
         }
 
-        if (process.getProcessSubjectTh() == null && process.getProcessSubjectTh().trim().length() <= 0
-                && process.getProcessSubjectEn() == null && process.getProcessSubjectEn().trim().length() <= 0) {
-            valid = 0;
-            responseMessage = "please enter at least one subject name";
-        }
         Integer id = process.getProcessId();
         if (id == null) {
             id = 0;
         }
 
-        if ((processDAO.isExistCount(process.getProcessNameTh(), process.getProcessNameEn(), process.getProcessSubjectTh(), process.getProcessSubjectEn(), id.toString())) > 0) {
+        if (processDAO.isExistCount(process) > 0) {
             valid = 0;
         }
         //return 1 if valid
@@ -270,7 +264,7 @@ public class EdcsMasProcessController {
 
         // Create JSON
         JSONObject json = new JSONObject();
-        
+
         List<Map> processMap = new ArrayList<Map>();
         String edit = messageSource.getMessage("process.edit", null, thaiLocale);
         String delete = messageSource.getMessage("process.delete", null, thaiLocale);
@@ -278,8 +272,9 @@ public class EdcsMasProcessController {
         for (EdcsMasProcess row : process) {
             Map p = new HashMap();
             p.put("processId", row.getProcessId());
-            p.put("processName", row.getFullProcessName());
-            p.put("subjectName", row.getFullSubjectName());
+            p.put("processCode", row.getProcessCode());
+            p.put("processSubject", row.getProcessSubject());
+            p.put("processBy", row.getProcessBy());
             p.put("createBy", row.getCreateBy());
             p.put("createOn", dfnt.format(row.getCreateOn()));
             p.put("changeBy", row.getChangeBy());
@@ -294,7 +289,7 @@ public class EdcsMasProcessController {
             processMap.add(p);
         }
         JSONArray jsonString = JSONArray.fromObject(processMap);
-        
+
         //Go to view
         out.print("{" + "\"size\":\"" + process.size() + "\",\"data\":" + jsonString + "}");
     }
@@ -306,13 +301,14 @@ public class EdcsMasProcessController {
         String reuse = messageSource.getMessage("process.reuse", null, thaiLocale);
         // Create JSON
         JSONObject json = new JSONObject();
-        
+
         List<Map> processMap = new ArrayList<Map>();
         for (EdcsMasProcess row : process) {
             Map p = new HashMap();
             p.put("processId", row.getProcessId());
-            p.put("processName", row.getFullProcessName());
-            p.put("subjectName", row.getFullSubjectName());
+            p.put("processCode", row.getProcessCode());
+            p.put("processSubject", row.getProcessSubject());
+            p.put("processBy", row.getProcessBy());
             p.put("createBy", row.getCreateBy());
             p.put("createOn", dfnt.format(row.getCreateOn()));
             p.put("changeBy", row.getChangeBy());
@@ -329,24 +325,24 @@ public class EdcsMasProcessController {
             processMap.add(p);
         }
         JSONArray jsonString = JSONArray.fromObject(processMap);
-        
+
         //Go to view
         out.print("{" + "\"size\":\"" + process.size() + "\",\"data\":" + jsonString + "}");
     }
 
     @RequestMapping(value = "/checkIfExisted")
-    public void checkIfExisted(@RequestParam("processNameTh") String processNameTh, @RequestParam("processNameEn") String processNameEn, @RequestParam("processSubjectTh") String processSubjectTh, @RequestParam("processSubjectEn")String processSubjectEn, @RequestParam(value = "id", required = false) String id, Model model, HttpSession session, HttpServletResponse response) throws IOException {
+    public void checkIfExisted(@RequestParam("processCode") String processCode, @RequestParam(value = "id", required = false) String id, Model model, HttpSession session, HttpServletResponse response) throws IOException {
         PrintWriter out = response.getWriter();
         try {
-            int count = processDAO.isExistCount(processNameTh.trim(), processNameEn.trim(), processSubjectTh.trim(), processSubjectEn.trim(), id);
+            EdcsMasProcess proCheck = new EdcsMasProcess();
+            if (id != null) {
+                proCheck.setProcessId(Integer.valueOf(id));
+            }
+            proCheck.setProcessCode(processCode);
+            int count = processDAO.isExistCount(proCheck);
             responseMessage = "";
-            EdcsMasProcess temp = new EdcsMasProcess();
-            temp.setProcessNameTh(processNameTh);
-            temp.setProcessNameEn(processNameEn);
-            temp.setProcessSubjectTh(processSubjectTh);
-            temp.setProcessSubjectEn(processSubjectEn);
             if (count > 0) {
-                responseMessage = "มี PROCESS " + temp.getFullName() + "ในระบบแล้ว";
+                responseMessage = "มีวิธีทดสอบรหัส " + proCheck.getProcessCode() + "ในระบบแล้ว";
             }
 
             out.write(responseMessage);

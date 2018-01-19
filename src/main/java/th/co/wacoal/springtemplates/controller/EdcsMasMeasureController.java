@@ -291,7 +291,7 @@ public class EdcsMasMeasureController {
         for (EdcsMasMeasure row : measure) {
             EdcsMasMeasureGroup measureGroup = measureGroupDAO.find(row.getMeasureGroupId());
             Map p = new HashMap();
-            p.put("measure", row.getMeasureId());
+            p.put("measureId", row.getMeasureId());
             p.put("measureGroup", row.getMeasureGroupId());
             p.put("measureGroupName", measureGroup.getFullName());
             p.put("measureCode", row.getMeasureCode());
@@ -343,7 +343,7 @@ public class EdcsMasMeasureController {
         for (EdcsMasMeasure row : measure) {
             EdcsMasMeasureGroup measureGroup = measureGroupDAO.find(row.getMeasureGroupId());
             Map p = new HashMap();
-            p.put("measure", row.getMeasureId());
+            p.put("measureId", row.getMeasureId());
             p.put("measureGroup", row.getMeasureGroupId());
             p.put("measureGroupName", measureGroup.getFullName());
             p.put("measureCode", row.getMeasureCode());

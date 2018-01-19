@@ -75,21 +75,21 @@ public class EdcsMasEquipcon implements Serializable {
     @Column(name = "FLAG_COMMENT")
     private String flagComment;
 
-    private transient String fullname;
+    private transient String fullName;
 
     public EdcsMasEquipcon() {
     }
 
     public EdcsMasEquipcon(Integer equipConId) {
         this.equipConId = equipConId;
-        fullname = getFullName();
+        fullName = getFullName();
     }
 
     public EdcsMasEquipcon(Integer equipConId, Date createOn, Date changeOn) {
         this.equipConId = equipConId;
         this.createOn = createOn;
         this.changeOn = changeOn;
-        fullname = getFullName();
+        fullName = getFullName();
     }
 
     public Integer getEquipConId() {
@@ -106,7 +106,7 @@ public class EdcsMasEquipcon implements Serializable {
 
     public void setEquipConNameTh(String equipConNameTh) {
         this.equipConNameTh = equipConNameTh;
-        fullname = getFullName();
+        fullName = getFullName();
     }
 
     public String getEquipConNameEn() {
@@ -115,7 +115,7 @@ public class EdcsMasEquipcon implements Serializable {
 
     public void setEquipConNameEn(String equipConNameEn) {
         this.equipConNameEn = equipConNameEn;
-        fullname = getFullName();
+        fullName = getFullName();
     }
 
     public String getCreateBy() {

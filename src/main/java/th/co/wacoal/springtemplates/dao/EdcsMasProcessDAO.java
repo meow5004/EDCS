@@ -34,5 +34,5 @@ public interface EdcsMasProcessDAO {
 
     public int reuseMutiple(Integer[] ids, String userId);
 
-    public int isExistCount(String processNameTh, String processNameEn, String subjectNameTh, String subjectNameEn, String id);
+    public int isExistCount(EdcsMasProcess process);
 }

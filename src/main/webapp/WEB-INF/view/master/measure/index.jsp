@@ -91,7 +91,7 @@
     $(document).ready(function () {
         availableTable = $('#availableMeasureTable').DataTable({
             "columns": [
-                {"data": "measure", "target": 0},
+                {"data": "measureId", "target": 0,"visible": false},
                 {"data": "measureCode", "target": 1},
                 {"data": "measureName", "target": 2},
                 {"data": "measureGroupName", "target": 3},
@@ -120,7 +120,7 @@
             "displayLength": 10});
         unAvailableTable = $('#unavailableMeasureTable').DataTable({
             "columns": [
-                {"data": "measure", "target": 0},
+                {"data": "measureId", "target": 0,"visible": false},
                 {"data": "measureCode", "target": 1},
                 {"data": "measureName", "target": 2},
                 {"data": "measureGroupName", "target": 3},
@@ -236,7 +236,7 @@
 
     function showFrom(link) {
         $("#ajaxCRUDfield").load(link, function () {
-            var $inputs = $('input[type=text][name=unitNameTh],input[type=text][name=unitNameEn]');
+            var $inputs = $('input[type=text][name=measureNameTh],input[type=text][name=measureNameEn]');
             $inputs.on('input', function () {
                 // Set the required property of the other input to false if this input is not empty.
                 $inputs.not(this).prop('required', !$(this).val().length);

@@ -31,9 +31,9 @@
                             <th colspan="5" style="text-align: center"><spring:message code= "process.table.avaliable" text="message not found"/></th>
                         </tr>
                         <tr class="alt" >
-                            <th><spring:message code= "process.processId" text="message not found"/></th>
-                            <th><spring:message code= "process.processName" text="message not found"/></th>
-                            <th><spring:message code= "process.processSubject"  text="message not found" /></th>
+                            <th><spring:message code= "process.processCode" text="message not found"/></th>
+                            <th><spring:message code= "process.processSubject" text="message not found"/></th>
+                            <th><spring:message code= "process.processBy"  text="message not found" /></th>
                             <th></th>
                             <th><button class="deleteMultiple btn btn-danger"><spring:message code= "process.delete" text="message not found"/><i class="fa fa-trash-o" aria-hidden="true"></i></button></th>
                         </tr> 
@@ -46,9 +46,9 @@
                             <th colspan="5" style="text-align: center"><spring:message code= "process.table.unavaliable" text="message not found"/></th>
                         </tr>
                         <tr class="alt" >
-                            <th><spring:message code= "process.processId" text="message not found"/></th>
-                            <th><spring:message code= "process.processName" text="message not found"/></th>
-                            <th><spring:message code= "process.processSubject"  text="message not found" /></th>
+                            <th><spring:message code= "process.processCode" text="message not found"/></th>
+                            <th><spring:message code= "process.processSubject" text="message not found"/></th>
+                            <th><spring:message code= "process.processBy"  text="message not found" /></th>
                             <th><button class="reuseMultiple btn btn-success"><spring:message code= "process.reuse" text="message not found"/><i class="fa fa-recycle" aria-hidden="true"></i></button></th>
                             <th><button class="realDeleteMultiple btn btn-danger"><spring:message code= "process.realDelete" text="message not found"/><i class="fa fa-remove" aria-hidden="true"></i></button></th>
                         </tr> 
@@ -71,9 +71,9 @@
     $(document).ready(function () {
         availableTable = $('#availableProcessTable').DataTable({
             "columns": [
-                {"data": "processId", "target": 0},
-                {"data": "processName", "target": 1},
-                {"data": "subjectName", "target": 2},
+                {"data": "processCode", "target": 0},
+                {"data": "processSubject", "target": 1},
+                {"data": "processBy", "target": 2},
                 {"data": "actionLink", "target": 3, "searchable": false, "orderable": false},
                 {"data": "deleteCheck", "target": 4, "className": "dt-center", "searchable": false, "orderable": false}
             ],
@@ -84,9 +84,9 @@
 
         unAvailableTable = $('#unavailableProcessTable').DataTable({
             "columns": [
-                {"data": "processId", "target": 0},
-                {"data": "processName", "target": 1},
-                {"data": "subjectName", "target": 2},
+                {"data": "processCode", "target": 0},
+                {"data": "processSubject", "target": 1},
+                {"data": "processBy", "target": 2},
                 {"data": "reuseCheck", "target": 3, "className": "dt-center", "searchable": false, "orderable": false},
                 {"data": "realDeleteCheck", "target": 4, "className": "dt-center", "searchable": false, "orderable": false}
             ],
@@ -276,7 +276,6 @@
             }
         }
         if (valid === 1) {
-            console.log(valid);
             var form = $(this); //wrap this in jQuery
             var url = form.prop('action'); // the script where you handle the form input.
             $.ajax({
@@ -302,13 +301,12 @@
 
     function validateInput() {
         valid = 1;
-
-        if ($("#processNameTh").val().trim().length <= 0 && $("#processNameEn").val().trim().length <= 0) {
+        if ($("#processCode").val().trim().length <= 0) {
             valid = 0;
             bootbox.alert({
                 backdrop: true,
                 className: "dangerFont",
-                message: "please Enter  process Name",
+                message: "please Enter  process Code",
                 callback: function () { /* your callback code */
                 }
             });
@@ -316,11 +314,12 @@
         }
 
         var id = $("#processId").val();
+        var code = $("#processCode").val();
         $.ajax({
             type: "POST",
             url: "checkIfExisted.htm",
             async: false,
-            data: {processNameTh: $("#processNameTh").val().trim(), processNameEn: $("#processNameEn").val().trim(), processSubjectTh: $("#processSubjectTh").val().trim(), processSubjectEn: $("#processSubjectEn").val().trim(), id: id}, // serializes the form's elements.
+            data: {processCode: code, id: id}, // serializes the form's elements.
             success: function (result)
             {
                 if (result.trim().length > 0) {

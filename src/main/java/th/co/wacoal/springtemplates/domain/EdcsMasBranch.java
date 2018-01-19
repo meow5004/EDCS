@@ -39,6 +39,10 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "EdcsMasBranch.findByFlagDel", query = "SELECT e FROM EdcsMasBranch e WHERE e.flagDel = :flagDel")})
 public class EdcsMasBranch implements Serializable {
 
+    @Size(max = 50)
+    @Column(name = "BRANCH_CODE")
+    private String branchCode;
+
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -191,6 +195,14 @@ public class EdcsMasBranch implements Serializable {
     @Override
     public String toString() {
         return "th.co.wacoal.springtemplates.domain.EdcsMasBranch[ branchId=" + branchId + " ]";
+    }
+
+    public String getBranchCode() {
+        return branchCode;
+    }
+
+    public void setBranchCode(String branchCode) {
+        this.branchCode = branchCode;
     }
 
 }

@@ -260,7 +260,7 @@ public class EdcsMasMeasure implements Serializable {
 
     public String getFullName() {
         String name = " ";
-        if (measureNameTh != null) {
+        if (measureNameTh != null&&measureNameTh.trim().length() > 0) {
             name += measureNameTh;
             if (measureNameEn != null) {
                 name += "( " + measureNameEn + " )";

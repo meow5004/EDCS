@@ -12,7 +12,14 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
 import th.co.wacoal.springtemplates.dao.EdcsCalibrationDAO;
+import th.co.wacoal.springtemplates.dao.EdcsMasCalageDAO;
+import th.co.wacoal.springtemplates.dao.EdcsMasDepartmentDAO;
+import th.co.wacoal.springtemplates.dao.EdcsMasEquipconDAO;
 import th.co.wacoal.springtemplates.dao.EdcsMasMeasureDAO;
+import th.co.wacoal.springtemplates.dao.EdcsMasMeasureUnitDAO;
+import th.co.wacoal.springtemplates.dao.EdcsMasModelDAO;
+import th.co.wacoal.springtemplates.dao.EdcsMasProcessDAO;
+import th.co.wacoal.springtemplates.dao.EdcsMasStatusCaldocDAO;
 import th.co.wacoal.springtemplates.db.Database;
 import th.co.wacoal.springtemplates.domain.EdcsCalibration;
 import th.co.wacoal.springtemplates.domain.EdcsMasMeasure;
@@ -24,11 +31,26 @@ import th.co.wacoal.springtemplates.domain.EdcsMasMeasure;
 public class EdcsCalibrationDAOImpI implements EdcsCalibrationDAO {
 
     private final Database db;
+
     EdcsMasMeasureDAO masDao = null;
+    EdcsMasCalageDAO calageDAO = null;
+    EdcsMasStatusCaldocDAO statusCalDocDAO = null;
+    EdcsMasEquipconDAO equipConDAO = null;
+    EdcsMasMeasureUnitDAO measureUnitDAO = null;
+    EdcsMasProcessDAO processDAO = null;
+    EdcsMasModelDAO modelDAO = null;
+    EdcsMasDepartmentDAO depDAO = null;
 
     public EdcsCalibrationDAOImpI(Database db) {
         this.db = db;
         masDao = new EdcsMasMeasureDAOImpI(db);
+        calageDAO = new EdcsMasCalageDAOImpI(db);
+        statusCalDocDAO = new EdcsMasStatusCaldocDAOImpl(db);
+        equipConDAO = new EdcsMasEquipconDAOImpl(db);
+        measureUnitDAO = new EdcsMasMeasureUnitDAOImpl(db);
+        processDAO = new EdcsMasProcessDAOImpI(db);
+        modelDAO = new EdcsMasModelDAOImpI(db);
+        depDAO = new EdcsMasDepartmentDAOImpl(db);
     }
 
     @Override
@@ -107,7 +129,7 @@ public class EdcsCalibrationDAOImpI implements EdcsCalibrationDAO {
         Map<String, Object> map = db.querySingle(sql, measureId);
         EdcsCalibration p = new EdcsCalibration();
         if (map != null) {
-            p.setDepId((Integer) map.get("DEP_ID"));
+            p.setDepId((String) map.get("DEP_ID"));
 
             int MeasureId = (Integer) map.get("MEASURE_ID");
             p.setMeasureId(MeasureId);
@@ -148,8 +170,15 @@ public class EdcsCalibrationDAOImpI implements EdcsCalibrationDAO {
     }
 
     @Override
+    public void saveCalibrationHeader(EdcsCalibration calibration) {
+        String statusCalibrationBy = "";
+        String sql = "UPDATE EDCS_CALIBRATION SET CALIBRATION_STATUS_BY=?,MEASURE_ID=?,MODEL_ID=?,PROCESS_ID=?,UNIT_ID=?,EQUIP_CON_ID=?,CONDITION_COMMENT=?,CALIBRATION_STATUS_ON=(getdate()),CALIBRATION_STATUS=1 WHERE CAL_ID=?";
+        int result = db.update(sql, statusCalibrationBy, calibration.getMeasureId(), calibration.getModelId(), calibration.getProcessId(), calibration.getUnitId(),calibration.getEquipConId(),calibration.getConditionComment(),calibration.getCalId());
+    }
+
+    @Override
     public List<EdcsCalibration> findAll() {
-        String sql = "select * from EDCS_MAS_CALIBRATION";
+        String sql = "select * from EDCS_CALIBRATION";
         List<Map<String, Object>> rs = db.queryList(sql);
         List<EdcsCalibration> ret = new ArrayList<>();
         for (Map<String, Object> map : rs) {
@@ -161,7 +190,18 @@ public class EdcsCalibrationDAOImpI implements EdcsCalibrationDAO {
 
     @Override
     public EdcsCalibration find(int id) {
-        String sql = "select * from EDCS_MAS_CALIBRATION where CAL_CODE = ?";
+        String sql = "select * from EDCS_CALIBRATION where CAL_ID = ?";
+        Map<String, Object> map = db.querySingle(sql, id);
+        EdcsCalibration p = new EdcsCalibration();
+        if (map != null) {
+            p = mappingResultSetToCalibration(map);
+        }
+        return p;
+    }
+
+    @Override
+    public EdcsCalibration findByCode(int id) {
+        String sql = "select * from EDCS_CALIBRATION where CAL_CODE = ?";
         Map<String, Object> map = db.querySingle(sql, id);
         EdcsCalibration p = new EdcsCalibration();
         if (map != null) {
@@ -172,7 +212,7 @@ public class EdcsCalibrationDAOImpI implements EdcsCalibrationDAO {
 
     @Override
     public List<EdcsCalibration> findByFlag(int flag) {
-        String sql = "select * from EDCS_MAS_CALIBRATION where FLAG_DEL=?";
+        String sql = "select * from EDCS_CALIBRATION where FLAG_DEL=?";
         List<Map<String, Object>> rs = db.queryList(sql, flag);
         List<EdcsCalibration> ret = new ArrayList<>();
         for (Map<String, Object> map : rs) {
@@ -252,7 +292,7 @@ public class EdcsCalibrationDAOImpI implements EdcsCalibrationDAO {
         return ret;
     }
 
-        @Override
+    @Override
     public List<EdcsCalibration> listNonFinishCalibration() {
         Database db = new Database("sqlServer");
         EdcsMasMeasureDAO masDao = new EdcsMasMeasureDAOImpI(db);
@@ -270,7 +310,7 @@ public class EdcsCalibrationDAOImpI implements EdcsCalibrationDAO {
 
         return ret;
     }
-    
+
     @Override
     public List<EdcsCalibration> getApprovedAndReceiverdDevice() {
         Database db = new Database("sqlServer");
@@ -293,25 +333,31 @@ public class EdcsCalibrationDAOImpI implements EdcsCalibrationDAO {
     @Override
     public EdcsCalibration mappingResultSetToCalibration(Map<String, Object> map) {
         EdcsCalibration p = new EdcsCalibration();
-        //get measure Mapping data
-        Map<Integer, EdcsMasMeasure> measureList = masDao.findByFlagListMappingById(0);
+        Integer MeasureId = map.get("MEASURE_ID") != null ? (Integer) map.get("MEASURE_ID") : null;
+        Integer calageId = map.get("CAL_AGE_ID") != null ? (Integer) map.get("CAL_AGE_ID") : null;
+        Integer statDocId = map.get("STATUS_CALDOC_ID") != null ? (Integer) map.get("STATUS_CALDOC_ID") : null;
+        Integer equipConId = map.get("EQUIP_CON_ID") != null ? (Integer) map.get("EQUIP_CON_ID") : null;
+        Integer unitId = map.get("UNIT_ID") != null ? (Integer) map.get("UNIT_ID") : null;
+        Integer processId = map.get("PROCESS_ID") != null ? (Integer) map.get("PROCESS_ID") : null;
+        Integer modelId = map.get("MODEL_ID") != null ? (Integer) map.get("MODEL_ID") : null;
+        String depId = map.get("DEP_ID") != null ? (String) map.get("DEP_ID") : null;
+
         p.setCalId((Integer) map.get("CAL_ID"));
         p.setCalCode((String) map.get("CAL_CODE"));
-        p.setCalAgeId((Integer) map.get("CAL_AGE_ID"));
+        p.setCalAgeId(calageId);
         p.setCalError((Double) map.get("CAL_ERROR"));
 
-        p.setDepId((Integer) map.get("DEP_ID"));
+        p.setDepId(depId);
 
-        int MeasureId = (Integer) map.get("MEASURE_ID");
         p.setMeasureId(MeasureId);
 
-        p.setModelId((Integer) map.get("MODEL_ID"));
-        p.setProcessId((Integer) map.get("PROCESS_ID"));
-        p.setUnitId((Integer) map.get("UNIT_ID"));
+        p.setModelId(modelId);
+        p.setProcessId(processId);
+        p.setUnitId(unitId);
 
         p.setDueDate((Date) map.get("DUE_DATE"));
-        p.setEquipConId((Integer) map.get("EQUIP_CON_ID"));
-        p.setStatusCaldocId((Integer) map.get("STATUS_CALDOC_ID"));
+        p.setEquipConId(equipConId);
+        p.setStatusCaldocId(statDocId);
         p.setComment((String) map.get("COMMENT"));
         p.setConditionComment((String) map.get("CONDITION_COMMENT"));
 
@@ -350,8 +396,34 @@ public class EdcsCalibrationDAOImpI implements EdcsCalibrationDAO {
         p.setStickerStatusBy((String) map.get("STICKER_STATUS_BY"));
         p.setStickerStatusOn((Date) map.get("STICKER_STATUS_ON"));
 
+        p.setCalibrationAttachStatus((String) map.get("CALIBRATION_ATTACH_STATUS"));
+        p.setCalibrationAttachStatusBy((String) map.get("CALIBRATION_ATTACH_STATUS_ON"));
+        p.setCalibrationAttachStatusOn((Date) map.get("CALIBRATION_ATTACH_STATUS_BY"));
         //extended properties 
-        p.setAssociateMeasure(measureList.get(MeasureId));
+        if (MeasureId != null) {
+            p.setAssociateMeasure(masDao.find(MeasureId));
+        }
+        if (calageId != null) {
+            p.setAssociateCalage(calageDAO.find(calageId));
+        }
+        if (statDocId != null) {
+            p.setAssociateStatusCaldoc(statusCalDocDAO.find(statDocId));
+        }
+        if (equipConId != null) {
+            p.setAssociateEquipCon(equipConDAO.find(equipConId));
+        }
+        if (unitId != null) {
+            p.setAssociateUnit(measureUnitDAO.find(unitId));
+        }
+        if (processId != null) {
+            p.setAssociateProcess(processDAO.find(processId));
+        }
+        if (modelId != null) {
+            p.setAssociateModel(modelDAO.find(modelId));
+        }
+        if (depId != null) {
+            p.setAssociateDep(depDAO.find(depId));
+        }
         return p;
     }
 

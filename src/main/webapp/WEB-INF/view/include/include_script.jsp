@@ -71,9 +71,34 @@
 
         return date;
     }
+
+    function formatDateFromJavaDateJSONEncoded(JSONData) {
+        var day = JSONData.date;
+        var month = parseInt(JSONData.month) + 1;
+        var year = parseInt(JSONData.year) + 1900;
+        var date = day + "/" + month + "/" + year;
+        return date;
+    }
 </script>
 
 <style>
+
+
+    .inpuTable  input {display: block !important; padding: 0 !important; margin: 0 !important; border: 1px:solid black !important; width: 100% !important; border-radius: 0 !important; line-height: 1 !important;min-height:30px!important}
+    .inpuTable  td {margin: 0 !important; padding: 0 !important;text-align: center;height: 30px!important}
+    .inpuTable  th {text-align: center}
+    .important-data-level-1{
+        font-weight: bolder;
+        font-size: 1em;
+        text-decoration: underline
+    }
+
+    .important-data-level-2{
+        font-weight: bolder;
+        font-size: 1.5em;
+        text-decoration: underline
+    }
+
     .warning{
         background-color:#ffdb99!important;
     }
@@ -81,7 +106,7 @@
         background-color:red;
     }
     .alert{
-         background-color:#e4b9c0;
+        background-color:#e4b9c0;
     }
 
     /*add red color if link = #*/

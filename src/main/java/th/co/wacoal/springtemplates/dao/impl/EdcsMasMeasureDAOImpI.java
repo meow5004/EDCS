@@ -110,7 +110,8 @@ public class EdcsMasMeasureDAOImpI implements EdcsMasMeasureDAO {
                 + "AB_TYPE =?,"
                 + "CALPOINT_ID =?,"
                 + "MEASURE_GROUP_ID=?, "
-                + "DEP_ID=?"
+                + "DEP_ID=?,"
+                + "MEASURE_TIMES=?"
                 + " where MEASURE_ID=?";
 
         int rs = db.update(sql,
@@ -127,6 +128,7 @@ public class EdcsMasMeasureDAOImpI implements EdcsMasMeasureDAO {
                 measure.getCalpointId(),
                 measure.getMeasureGroupId(),
                 measure.getDepId(),
+                measure.getMeasureTimes(),
                 measure.getMeasureId());
         return rs;
     }
@@ -147,12 +149,13 @@ public class EdcsMasMeasureDAOImpI implements EdcsMasMeasureDAO {
                 + "CALPOINT_ID,"
                 + "MEASURE_GROUP_ID,"
                 + "MEASURE_TIMES,"
+                + "DEP_ID,"
                 + "FLAG_DEL)"
                 + " VALUES (?,?,"
                 + "?,(getdate()),"
                 + "?,(getdate()),"
-                + "?,?,?,?,?,?,?,?,?,"
-                + "1,0)";
+                + "?,?,?,?,?,?,?,?,?,?,?"
+                + ",0)";
         int res = db.add(sql, measure.getMeasureNameTh(), measure.getMeasureNameEn(),
                 measure.getCreateBy(), measure.getChangeBy(),
                 measure.getMeasureCode(),
@@ -161,7 +164,9 @@ public class EdcsMasMeasureDAOImpI implements EdcsMasMeasureDAO {
                 measure.getDescription(),
                 measure.getAbType(),
                 measure.getCalpointId(),
-                measure.getMeasureGroupId()
+                measure.getMeasureGroupId(),
+                measure.getMeasureTimes(),
+                measure.getDepId()
         );
         return res;
     }

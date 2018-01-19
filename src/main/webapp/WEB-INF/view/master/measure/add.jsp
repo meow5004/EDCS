@@ -17,14 +17,14 @@
             <form:form id="addForm"  class="form-inline" action="add.htm" method="post" modelAttribute="measure" onsubmit="return false;">
                 <div class="col-md-10">
                     <div class="row">
-                          <div class="col-md-3">
+                        <div class="col-md-3">
                             <spring:message code="measure.depId" text="message not found"/>:
                         </div>
                         <div class="col-md-6">
-                           <form:select path="depId" class="form-control" required="required" >
+                            <form:select path="depId" class="form-control" required="required" >
                                 <form:options items="${departments}" itemLabel="fullName" itemValue="depId" />
                             </form:select>
-                           </div>
+                        </div>
                     </div>
                     <div class="row">
                         <div class="col-md-3">
@@ -111,11 +111,17 @@
                         <div class="col-md-3">
                             <spring:message code="measure.abtype" text="message not found"/>:
                         </div>
-                        <div class="col-md-9">
-                                <form:select path="abType" class="form-control" required="required" >
-                                    <form:option value="A" label="วัดหน้าเดียว"/>
-                                    <form:option  value="AB" label="วัดสองหน้า" />
-                                </form:select>
+                        <div class="col-md-2">
+                            <form:select path="abType" class="form-control" required="required" >
+                                <form:option value="A" label="วัดหน้าเดียว"/>
+                                <form:option  value="AB" label="วัดสองหน้า" />
+                            </form:select>
+                        </div>
+                        <div class="col-md-2">
+                            <spring:message code="measure.measureTimes" text="message not found"/>:
+                        </div>
+                        <div class="col-md-2">
+                            <form:input path="measureTimes"  style="width:100%" class="form-control" type="number" value="3" required="required" />
                         </div>
                     </div>
                 </div>

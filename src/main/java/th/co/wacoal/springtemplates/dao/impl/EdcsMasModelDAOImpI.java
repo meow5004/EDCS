@@ -38,7 +38,7 @@ public class EdcsMasModelDAOImpI implements EdcsMasModelDAO {
             p.setMeasureId((int) map.get("MEASURE_ID"));
             p.setLocationBy((String) map.get("LOCATION_BY"));
             p.setLocationReturn((String) map.get("LOCATION_RETURN"));
-            p.setCerOn((String) map.get("CER_ON"));
+            p.setcerNo((String) map.get("CER_NO"));
 
             p.setCreateBy((String) map.get("CREATE_BY"));
             p.setCreateOn((Date) map.get("CREATE_ON"));
@@ -96,7 +96,7 @@ public class EdcsMasModelDAOImpI implements EdcsMasModelDAO {
                 + "CHANGE_BY=?,CHANGE_ON=(getdate()),"
                 + "MEASURE_ID =?,"
                 + "LOCATION_BY =?,LOCATION_RETURN =? ,"
-                + "CER_ON =?,MODEL_CODE=?"
+                + "CER_NO =?,MODEL_CODE=?"
                 + " where MODEL_ID=?";
 
         int rs = db.update(sql,
@@ -104,7 +104,7 @@ public class EdcsMasModelDAOImpI implements EdcsMasModelDAO {
                 model.getMeasureId(),
                 model.getLocationBy(),
                 model.getLocationReturn(),
-                model.getCerOn(), model.getModelCode(),
+                model.getcerNo(), model.getModelCode(),
                 model.getModelId()
         );
         return rs;
@@ -120,7 +120,7 @@ public class EdcsMasModelDAOImpI implements EdcsMasModelDAO {
                 + "CHANGE_BY,CHANGE_ON,"
                 + "MEASURE_ID,"
                 + "LOCATION_BY,LOCATION_RETURN,"
-                + "CER_ON,MODEL_CODE,"
+                + "CER_NO,MODEL_CODE,"
                 + "FLAG_DEL)"
                 + " VALUES ("
                 + "?,(getdate()),"
@@ -131,7 +131,7 @@ public class EdcsMasModelDAOImpI implements EdcsMasModelDAO {
                 model.getCreateBy(), model.getChangeBy(),
                 model.getMeasureId(),
                 model.getLocationBy(), model.getLocationReturn(),
-                model.getCerOn(), model.getModelCode()
+                model.getcerNo(), model.getModelCode()
         );
         return res;
     }
@@ -146,7 +146,7 @@ public class EdcsMasModelDAOImpI implements EdcsMasModelDAO {
             p.setMeasureId((int) map.get("MEASURE_ID"));
             p.setLocationBy((String) map.get("LOCATION_BY"));
             p.setLocationReturn((String) map.get("LOCATION_RETURN"));
-            p.setCerOn((String) map.get("CER_ON"));
+            p.setcerNo((String) map.get("CER_NO"));
 
             p.setCreateBy((String) map.get("CREATE_BY"));
             p.setCreateOn((Date) map.get("CREATE_ON"));
@@ -170,7 +170,7 @@ public class EdcsMasModelDAOImpI implements EdcsMasModelDAO {
             p.setMeasureId((int) map.get("MEASURE_ID"));
             p.setLocationBy((String) map.get("LOCATION_BY"));
             p.setLocationReturn((String) map.get("LOCATION_RETURN"));
-            p.setCerOn((String) map.get("CER_ON"));
+            p.setcerNo((String) map.get("CER_NO"));
             p.setModelCode((String) map.get("MODEL_CODE"));
             p.setCreateBy((String) map.get("CREATE_BY"));
             p.setCreateOn((Date) map.get("CREATE_ON"));
@@ -211,7 +211,7 @@ public class EdcsMasModelDAOImpI implements EdcsMasModelDAO {
             p.setMeasureId((int) map.get("MEASURE_ID"));
             p.setLocationBy((String) map.get("LOCATION_BY"));
             p.setLocationReturn((String) map.get("LOCATION_RETURN"));
-            p.setCerOn((String) map.get("CER_ON"));
+            p.setcerNo((String) map.get("CER_NO"));
             p.setModelCode((String) map.get("MODEL_CODE"));
             p.setCreateBy((String) map.get("CREATE_BY"));
             p.setCreateOn((Date) map.get("CREATE_ON"));

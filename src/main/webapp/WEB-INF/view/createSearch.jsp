@@ -16,7 +16,7 @@
                     <div class="row">
                         <div class="col-sm-12">
 
-                            <table>
+                            <table id="createTable">
                                 <thead>
                                     <tr>
                                         <th style="text-align: center;">เลขที่</th>
@@ -26,22 +26,21 @@
                                         <th style="text-align: center;">วันที่จัดส่ง</th>
                                         <th style="text-align: center;">รายงาน</th>
                                         <th style="text-align: center;">ผลสอบเทียบ</th>
-                                        <th style="text-align: center;">ส่งอนุมัติ</th>
                                         <th style="text-align: center;">เลือก</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <th>7200007</th>
-                                        <td>ชิ้นส่วน</td>
-                                        <td>RI0001</td>
-                                        <td>สายวัดสีดำ</td>
-                                        <td style="text-align: center;">12/06/2017</td>
-                                        <td style="text-align: center;"><a href="createDoc.htm"><img src="../images/icons/BallIconCancel.png" alt="" style="width: 40px; height: 40px;"/></a></td>
-                                        <td style="text-align: center;"><a href="createDoc.htm"><img src="../images/icons/BallIconCancel.png" alt="" style="width: 40px; height: 40px;"/></a></td>
-                                        <td style="text-align: center;"><img src="../images/icons/BallIconCancel.png" alt="" style="width: 40px; height: 40px;"/></td>
-                                        <td style="text-align: center;"><input type="checkbox" style="width: 35px; height: 35px;" disabled></td>
-                                    </tr>
+                                    <!--                                    <tr>
+                                                                            <th>7200007</th>
+                                                                            <td>ชิ้นส่วน</td>
+                                                                            <td>RI0001</td>
+                                                                            <td>สายวัดสีดำ</td>
+                                                                            <td style="text-align: center;">12/06/2017</td>
+                                                                            <td style="text-align: center;"><a href="createDoc.htm"><img src="../images/icons/BallIconCancel.png" alt="" style="width: 40px; height: 40px;"/></a></td>
+                                                                            <td style="text-align: center;"><a href="createDoc.htm"><img src="../images/icons/BallIconCancel.png" alt="" style="width: 40px; height: 40px;"/></a></td>
+                                                                            <td style="text-align: center;"><img src="../images/icons/BallIconCancel.png" alt="" style="width: 40px; height: 40px;"/></td>
+                                                                            <td style="text-align: center;"><input type="checkbox" style="width: 35px; height: 35px;" disabled></td>
+                                                                        </tr>-->
 
                                 </tbody>
                             </table>
@@ -65,44 +64,32 @@
     </div>
     <script>
         $(document).ready(function () {
-            availableTable = $('#trackingTable').DataTable({
+            availableTable = $('#createTable').DataTable({
                 "columns": [
                     {"data": "calCode", "target": 0},
-                    {"data": "requestCommnet", "target": 1},
-                    {"data": "measureId", "target": 2},
+                    {"data": "depId", "target": 1},
+                    {"data": "associateMeasure.measureCode", "target": 2},
                     {"data": "associateMeasure.fullName", "target": 3},
-                    {"data": "approveStatusOn", "target": 4},
-                    {"data": "calAgeId", "target": 5},
-                    {"data": "requestApproverStatus", "target": 6, render: function (data, type, row, meta) {
+                    {"data": "requestApproverOn", "target": 4, render: function (data, type, row, meta) {
+                            //format date form json
+                            return formatDateFromJavaDateJSONEncoded(data);
+                        }},
+                    {"data": "calibrationStatus", "target": 5, render: function (data, type, row, meta) {
                             if (data == 1) {
-                                return "<img src='../images/icons/BallIconCheck.png' alt='' style='width: 40px; height: 40px;'/>";
+                                return "<a href='createDoc.htm?calId=" + row.calId + "'> <img src='../images/icons/BallIconCheck.png' alt='' style='width: 40px; height: 40px;'/>";
                             } else {
-                                return "<img src='../images/icons/BallIconCancel.png' alt='' style='width: 40px; height: 40px;'/>";
+                                return "<a href='createDoc.htm?calId=" + row.calId + "'> <img src='../images/icons/BallIconCancel.png'  alt='' style='width: 40px; height: 40px;'/>";
                             }
                         }},
-                    {"data": "receiveStatus", "target": 7, render: function (data, type, row, meta) {
+                    {"data": "calibrationAttactStatus", "target": 6, render: function (data, type, row, meta) {
                             if (data == 1) {
-                                return "<img src='../images/icons/BallIconCheck.png' alt='' style='width: 40px; height: 40px;'/>";
+                                return "<a href='createDoc.htm?calId=" + row.calId + "'> <img src='../images/icons/BallIconCheck.png' alt='' style='width: 40px; height: 40px;'/>";
                             } else {
-                                return "<img src='../images/icons/BallIconCancel.png' alt='' style='width: 40px; height: 40px;'/>";
+                                return "<a href='createDetail.htm?calId=" + row.calId + "'> <img src='../images/icons/BallIconCancel.png' alt='' style='width: 40px; height: 40px;'/>";
                             }
-                        }},
-                    {"data": "calibrationStatus", "target": 8, render: function (data, type, row, meta) {
-                            if (data == 1) {
-                                return "<img src='../images/icons/BallIconCheck.png' alt='' style='width: 40px; height: 40px;'/>";
-                            } else {
-                                return "<img src='../images/icons/BallIconCancel.png' alt='' style='width: 40px; height: 40px;'/>";
-                            }
-                        }},
-                    {"data": "returnStatus", "target": 9, render: function (data, type, row, meta) {
-                            var choice = "<input type='checkbox' name='measureId[]' value='" + data + "'>";
+                        }}, {"data": "calId", "target": 7, render: function (data, type, row, meta) {
+                            var choice = "<input type='checkbox' name='calId[]' value='" + data + "'>";
                             return choice
-                        }}, {"data": "ApproveStatus", "target": 9, render: function (data, type, row, meta) {
-                            if (data == 1) {
-                                return "<img src='../images/icons/BallIconCheck.png' alt='' style='width: 40px; height: 40px;'/>";
-                            } else {
-                                return "<img src='../images/icons/BallIconCancel.png' alt='' style='width: 40px; height: 40px;'/>";
-                            }
                         }}
                 ],
                 "createdRow": function (row, data, index) {

@@ -22,16 +22,19 @@ import th.co.wacoal.springtemplates.dao.EdcsMasEquipconDAO;
 import th.co.wacoal.springtemplates.dao.EdcsMasMeasureDAO;
 import th.co.wacoal.springtemplates.dao.EdcsMasMeasureGroupDAO;
 import th.co.wacoal.springtemplates.dao.EdcsMasModelDAO;
+import th.co.wacoal.springtemplates.dao.EdcsMasProcessDAO;
 import th.co.wacoal.springtemplates.dao.impl.EdcsCalibrationDAOImpI;
 import th.co.wacoal.springtemplates.dao.impl.EdcsMasCalpointDAOImpl;
 import th.co.wacoal.springtemplates.dao.impl.EdcsMasEquipconDAOImpl;
 import th.co.wacoal.springtemplates.dao.impl.EdcsMasMeasureDAOImpI;
 import th.co.wacoal.springtemplates.dao.impl.EdcsMasMeasureGroupDAOImpI;
 import th.co.wacoal.springtemplates.dao.impl.EdcsMasModelDAOImpI;
+import th.co.wacoal.springtemplates.dao.impl.EdcsMasProcessDAOImpI;
 import th.co.wacoal.springtemplates.db.Database;
 import th.co.wacoal.springtemplates.domain.EdcsCalibration;
 import th.co.wacoal.springtemplates.domain.EdcsMasMeasure;
 import th.co.wacoal.springtemplates.domain.EdcsMasModel;
+import th.co.wacoal.springtemplates.domain.EdcsMasProcess;
 
 /**
  *
@@ -47,6 +50,7 @@ public class mainAjaxUtilController {
     EdcsMasCalpointDAO calpointDAO = new EdcsMasCalpointDAOImpl(db);
     EdcsMasEquipconDAO equipConDAO = new EdcsMasEquipconDAOImpl(db);
     EdcsMasModelDAO modelDAO = new EdcsMasModelDAOImpI(db);
+    EdcsMasProcessDAO proDAO = new EdcsMasProcessDAOImpI(db);
     EdcsMasMeasureGroupDAO measureGroupDAO = new EdcsMasMeasureGroupDAOImpI(db);
 
     @RequestMapping("/getNearDueAndNewCalibration.htm")
@@ -123,4 +127,16 @@ public class mainAjaxUtilController {
         JSONObject jsonString = JSONObject.fromObject(measure);
         out.print(jsonString);
     }
+
+    @RequestMapping("/findProcess.htm")
+    public void findProcess(@RequestParam("processId") String processId, Model model, HttpSession session, HttpServletResponse response) throws IOException {
+        PrintWriter out = response.getWriter();
+        proDAO = new EdcsMasProcessDAOImpI(db);
+        EdcsMasProcess measure = proDAO.find(Integer.parseInt(processId));
+        // Do somethin
+
+        JSONObject jsonString = JSONObject.fromObject(measure);
+        out.print(jsonString);
+    }
+
 }

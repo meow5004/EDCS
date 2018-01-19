@@ -31,10 +31,6 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "EdcsMasProcess.findAll", query = "SELECT e FROM EdcsMasProcess e")})
 public class EdcsMasProcess implements Serializable {
 
-    @Size(max = 50)
-    @Column(name = "PROCESS_CODE")
-    private String processCode;
-
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -42,17 +38,14 @@ public class EdcsMasProcess implements Serializable {
     @Column(name = "PROCESS_ID")
     private Integer processId;
     @Size(max = 50)
-    @Column(name = "PROCESS_NAME_TH")
-    private String processNameTh;
-    @Size(max = 50)
-    @Column(name = "PROCESS_NAME_EN")
-    private String processNameEn;
-    @Size(max = 50)
-    @Column(name = "PROCESS_SUBJECT_TH")
-    private String processSubjectTh;
-    @Size(max = 50)
-    @Column(name = "PROCESS_SUBJECT_EN")
-    private String processSubjectEn;
+    @Column(name = "PROCESS_CODE")
+    private String processCode;
+    @Size(max = 250)
+    @Column(name = "PROCESS_SUBJECT")
+    private String processSubject;
+    @Size(max = 250)
+    @Column(name = "PROCESS_BY")
+    private String processBy;
     @Size(max = 50)
     @Column(name = "CREATE_BY")
     private String createBy;
@@ -84,36 +77,28 @@ public class EdcsMasProcess implements Serializable {
         this.processId = processId;
     }
 
-    public String getProcessNameTh() {
-        return processNameTh;
+    public String getProcessCode() {
+        return processCode;
     }
 
-    public void setProcessNameTh(String processNameTh) {
-        this.processNameTh = processNameTh;
+    public void setProcessCode(String processCode) {
+        this.processCode = processCode;
     }
 
-    public String getProcessNameEn() {
-        return processNameEn;
+    public String getProcessSubject() {
+        return processSubject;
     }
 
-    public void setProcessNameEn(String processNameEn) {
-        this.processNameEn = processNameEn;
+    public void setProcessSubject(String processSubject) {
+        this.processSubject = processSubject;
     }
 
-    public String getProcessSubjectTh() {
-        return processSubjectTh;
+    public String getProcessBy() {
+        return processBy;
     }
 
-    public void setProcessSubjectTh(String processSubjectTh) {
-        this.processSubjectTh = processSubjectTh;
-    }
-
-    public String getProcessSubjectEn() {
-        return processSubjectEn;
-    }
-
-    public void setProcessSubjectEn(String processSubjectEn) {
-        this.processSubjectEn = processSubjectEn;
+    public void setProcessBy(String processBy) {
+        this.processBy = processBy;
     }
 
     public String getCreateBy() {
@@ -156,60 +141,6 @@ public class EdcsMasProcess implements Serializable {
         this.flagDel = flagDel;
     }
 
-    public String getFullName() {
-        String name = "process ";
-        if (processNameTh != null) {
-            name += processNameTh;
-            if (processNameEn != null) {
-                name += "( " + processNameEn + " )";
-            }
-        } else {
-            name += processNameEn;
-        }
-        //subject
-        String subject = "subject ";
-        if (processSubjectTh != null) {
-            subject += processSubjectTh;
-            if (processSubjectEn != null) {
-                subject += "( " + processSubjectEn + " )";
-            }
-        } else {
-            subject += processSubjectEn;
-        }
-
-        return name + " " + subject;
-    }
-
-    public String getFullProcessName() {
-        String name = "process ";
-        if (processNameTh != null) {
-            name += processNameTh;
-            if (processNameEn != null) {
-                name += "( " + processNameEn + " )";
-            }
-        } else {
-            name += processNameEn;
-        }
-        return name;
-    }
-
-    ;
-    
-    public String getFullSubjectName() {
-        String subject = "subject ";
-        if (processSubjectTh != null) {
-            subject += processSubjectTh;
-            if (processSubjectEn != null) {
-                subject += "( " + processSubjectEn + " )";
-            }
-        } else {
-            subject += processSubjectEn;
-        }
-        return subject;
-    }
-
-    ;
-    
     @Override
     public int hashCode() {
         int hash = 0;
@@ -234,13 +165,5 @@ public class EdcsMasProcess implements Serializable {
     public String toString() {
         return "th.co.wacoal.springtemplates.domain.EdcsMasProcess[ processId=" + processId + " ]";
     }
-
-    public String getProcessCode() {
-        return processCode;
-    }
-
-    public void setProcessCode(String processCode) {
-        this.processCode = processCode;
-    }
-
+    
 }

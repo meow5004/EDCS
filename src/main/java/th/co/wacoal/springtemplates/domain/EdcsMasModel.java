@@ -49,8 +49,8 @@ public class EdcsMasModel implements Serializable {
     @Column(name = "LOCATION_RETURN")
     private String locationReturn;
     @Size(max = 50)
-    @Column(name = "CER_ON")
-    private String cerOn;
+    @Column(name = "CER_NO")
+    private String cerNo;
     @Size(max = 50)
     @Column(name = "CREATE_BY")
     private String createBy;
@@ -124,12 +124,12 @@ public class EdcsMasModel implements Serializable {
         this.locationReturn = locationReturn;
     }
 
-    public String getCerOn() {
-        return cerOn;
+    public String getcerNo() {
+        return cerNo;
     }
 
-    public void setCerOn(String cerOn) {
-        this.cerOn = cerOn;
+    public void setcerNo(String cerNo) {
+        this.cerNo = cerNo;
     }
 
     public String getCreateBy() {

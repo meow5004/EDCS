@@ -6,6 +6,7 @@
 package th.co.wacoal.springtemplates.domain;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -32,6 +33,16 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class EdcsCalibration implements Serializable {
 
     @Size(max = 50)
+    @Column(name = "CALIBRATION_ATTACH_STATUS")
+    private String calibrationAttachStatus;
+    @Column(name = "CALIBRATION_ATTACH_STATUS_ON")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date calibrationAttachStatusOn;
+    @Size(max = 50)
+    @Column(name = "CALIBRATION_ATTACH_STATUS_BY")
+    private String calibrationAttachStatusBy;
+
+    @Size(max = 50)
     @Column(name = "REQUEST_STATUS")
     private String requestStatus;
     @Size(max = 50)
@@ -54,7 +65,7 @@ public class EdcsCalibration implements Serializable {
     @Column(name = "CREATE_BY")
     private String createBy;
     @Column(name = "DEP_ID")
-    private Integer depId;
+    private String depId;
     @Column(name = "MEASURE_ID")
     private Integer measureId;
     @Column(name = "MODEL_ID")
@@ -152,11 +163,28 @@ public class EdcsCalibration implements Serializable {
 
     //extended propeties
     private EdcsMasMeasure associateMeasure;
+    private EdcsMasCalage associateCalage;
+    private EdcsMasStatusCaldoc associateStatusCaldoc;
+    private EdcsMasEquipcon associateEquipCon;
+    private EdcsMasMeasureUnit associateUnit;
+    private EdcsMasProcess associateProcess;
+    private EdcsMasModel associateModel;
+    private EdcsMasDepartment associateDep;
+    private Collection<EdcsCalibrationAttachHead> edcsCalibrationAttachHeadCollection;
+
     public EdcsCalibration() {
     }
 
     public EdcsCalibration(Integer calId) {
         this.calId = calId;
+    }
+
+    public Collection<EdcsCalibrationAttachHead> getEdcsCalibrationAttachHeadCollection() {
+        return edcsCalibrationAttachHeadCollection;
+    }
+
+    public void setEdcsCalibrationAttachHeadCollection(Collection<EdcsCalibrationAttachHead> edcsCalibrationAttachHeadCollection) {
+        this.edcsCalibrationAttachHeadCollection = edcsCalibrationAttachHeadCollection;
     }
 
     public Integer getCalId() {
@@ -191,11 +219,11 @@ public class EdcsCalibration implements Serializable {
         this.createBy = createBy;
     }
 
-    public Integer getDepId() {
+    public String getDepId() {
         return depId;
     }
 
-    public void setDepId(Integer depId) {
+    public void setDepId(String depId) {
         this.depId = depId;
     }
 
@@ -479,7 +507,62 @@ public class EdcsCalibration implements Serializable {
         this.associateMeasure = associateMeasure;
     }
 
-    
+    public EdcsMasCalage getAssociateCalage() {
+        return associateCalage;
+    }
+
+    public void setAssociateCalage(EdcsMasCalage associateCalage) {
+        this.associateCalage = associateCalage;
+    }
+
+    public EdcsMasStatusCaldoc getAssociateStatusCaldoc() {
+        return associateStatusCaldoc;
+    }
+
+    public void setAssociateStatusCaldoc(EdcsMasStatusCaldoc associateStatusCaldoc) {
+        this.associateStatusCaldoc = associateStatusCaldoc;
+    }
+
+    public EdcsMasEquipcon getAssociateEquipCon() {
+        return associateEquipCon;
+    }
+
+    public void setAssociateEquipCon(EdcsMasEquipcon associateEquipCon) {
+        this.associateEquipCon = associateEquipCon;
+    }
+
+    public EdcsMasMeasureUnit getAssociateUnit() {
+        return associateUnit;
+    }
+
+    public void setAssociateUnit(EdcsMasMeasureUnit associateUnit) {
+        this.associateUnit = associateUnit;
+    }
+
+    public EdcsMasProcess getAssociateProcess() {
+        return associateProcess;
+    }
+
+    public void setAssociateProcess(EdcsMasProcess associateProcess) {
+        this.associateProcess = associateProcess;
+    }
+
+    public EdcsMasModel getAssociateModel() {
+        return associateModel;
+    }
+
+    public void setAssociateModel(EdcsMasModel associateModel) {
+        this.associateModel = associateModel;
+    }
+
+    public EdcsMasDepartment getAssociateDep() {
+        return associateDep;
+    }
+
+    public void setAssociateDep(EdcsMasDepartment associateDep) {
+        this.associateDep = associateDep;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -520,5 +603,29 @@ public class EdcsCalibration implements Serializable {
     public void setRequestApproverStatus(String requestApproverStatus) {
         this.requestApproverStatus = requestApproverStatus;
     }
-    
+
+    public String getCalibrationAttachStatus() {
+        return calibrationAttachStatus;
+    }
+
+    public void setCalibrationAttachStatus(String calibrationAttachStatus) {
+        this.calibrationAttachStatus = calibrationAttachStatus;
+    }
+
+    public Date getCalibrationAttachStatusOn() {
+        return calibrationAttachStatusOn;
+    }
+
+    public void setCalibrationAttachStatusOn(Date calibrationAttachStatusOn) {
+        this.calibrationAttachStatusOn = calibrationAttachStatusOn;
+    }
+
+    public String getCalibrationAttachStatusBy() {
+        return calibrationAttachStatusBy;
+    }
+
+    public void setCalibrationAttachStatusBy(String calibrationAttachStatusBy) {
+        this.calibrationAttachStatusBy = calibrationAttachStatusBy;
+    }
+
 }
