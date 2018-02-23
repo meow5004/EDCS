@@ -27,10 +27,6 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "EdcsCalibrationAttachItem.findAll", query = "SELECT e FROM EdcsCalibrationAttachItem e")})
 public class EdcsCalibrationAttachItem implements Serializable {
 
-    @JoinColumn(name = "CAL_ATTACH_HEAD_ID", referencedColumnName = "CAL_ATTACH_HEAD_ID", insertable = false, updatable = false)
-    @ManyToOne(optional = false)
-    private EdcsCalibrationAttachHead edcsCalibrationAttachHead;
-
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected EdcsCalibrationAttachItemPK edcsCalibrationAttachItemPK;
@@ -41,6 +37,9 @@ public class EdcsCalibrationAttachItem implements Serializable {
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "CALPOINT_VALUE")
     private Double calpointValue;
+    @JoinColumn(name = "CAL_ATTACH_HEAD_ID", referencedColumnName = "CAL_ATTACH_HEAD_ID", insertable = false, updatable = false)
+    @ManyToOne(optional = false)
+    private EdcsCalibrationAttachHead edcsCalibrationAttachHead;
 
     public EdcsCalibrationAttachItem() {
     }
@@ -85,6 +84,14 @@ public class EdcsCalibrationAttachItem implements Serializable {
         this.calpointValue = calpointValue;
     }
 
+    public EdcsCalibrationAttachHead getEdcsCalibrationAttachHead() {
+        return edcsCalibrationAttachHead;
+    }
+
+    public void setEdcsCalibrationAttachHead(EdcsCalibrationAttachHead edcsCalibrationAttachHead) {
+        this.edcsCalibrationAttachHead = edcsCalibrationAttachHead;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -108,14 +115,6 @@ public class EdcsCalibrationAttachItem implements Serializable {
     @Override
     public String toString() {
         return "th.co.wacoal.springtemplates.domain.EdcsCalibrationAttachItem[ edcsCalibrationAttachItemPK=" + edcsCalibrationAttachItemPK + " ]";
-    }
-
-    public EdcsCalibrationAttachHead getEdcsCalibrationAttachHead() {
-        return edcsCalibrationAttachHead;
-    }
-
-    public void setEdcsCalibrationAttachHead(EdcsCalibrationAttachHead edcsCalibrationAttachHead) {
-        this.edcsCalibrationAttachHead = edcsCalibrationAttachHead;
     }
     
 }

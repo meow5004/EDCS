@@ -30,6 +30,8 @@ public interface EdcsMasCalageDAO {
 
     public List<EdcsMasCalage> findByFlag(int flag);
 
+    public List<EdcsMasCalage> findByFlagLockedDate(int flag);
+
     public int reuse(int id, String userId);
 
     public int reuseMutiple(Integer[] ids, String userId);

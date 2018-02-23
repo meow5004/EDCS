@@ -16,7 +16,7 @@
         <div align="center container">
             <form:form id="editForm"  class="form-inline" action="edit.htm" method="post" modelAttribute="measureUnit">
                 <form:hidden path="unitId"></form:hidden>
-                    <div class="row col-md-10">
+                    <div class="row centralize-flex col-md-10">
                         <div class="col-md-2">
                             <div class="form-group">
                             <spring:message code="measureUnit.unitId" text="message not found"/>:
@@ -36,7 +36,7 @@
                         <form:input path="unitShortTh"  class="form-control" required="required" />
                     </div>
                 </div>
-                <div class="row col-md-10">
+                <div class="row centralize-flex col-md-10">
                     <div class="col-md-2 col-md-offset-2">
                         <spring:message code="measureUnit.unitNameEn" text="message not found"/>:
                     </div>

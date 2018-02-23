@@ -16,7 +16,7 @@
         <div align="center container">
             <form:form id="editForm"  class="form-inline" action="edit.htm" method="post" modelAttribute="entityModel">
                 <div class="col-md-8">
-                    <div class="row">
+                    <div class="row centralize-flex">
                         <div class="col-md-6">
                             <div class="col-md-6">
                                 <form:hidden path="modelId" />
@@ -35,7 +35,7 @@
                             </div>
                         </div>       
                     </div>
-                    <div class="row">
+                    <div class="row centralize-flex">
                         <div class="col-md-6">
                             <div class="col-md-6">
                                 <spring:message code="model.measureCode" text="message not found"/>:
@@ -55,7 +55,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row centralize-flex">
                         <div class="col-md-12">
                             <div class="col-md-3">
                                 <spring:message code="model.locationBy" text="message not found"/>:
@@ -65,7 +65,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row centralize-flex">
                         <div class="col-md-12">
                             <div class="col-md-3">
                                 <spring:message code="model.locationReturn" text="message not found"/>:

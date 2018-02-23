@@ -25,7 +25,7 @@
 
                 <div id="ajaxCRUDfield">
                 </div>
-                <table id="availableCalageTable" class="datatable hover cell-border">
+                <table id="availableCalageTable" class="dataTable hover cell-border nowrap">
                     <thead>
                         <tr>
                             <th colspan="6" style="text-align: center"><spring:message code="calage.table.avaliable" text="message not found"/></th>
@@ -41,7 +41,7 @@
                     </thead>
                 </table>
                 <br/>
-                <table id="unavailableCalage" class="datatable hover cell-border ">
+                <table id="unavailableCalage" class="dataTable hover cell-border ">
                     <thead>
                         <tr>
                             <th colspan="6" style="text-align: center"><spring:message code="calage.table.unavaliable" text="message not found"/></th>
@@ -73,6 +73,11 @@
     $(document).ready(function () {
         moment.locale("en");
         availableTable = $('#availableCalageTable').DataTable({
+            responsive: {
+                details: {
+                    type: 'inline'
+                }
+            },
             "columns": [
                 {"data": "calageId", "target": 0},
                 {"data": "calage", "target": 1},
@@ -90,11 +95,16 @@
                 {"data": "deleteCheck", "target": 5, "className": "dt-center", "searchable": false, "orderable": false}
             ],
             "ajax": "./getAvailableCalage.htm",
-            "dom": '<lf<t>ip>',
+            "dom": '<lftip>',
             "order": [[0, 'asc']],
             "displayLength": 10});
 
         unAvailableTable = $('#unavailableCalage').DataTable({
+            responsive: {
+                details: {
+                    type: 'inline'
+                }
+            },
             "columns": [
                 {"data": "calageId", "target": 0},
                 {"data": "calage", "target": 1},
@@ -112,7 +122,7 @@
                 {"data": "realDeleteCheck", "target": 5, "className": "dt-center", "searchable": false, "orderable": false}
             ],
             "ajax": "./getUnavailableCalage.htm",
-            "dom": '<lf<t>ip>',
+            "dom": '<lftip>',
             "order": [[0, 'asc']],
             "displayLength": 10});
 
@@ -289,8 +299,8 @@
                         callback: function () { /* your callback code */
                         }
                     });
-                    refreshDataAndJumpTo(id, 0);    
-                  highlightDatum(id, 0, availableTable);
+                    refreshDataAndJumpTo(id, 0);
+                    highlightDatum(id, 0, availableTable);
                 }
             });
         }

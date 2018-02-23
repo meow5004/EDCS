@@ -7,6 +7,7 @@ package th.co.wacoal.springtemplates.dao.impl;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.lang.StringUtils;
@@ -116,15 +117,7 @@ public class EdcsMasDepartmentDAOImpl implements EdcsMasDepartmentDAO {
         List<EdcsMasDepartment> ret = new ArrayList<EdcsMasDepartment>();
         for (Map<String, Object> map : rs) {
             EdcsMasDepartment p = new EdcsMasDepartment();
-            p.setBranchId((int) map.get("BRANCH_ID"));
-            p.setDepId((String) map.get("DEP_ID"));
-            p.setDepNameTh((String) map.get("DEP_NAME_TH"));
-            p.setDepNameEn((String) map.get("DEP_NAME_EN"));
-            p.setCreateBy((String) map.get("CREATE_BY"));
-            p.setCreateOn((Date) map.get("CREATE_ON"));
-            p.setChangeBy((String) map.get("CHANGE_BY"));
-            p.setChangeOn((Date) map.get("CHANGE_ON"));
-            p.setFlagDel((String) map.get("FLAG_DEL"));
+            p = mappingResultSet(map);
             ret.add(p);
         }
         return ret;
@@ -136,15 +129,7 @@ public class EdcsMasDepartmentDAOImpl implements EdcsMasDepartmentDAO {
         Map<String, Object> map = db.querySingle(sql, id);
         EdcsMasDepartment p = new EdcsMasDepartment();
         if (map != null) {
-            p.setBranchId((int) map.get("BRANCH_ID"));
-            p.setDepId((String) map.get("DEP_ID"));
-            p.setDepNameTh((String) map.get("DEP_NAME_TH"));
-            p.setDepNameEn((String) map.get("DEP_NAME_EN"));
-            p.setCreateBy((String) map.get("CREATE_BY"));
-            p.setCreateOn((Date) map.get("CREATE_ON"));
-            p.setChangeBy((String) map.get("CHANGE_BY"));
-            p.setChangeOn((Date) map.get("CHANGE_ON"));
-            p.setFlagDel((String) map.get("FLAG_DEL"));
+            p = mappingResultSet(map);
         }
         return p;
     }
@@ -157,15 +142,7 @@ public class EdcsMasDepartmentDAOImpl implements EdcsMasDepartmentDAO {
         for (Map<String, Object> map : rs) {
             EdcsMasDepartment p = new EdcsMasDepartment();
 
-            p.setBranchId((int) map.get("BRANCH_ID"));
-            p.setDepId((String) map.get("DEP_ID"));
-            p.setDepNameTh((String) map.get("DEP_NAME_TH"));
-            p.setDepNameEn((String) map.get("DEP_NAME_EN"));
-            p.setCreateBy((String) map.get("CREATE_BY"));
-            p.setCreateOn((Date) map.get("CREATE_ON"));
-            p.setChangeBy((String) map.get("CHANGE_BY"));
-            p.setChangeOn((Date) map.get("CHANGE_ON"));
-            p.setFlagDel((String) map.get("FLAG_DEL"));
+            p = mappingResultSet(map);
             ret.add(p);
         }
         return ret;
@@ -179,15 +156,7 @@ public class EdcsMasDepartmentDAOImpl implements EdcsMasDepartmentDAO {
         for (Map<String, Object> map : rs) {
             EdcsMasDepartment p = new EdcsMasDepartment();
 
-            p.setBranchId((int) map.get("BRANCH_ID"));
-            p.setDepId((String) map.get("DEP_ID"));
-            p.setDepNameTh((String) map.get("DEP_NAME_TH"));
-            p.setDepNameEn((String) map.get("DEP_NAME_EN"));
-            p.setCreateBy((String) map.get("CREATE_BY"));
-            p.setCreateOn((Date) map.get("CREATE_ON"));
-            p.setChangeBy((String) map.get("CHANGE_BY"));
-            p.setChangeOn((Date) map.get("CHANGE_ON"));
-            p.setFlagDel((String) map.get("FLAG_DEL"));
+            p = mappingResultSet(map);
             ret.add(p);
         }
         return ret;
@@ -201,18 +170,59 @@ public class EdcsMasDepartmentDAOImpl implements EdcsMasDepartmentDAO {
         for (Map<String, Object> map : rs) {
             EdcsMasDepartment p = new EdcsMasDepartment();
 
-            p.setBranchId((int) map.get("BRANCH_ID"));
-            p.setDepId((String) map.get("DEP_ID"));
-            p.setDepNameTh((String) map.get("DEP_NAME_TH"));
-            p.setDepNameEn((String) map.get("DEP_NAME_EN"));
-            p.setCreateBy((String) map.get("CREATE_BY"));
-            p.setCreateOn((Date) map.get("CREATE_ON"));
-            p.setChangeBy((String) map.get("CHANGE_BY"));
-            p.setChangeOn((Date) map.get("CHANGE_ON"));
-            p.setFlagDel((String) map.get("FLAG_DEL"));
+            p = mappingResultSet(map);
             ret.add(p);
         }
         return ret;
     }
 
+    @Override
+    public List<EdcsMasDepartment> showViewableDepartmentsByempId(String empId) {
+        String sql = "SELECT * FROM EDCS_MAS_DEPARTMENT WHERE DEP_ID IN ("
+                + "SELECT distinct DEP_ID"
+                + "  FROM EDCS_USER_ROLE"
+                + "  where EMP_ID=?"
+                + "  ) AND FLAG_DEL=0";
+        List<Map<String, Object>> rs = db.queryList(sql, empId);
+        List<EdcsMasDepartment> ret = new ArrayList<>();
+        for (Map<String, Object> map : rs) {
+            EdcsMasDepartment p = new EdcsMasDepartment();
+            p = mappingResultSet(map);
+            ret.add(p);
+        }
+        return ret;
+    }
+
+    @Override
+    public Map<String, EdcsMasDepartment> findByFlagListMappingById(int flag) {
+
+        String sql = "select * from EDCS_MAS_DEPARTMENT where FLAG_DEL=?";
+        List<Map<String, Object>> rs = db.queryList(sql, flag);
+        Map<String, EdcsMasDepartment> ret = new HashMap<>();
+        for (Map<String, Object> map : rs) {
+            String id = (String) map.get("DEP_ID");
+            EdcsMasDepartment p = new EdcsMasDepartment();
+            p = mappingResultSet(map);
+            ret.put(id, p);
+        }
+        return ret;
+
+    }
+
+    @Override
+    public EdcsMasDepartment mappingResultSet(Map<String, Object> map) {
+        EdcsMasDepartment p = new EdcsMasDepartment();
+
+        p.setBranchId((int) map.get("BRANCH_ID"));
+        p.setDepId((String) map.get("DEP_ID"));
+        p.setDepNameTh((String) map.get("DEP_NAME_TH"));
+        p.setDepNameEn((String) map.get("DEP_NAME_EN"));
+        p.setCreateBy((String) map.get("CREATE_BY"));
+        p.setCreateOn((Date) map.get("CREATE_ON"));
+        p.setChangeBy((String) map.get("CHANGE_BY"));
+        p.setChangeOn((Date) map.get("CHANGE_ON"));
+        p.setFlagDel((String) map.get("FLAG_DEL"));
+
+        return p;
+    }
 }

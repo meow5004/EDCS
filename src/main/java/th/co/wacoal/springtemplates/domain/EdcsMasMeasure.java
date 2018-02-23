@@ -32,6 +32,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class EdcsMasMeasure implements Serializable {
 
     @Size(max = 50)
+    @Column(name = "BRAND")
+    private String brand;
+
+    @Size(max = 50)
     @Column(name = "DEP_ID")
     private String depId;
 
@@ -262,7 +266,7 @@ public class EdcsMasMeasure implements Serializable {
         String name = " ";
         if (measureNameTh != null&&measureNameTh.trim().length() > 0) {
             name += measureNameTh;
-            if (measureNameEn != null) {
+            if (measureNameEn != null&&measureNameEn.trim().length() > 0) {
                 name += "( " + measureNameEn + " )";
             }
         } else {
@@ -318,6 +322,14 @@ public class EdcsMasMeasure implements Serializable {
 
     public void setDepId(String depId) {
         this.depId = depId;
+    }
+
+    public String getBrand() {
+        return brand;
+    }
+
+    public void setBrand(String brand) {
+        this.brand = brand;
     }
 
 }

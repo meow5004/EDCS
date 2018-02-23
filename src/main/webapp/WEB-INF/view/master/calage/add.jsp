@@ -17,17 +17,17 @@
         <div align="center container">
             <form:form id="addForm"  class="form-inline" action="add.htm" method="post" modelAttribute="calage" onsubmit="return false;">
                 <div class="col-md-8">
-                    <div class="row">
+                    <div class="row centralize-flex">
                         <div class="col-md-6">
                             <div class="col-md-6">
-                                <spring:message code="calage.calage" text="message not found"/>:
+                                <spring:message code="user.user" text="message not found"/>:
                             </div>
                             <div class="col-md-6">
                                 <form:input path="calAge"   type = "number" class="form-control" required="required" />
                             </div>
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row centralize-flex">
                         <div class="col-md-6">
                             <div class="col-md-6">
                                 <spring:message code="calage.startDate" text="message not found"/>:
@@ -47,7 +47,7 @@
                     </div>
                 </div>
 
-                <button type="submit" class="addSubmitButton btn btn-success" ><spring:message code="calage.fulladd" text="message not found"/> </button>
+                <button type="submit" class="addSubmitButton btn btn-success" ><spring:message code="user.fulladd" text="message not found"/> </button>
             </form:form>
         </div>
         <script  type="text/javascript">

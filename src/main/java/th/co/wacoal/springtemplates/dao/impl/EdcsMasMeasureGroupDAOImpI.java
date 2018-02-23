@@ -10,9 +10,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.lang.StringUtils;
+import th.co.wacoal.springtemplates.dao.EdcsMasMeasureGroupDAO;
 import th.co.wacoal.springtemplates.db.Database;
 import th.co.wacoal.springtemplates.domain.EdcsMasMeasureGroup;
-import th.co.wacoal.springtemplates.dao.EdcsMasMeasureGroupDAO;
 
 /**
  *
@@ -148,13 +148,13 @@ public class EdcsMasMeasureGroupDAOImpI implements EdcsMasMeasureGroupDAO {
     }
 
     @Override
-    public int isExistCount(String nameTh,String nameEn, String id) {
+    public int isExistCount(String nameTh, String nameEn, String id) {
         if (id == null) {
             id = "0";
         }
         int idInt = Integer.parseInt(id);
         String sql = "select count(*) as count from EDCS_MAS_MEASURE_GROUP where MEASURE_GROUP_NAME_TH=? AND MEASURE_GROUP_NAME_EN=?  AND MEASURE_GROUP_ID !=?";
-        Map<String, Object> map = db.querySingle(sql, nameTh,nameEn, idInt);
+        Map<String, Object> map = db.querySingle(sql, nameTh, nameEn, idInt);
         int count = 0;
         if (map != null) {
             count = (int) map.get("count");

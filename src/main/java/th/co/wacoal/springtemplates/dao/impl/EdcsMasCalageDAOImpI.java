@@ -177,6 +177,30 @@ public class EdcsMasCalageDAOImpI implements EdcsMasCalageDAO {
     }
 
     @Override
+    public List<EdcsMasCalage> findByFlagLockedDate(int flag) {
+        String sql = "select * from EDCS_MAS_CALAGE where FLAG_DEL=? AND CAST(END_DATE AS Date) <= GETDATE() AND CAST(START_DATE AS Date) <= GETDATE()";
+        List<Map<String, Object>> rs = db.queryList(sql, flag);
+        List<EdcsMasCalage> ret = new ArrayList<>();
+        for (Map<String, Object> map : rs) {
+            EdcsMasCalage p = new EdcsMasCalage();
+
+            p.setCalAgeId((int) map.get("CAL_AGE_ID"));
+            p.setCalAge((Double) map.get("CAL_AGE"));
+            p.setStartDate((Date) map.get("START_DATE"));
+            p.setEndDate((Date) map.get("END_DATE"));
+
+            p.setCreateBy((String) map.get("CREATE_BY"));
+            p.setCreateOn((Date) map.get("CREATE_ON"));
+            p.setChangeBy((String) map.get("CHANGE_BY"));
+            p.setChangeOn((Date) map.get("CHANGE_ON"));
+            p.setFlagDel((String) map.get("FLAG_DEL"));
+
+            ret.add(p);
+        }
+        return ret;
+    }
+
+    @Override
     public List<EdcsMasCalage> findByFlag(int flag) {
         String sql = "select * from EDCS_MAS_CALAGE where FLAG_DEL=?";
         List<Map<String, Object>> rs = db.queryList(sql, flag);

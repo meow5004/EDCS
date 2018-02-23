@@ -25,7 +25,7 @@
 
                 <div id="ajaxCRUDfield">
                 </div>
-                <table id="availableMeasureUnitTable" class="datatable hover cell-border">
+                <table id="availableMeasureUnitTable" class="dataTable hover cell-border nowrap">
                     <thead>
                         <tr>
                             <th colspan="7" style="text-align: center"><spring:message code="measureUnit.table.avaliable" text="message not found"/></th>
@@ -42,7 +42,7 @@
                     </thead>
                 </table>
                 <br/>
-                <table id="unavailableMeasureUnitTable" class="datatable hover cell-border">
+                <table id="unavailableMeasureUnitTable" class="dataTable hover cell-border nowrap">
                     <thead>
                         <tr>
                             <th colspan="7" style="text-align: center"><spring:message code="measureUnit.table.unavaliable" text="message not found"/></th>
@@ -74,6 +74,11 @@
 
     $(document).ready(function () {
         availableTable = $('#availableMeasureUnitTable').DataTable({
+            responsive: {
+                details: {
+                    type: 'inline'
+                }
+            },
             "columns": [
                 {"data": "unitId", "target": 0},
                 {"data": "unitNameTh", "target": 1},
@@ -84,11 +89,16 @@
                 {"data": "deleteCheck", "target": 6, "className": "dt-center", "searchable": false, "orderable": false}
             ],
             "ajax": "./getAvailableMeasureUnit.htm",
-            "dom": '<lf<t>ip>',
+            "dom": '<lftip>',
             "order": [[0, 'asc']],
             "displayLength": 10});
 
         unAvailableTable = $('#unavailableMeasureUnitTable').DataTable({
+            responsive: {
+                details: {
+                    type: 'inline'
+                }
+            },
             "columns": [
                 {"data": "unitId", "target": 0},
                 {"data": "unitNameTh", "target": 1},
@@ -99,7 +109,7 @@
                 {"data": "realDeleteCheck", "target": 6, "className": "dt-center", "searchable": false, "orderable": false}
             ],
             "ajax": "./getUnavailableMeasureUnit.htm",
-            "dom": '<lf<t>ip>',
+            "dom": '<lftip>',
             "order": [[0, 'asc']],
             "displayLength": 10});
 

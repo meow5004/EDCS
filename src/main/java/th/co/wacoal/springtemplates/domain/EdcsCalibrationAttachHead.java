@@ -6,8 +6,8 @@
 package th.co.wacoal.springtemplates.domain;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -23,6 +23,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  *
@@ -34,19 +35,6 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "EdcsCalibrationAttachHead.findAll", query = "SELECT e FROM EdcsCalibrationAttachHead e")})
 public class EdcsCalibrationAttachHead implements Serializable {
-
-    @Size(max = 10)
-    @Column(name = "AB_TYPE")
-    private String abType;
-
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-    @Column(name = "ACCEPTANCE")
-    private Double acceptance;
-    @Column(name = "CAL_DATE")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date calDate;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "edcsCalibrationAttachHead")
-    private Collection<EdcsCalibrationAttachItem> edcsCalibrationAttachItemCollection;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -71,6 +59,18 @@ public class EdcsCalibrationAttachHead implements Serializable {
     @Size(max = 50)
     @Column(name = "ACTIVE_RANGE")
     private String activeRange;
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Column(name = "ACCEPTANCE")
+    private Double acceptance;
+    @Column(name = "CAL_DATE")
+    @Temporal(TemporalType.TIMESTAMP)
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    private Date calDate;
+    @Size(max = 10)
+    @Column(name = "AB_TYPE")
+    private String abType;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "edcsCalibrationAttachHead")
+    private List<EdcsCalibrationAttachItem> edcsCalibrationAttachItemList;
 
     public EdcsCalibrationAttachHead() {
     }
@@ -135,6 +135,39 @@ public class EdcsCalibrationAttachHead implements Serializable {
         this.activeRange = activeRange;
     }
 
+    public Double getAcceptance() {
+        return acceptance;
+    }
+
+    public void setAcceptance(Double acceptance) {
+        this.acceptance = acceptance;
+    }
+
+    public Date getCalDate() {
+        return calDate;
+    }
+
+    public void setCalDate(Date calDate) {
+        this.calDate = calDate;
+    }
+
+    public String getAbType() {
+        return abType;
+    }
+
+    public void setAbType(String abType) {
+        this.abType = abType;
+    }
+
+    @XmlTransient
+    public List<EdcsCalibrationAttachItem> getEdcsCalibrationAttachItemList() {
+        return edcsCalibrationAttachItemList;
+    }
+
+    public void setEdcsCalibrationAttachItemList(List<EdcsCalibrationAttachItem> edcsCalibrationAttachItemList) {
+        this.edcsCalibrationAttachItemList = edcsCalibrationAttachItemList;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -160,37 +193,4 @@ public class EdcsCalibrationAttachHead implements Serializable {
         return "th.co.wacoal.springtemplates.domain.EdcsCalibrationAttachHead[ calAttachHeadId=" + calAttachHeadId + " ]";
     }
 
-    public Double getAcceptance() {
-        return acceptance;
-    }
-
-    public void setAcceptance(Double acceptance) {
-        this.acceptance = acceptance;
-    }
-
-    public Date getCalDate() {
-        return calDate;
-    }
-
-    public void setCalDate(Date calDate) {
-        this.calDate = calDate;
-    }
-
-    @XmlTransient
-    public Collection<EdcsCalibrationAttachItem> getEdcsCalibrationAttachItemCollection() {
-        return edcsCalibrationAttachItemCollection;
-    }
-
-    public void setEdcsCalibrationAttachItemCollection(Collection<EdcsCalibrationAttachItem> edcsCalibrationAttachItemCollection) {
-        this.edcsCalibrationAttachItemCollection = edcsCalibrationAttachItemCollection;
-    }
-
-    public String getAbType() {
-        return abType;
-    }
-
-    public void setAbType(String abType) {
-        this.abType = abType;
-    }
-    
 }

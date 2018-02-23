@@ -60,6 +60,12 @@ public class EdcsUserRole implements Serializable {
     @Column(name = "CHANGE_BY")
     private String changeBy;
 
+    //extended property
+    private EdcsMasUserAuthType associateUserAuthType;
+    private EdcsMasUserType associateUserType;
+    private EdcsMasDepartment associateDepartment;
+    private EdcsMasUser associateUser;
+
     public EdcsUserRole() {
     }
 
@@ -159,9 +165,41 @@ public class EdcsUserRole implements Serializable {
         return true;
     }
 
+    public EdcsMasUserAuthType getAssociateUserAuthType() {
+        return associateUserAuthType;
+    }
+
+    public void setAssociateUserAuthType(EdcsMasUserAuthType associateUserAuthType) {
+        this.associateUserAuthType = associateUserAuthType;
+    }
+
+    public EdcsMasUserType getAssociateUserType() {
+        return associateUserType;
+    }
+
+    public void setAssociateUserType(EdcsMasUserType associateUserType) {
+        this.associateUserType = associateUserType;
+    }
+
+    public EdcsMasDepartment getAssociateDepartment() {
+        return associateDepartment;
+    }
+
+    public void setAssociateDepartment(EdcsMasDepartment associateDepartment) {
+        this.associateDepartment = associateDepartment;
+    }
+
+    public EdcsMasUser getAssociateUser() {
+        return associateUser;
+    }
+
+    public void setAssociateUser(EdcsMasUser associateUser) {
+        this.associateUser = associateUser;
+    }
+
     @Override
     public String toString() {
         return "th.co.wacoal.springtemplates.domain.EdcsUserRole[ roleId=" + roleId + " ]";
     }
-    
+
 }

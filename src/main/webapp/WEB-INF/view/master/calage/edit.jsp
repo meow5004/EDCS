@@ -17,7 +17,7 @@
         <div align="center container">
             <form:form id="editForm"  class="form-inline" action="edit.htm" method="post" modelAttribute="calage" onsubmit="return false;">
                 <div class="col-md-8">
-                    <div class="row">
+                    <div class="row centralize-flex">
                         <div class="col-md-6">
                             <div class="col-md-6">
                                 <spring:message code="calage.calage" text="message not found"/>:
@@ -28,7 +28,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row centralize-flex">
                         <div class="col-md-6">
                             <div class="col-md-6">
                                 <spring:message code="calage.startDate" text="message not found"/>:

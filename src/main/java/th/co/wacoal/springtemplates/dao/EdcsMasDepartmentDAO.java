@@ -6,6 +6,7 @@
 package th.co.wacoal.springtemplates.dao;
 
 import java.util.List;
+import java.util.Map;
 import th.co.wacoal.springtemplates.domain.EdcsMasDepartment;
 
 /**
@@ -34,7 +35,13 @@ public interface EdcsMasDepartmentDAO {
 
     public List<EdcsMasDepartment> findByFlag(int flag);
 
+    public List<EdcsMasDepartment> showViewableDepartmentsByempId(String empId);
+
     public int reuse(String id, String userId);
 
     public int reuseMutiple(String[] ids, String userId);
+
+    public EdcsMasDepartment mappingResultSet(Map<String, Object> map); 
+
+    public Map<String, EdcsMasDepartment> findByFlagListMappingById(int flag);
 }

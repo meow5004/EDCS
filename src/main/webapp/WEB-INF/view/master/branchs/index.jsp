@@ -25,7 +25,7 @@
 
                 <div id="ajaxCRUDfield">
                 </div>
-                <table id="availableBranchTable" class="datatable hover cell-border compact">
+                <table id="availableBranchTable" class="dataTable hover cell-border compact">
                     <thead>
                         <tr>
                             <th colspan="5" style="text-align: center"><spring:message code="branch.table.avaliable" text="message not found"/></th>
@@ -40,7 +40,7 @@
                     </thead>
                 </table>
                 <br/>
-                <table id="unavailableBranchTable" class="datatable hover cell-border">
+                <table id="unavailableBranchTable" class="dataTable hover cell-border nowrap">
                     <thead>
                         <tr>
                             <th colspan="5" style="text-align: center"><spring:message code="branch.table.unavaliable" text="message not found"/></th>
@@ -69,6 +69,11 @@
 
     $(document).ready(function () {
         availableTable = $('#availableBranchTable').DataTable({
+            responsive: {
+                details: {
+                    type: 'inline'
+                }
+            },
             "columns": [
                 {"data": "branchId", "target": 0},
                 {"data": "branchNameTh", "target": 1},
@@ -77,11 +82,16 @@
                 {"data": "deleteCheck", "target": 4, "className": "dt-center", "searchable": false, "orderable": false}
             ],
             "ajax": "./getAvailableBranch.htm",
-            "dom": '<lf<t>ip>',
+            "dom": '<lftip>',
             "order": [[0, 'asc']],
             "displayLength": 10
         });
         unAvailableTable = $('#unavailableBranchTable').DataTable({
+            responsive: {
+                details: {
+                    type: 'inline'
+                }
+            },
             "columns": [
                 {"data": "branchId", "target": 0},
                 {"data": "branchNameTh", "target": 1},
@@ -91,7 +101,7 @@
                 {"data": "realDeleteCheck", "target": 4, "className": "dt-center", "searchable": false, "orderable": false}
             ],
             "ajax": "./getUnavailableBranch.htm",
-            "dom": '<lf<t>ip>',
+            "dom": '<lftip>',
             "order": [[0, 'asc']],
             "displayLength": 10});
         $(document).on("click", ".addData,.editData", showFormByClick);

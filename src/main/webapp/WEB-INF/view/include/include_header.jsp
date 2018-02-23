@@ -9,114 +9,9 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>E-Doc Calibration Service</title>
         <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
-        <link href="../plugins/bootstrap-select/bootstrap-select.min.css" rel="stylesheet" type="text/css"/>
-        <link href="../plugins/dataTable/jquery.dataTables.min.css" rel="stylesheet" type="text/css"/>
-        <link href="../plugins/dataTable/responsive.bootstrap.min.css" rel="stylesheet" type="text/css"/>
+
         <jsp:include page="../include/include_script.jsp" flush="true"></jsp:include>
 
-            <script>
-                function logout() {
-                    window.location = "Logout";
-                    window.open('', '_self', '');
-                    window.close();
-                    self.close();
-                }
-                $(document).ready(function () {
-                    $("#logout").click(function (event) {
-                        event.preventDefault();
-                        logout();
-                    });
-                });
-                //close modal on overlay click
-                $(document).on('click', ".ui-widget-overlay", function () {
-                    $(".ui-dialog-titlebar-close").trigger('click');
-                });
-
-                //jump page api
-                jQuery.fn.dataTable.Api.register('page.jumpToData()', function (data, column) {
-                    var pos = this.column(column, {order: 'index'}).data().indexOf(data);
-                    if (pos >= 0) {
-                        var page = Math.floor(pos / this.page.info().length);
-                        this.page(page).draw(false);
-                        //$(this.row(pos).nodes()).addClass("lastModifiedRow");
-                    }
-                    return this;
-                });
-
-                function refreshDataAndJumpTo(jumpTo, searchColumn) {
-                    availableTable.ajax.reload(function () {
-                        //relaod before jump
-                        if (jumpTo !== null) {
-                            if (jumpTo === "lastest") {
-                                var maxId = availableTable
-                                        .column(searchColumn)
-                                        .data()
-                                        .sort(function (a, b) {
-                                            return a - b;
-                                        }).reverse()[0];
-                                availableTable.page.jumpToData(maxId, searchColumn);
-                            } else {
-                                var toInt = parseInt(jumpTo);
-                                availableTable.page.jumpToData(toInt, searchColumn);
-                            }
-                        }
-                    }, false);
-
-                    unAvailableTable.ajax.reload(function () {
-                        //relaod before jump
-                        if (jumpTo !== null) {
-                            if (jumpTo === "lastest") {
-                                var maxId = unAvailableTable
-                                        .column(searchColumn)
-                                        .data()
-                                        .sort(function (a, b) {
-                                            return a - b;
-                                        }).reverse()[0];
-                                unAvailableTable.page.jumpToData(maxId, searchColumn);
-                            } else {
-                                var toInt = parseInt(jumpTo);
-                                unAvailableTable.page.jumpToData(toInt, searchColumn);
-                            }
-                        }
-                    }, false);
-                    //start by show add form
-                    showFrom("add.htm");
-                }
-
-                function highlightData(/*array of object*/ ids, columnToSearch, table) {
-                    table.ajax.reload(function () {
-                        console.log("length=" + ids.length);
-                        for (var i = 0; i < ids.length; i++) {
-                            var pos = table.column(columnToSearch, {order: 'index'}).data().indexOf(ids[0]);
-                            if (pos >= 0) {
-                                $(table.row(pos).nodes()).addClass("lastModifiedRow");
-                            } else {
-                                var posInt = table.column(columnToSearch, {order: 'index'}).data().indexOf(parseInt(ids[0]));
-                                if (posInt >= 0) {
-                                    $(table.row(posInt).nodes()).addClass("lastModifiedRow");
-                                }
-                            }
-                        }
-                    }, false);
-                    return this;
-                }
-
-                function highlightDatum(id, columnToSearch, table) {
-                    table.ajax.reload(function () {
-                        var pos = table.column(columnToSearch, {order: 'index'}).data().indexOf(id);
-                        if (pos >= 0) {
-                            $(table.row(pos).nodes()).addClass("lastModifiedRow");
-                        } else {
-                            var posInt = table.column(columnToSearch, {order: 'index'}).data().indexOf(parseInt(id));
-                            if (posInt >= 0) {
-                                $(table.row(posInt).nodes()).addClass("lastModifiedRow");
-                            }
-                        }
-
-                    }, false);
-                    return this;
-                }
-            </script>
         </head>
         <body class="skin-blue fixed sidebar-collapse"> 
             <div class="wrapper" id="mainProfit"> 
@@ -169,15 +64,15 @@
                                 <li class="dropdown user user-menu">
                                     <a href="<c:url value = "#"/>" class="dropdown-toggle" data-toggle="dropdown">
                                         <i class="glyphicon glyphicon-user"></i>
-                                        <span>{name} {surname}<i class="caret"></i></span>
+                                        <span>${user.userName}<i class="caret"></i></span>
                                     </a>
                                     <ul class="dropdown-menu">
                                         <!-- User image -->
                                         <li class="user-header">
-                                            <%--<img src="http://prev.wacoalsampan.com/employee_picture/${empId}.jpg" class="img-circle" alt="User Image" />--%>
+                                            <img src="http://prev.wacoalsampan.com/employee_picture/${userId}.jpg" class="img-circle" alt="User Image" />
                                             <p>
-                                                ${profile.empNameTh} ${profile.empSurnameTh} (${profile.uid})
-                                                <small>${profile.empDeptTh}</small>
+                                                ${user.userName} (${user.empId})
+                                                <small>${userDep.fullName}</small>
                                             </p>
                                         </li>                 
                                         <!-- Menu Footer-->
@@ -185,7 +80,7 @@
                                             <div class="pull-right">
                                                 <c:choose>
                                                     <c:when test="${origin==null}">
-                                                        <a href="Login" class="btn btn-default btn-flat">Sign out</a>
+                                                        <a href="../login.htm" class="btn btn-default btn-flat">Sign out</a>
                                                     </c:when>
                                                     <c:otherwise>
                                                         <a href="<c:url value = "#"/>" id="logout" class="btn btn-default btn-flat">Sign out</a>
@@ -223,66 +118,89 @@
                         <!-- sidebar menu: : style can be found in sidebar.less -->
                         <ul class="sidebar-menu">
                             <li class="header">MAIN NAVIGATION</li>     
-                            <li>
-                                <a href="<c:url value = "/index/AdminIndex?s=c"/>checkDoc.htm">
-                                    <i class="fa fa-edit"></i> <span>ส่งรายงานสอบเทียบ</span>
-                                    <i class="fa fa-angle-right pull-right"></i>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="<c:url value = "/index/trackingDoc.htm"/>">
-                                    <i class="fa fa-search"></i> <span>ติดตามรายงานสอบเทียบ</span>
-                                    <i class="fa fa-angle-right pull-right"></i>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="<c:url value = "/index/deviceReceivce.htm"/>">
-                                    <i class="fa fa-sign-in"></i> <span>รับอุปกรณ์สอบเทียบ</span>
-                                    <i class="fa fa-angle-right pull-right"></i>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="<c:url value = "/index/createSearch.htm"/>">
-                                    <i class="fa fa-calendar"></i> <span>จัดทำรายงานสอบเทียบ</span>
-                                    <i class="fa fa-angle-right pull-right"></i>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="<c:url value = "/index/createDoc.htm"/>">
-                                    <i class="fa fa-file-text-o"></i> <span>รายงานผลการสอบเทียบ</span>
-                                    <i class="fa fa-angle-right pull-right"></i>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="<c:url value = "/index/createDetail.htm"/>">
-                                    <i class="fa fa-list-alt"></i> <span>ผลการสอบเทียบ</span>
-                                    <i class="fa fa-angle-right pull-right"></i>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="<c:url value = "/index/labApprove.htm"/>">
-                                    <i class="fa fa-check-square-o"></i> <span>อนุมัติรายการสอบเทียบ</span>
-                                    <i class="fa fa-angle-right pull-right"></i>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="<c:url value = "/index/printSticker.htm"/>">
-                                    <i class="fa fa-print"></i> <span>พิมพ์สติ๊กเกอร์</span>
-                                    <i class="fa fa-angle-right pull-right"></i>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="<c:url value = "/index/deviceSend.htm"/>">
-                                    <i class="fa fa-sign-out"></i> <span>คืนอุปกรณ์สอบเทียบ</span>
-                                    <i class="fa fa-angle-right pull-right"></i>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="<c:url value = "#"/>">
-                                    <i class="fa fa-table"></i> <span>แผนประจำปี</span>
-                                    <i class="fa fa-angle-right pull-right"></i>
-                                </a>
-                            </li>
+                                <c:if test="${fn:contains( user.userAuthTypeIds,1)}">
+                                <li>
+                                    <a href="<c:url value = "/index/checkDoc.htm"/>">
+                                        <i class="fa fa-edit"></i> <span>ส่งรายงานสอบเทียบ</span>
+                                        <i class="fa fa-angle-right pull-right"></i>
+                                    </a>
+                                </li>
+                            </c:if>
+                            <c:if test="${fn:contains( user.userAuthTypeIds,2)}">
+                                <li>
+                                    <a href="<c:url value = "/index/approveDoc.htm"/>">
+                                        <i class="fa fa-edit"></i> <span>อนุมัติส่งอุปกรณ์สอบเทียบ</span>
+                                        <i class="fa fa-angle-right pull-right"></i>
+                                    </a>
+                                </li>
+                            </c:if>
+
+                                <li>
+                                    <a href="<c:url value = "/index/trackingDoc.htm"/>">
+                                        <i class="fa fa-search"></i> <span>ติดตามรายงานสอบเทียบ</span>
+                                        <i class="fa fa-angle-right pull-right"></i>
+                                    </a>
+                                </li>
+                            <c:if test="${fn:contains( user.userAuthTypeIds,3)}">
+                                <li>
+                                    <a href="<c:url value = "/index/deviceReceivce.htm"/>">
+                                        <i class="fa fa-sign-in"></i> <span>รับอุปกรณ์สอบเทียบ</span>
+                                        <i class="fa fa-angle-right pull-right"></i>
+                                    </a>
+                                </li>
+                            </c:if>
+                            <c:if test="${fn:contains( user.userAuthTypeIds,4)}">
+                                <li>
+                                    <a href="<c:url value = "/index/createSearch.htm"/>">
+                                        <i class="fa fa-calendar"></i> <span>จัดทำรายงานสอบเทียบ</span>
+                                        <i class="fa fa-angle-right pull-right"></i>
+                                    </a>
+                                </li>
+                            </c:if>
+                            <!--                            <li>
+                                                            <a href="<c:url value = "/index/createDoc.htm"/>">
+                                                                <i class="fa fa-file-text-o"></i> <span>รายงานผลการสอบเทียบ</span>
+                                                                <i class="fa fa-angle-right pull-right"></i>
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="<c:url value = "/index/createDetail.htm"/>">
+                                                                <i class="fa fa-list-alt"></i> <span>ผลการสอบเทียบ</span>
+                                                                <i class="fa fa-angle-right pull-right"></i>
+                                                            </a>
+                                                        </li>-->
+                            <c:if test="${fn:contains( user.userAuthTypeIds,5)}">
+                                <li>
+                                    <a href="<c:url value = "/index/labApprove.htm"/>">
+                                        <i class="fa fa-check-square-o"></i> <span>อนุมัติรายการสอบเทียบ</span>
+                                        <i class="fa fa-angle-right pull-right"></i>
+                                    </a>
+                                </li>
+                            </c:if>
+                            <c:if test="${fn:contains( user.userAuthTypeIds,6)}">
+                                <li>
+                                    <a href="<c:url value = "/index/printSticker.htm"/>">
+                                        <i class="fa fa-print"></i> <span>พิมพ์สติ๊กเกอร์</span>
+                                        <i class="fa fa-angle-right pull-right"></i>
+                                    </a>
+                                </li>
+                            </c:if>
+                            <c:if test="${fn:contains( user.userAuthTypeIds,7)}">
+                                <li>
+                                    <a href="<c:url value = "/index/deviceSend.htm"/>">
+                                        <i class="fa fa-sign-out"></i> <span>คืนอุปกรณ์สอบเทียบ</span>
+                                        <i class="fa fa-angle-right pull-right"></i>
+                                    </a>
+                                </li>
+                            </c:if>
+                            <c:if test="${fn:contains( user.userAuthTypeIds,8)}">
+                                <li>
+                                    <a href="<c:url value = "#"/>">
+                                        <i class="fa fa-table"></i> <span>แผนประจำปี</span>
+                                        <i class="fa fa-angle-right pull-right"></i>
+                                    </a>
+                                </li>
+                            </c:if>
                             <li class="treeview">
                                 <a href="<c:url value = "#"/>">
                                     <i class="fa fa-cog"></i> <span>จัดการข้อมูลหลัก</span>
@@ -292,14 +210,16 @@
                                     <li><a href="<c:url value = "/branchs/index.htm"/>" ><i class="fa fa-building" ></i><span>จัดการสาขา</span></a><li>
                                     <li><a href="<c:url value = "/departments/index.htm"/>" ><i class="fa fa-building-o" ></i><span>จัดการแผนก</span></a><li>
                                     <li><a href="<c:url value = "/measure/index.htm"/>" ><i class="fa fa-book" ></i><span>สร้างรหัสเครื่องวัด/ทดสอบ</span></a><li>
-                                    <li><a href="<c:url value = "/equipcons/index.htm"/>" ><i class="fa fa-th-list" ></i><span>ประเภทเครื่องวัด/ทดสอบ</span></a><li>
+                                    <li><a href="<c:url value = "/equipcons/index.htm"/>" ><i class="fa fa-th-list" ></i><span>สถานะเครื่องวัด/ทดสอบ</span></a><li>
                                     <li><a href="<c:url value = "/measureGroup/index.htm"/>" ><i class="fa fa-columns" ></i><span>กลุ่มเครื่องวัด/ทดสอบ</span></a><li>
                                     <li><a href="<c:url value = "/calpoints/index.htm"/>" ><i class="fa fa-crosshairs" ></i><span>จุดสอบเทียบ</span> </a><li>
                                     <li><a href="<c:url value = "#"/>" ><i class="fa fa-subscript" ></i><span>สูตรคำนวณ</span></a><li>
                                     <li><a href="<c:url value = "/measureUnits/index.htm"/>" ><i class="fa fa-balance-scale" ></i><span>หน่วยวัด</span></a><li>
                                     <li><a href="<c:url value = "/statusCaldocs/index.htm"/>" ><i class="fa fa-file" ></i><span>สถานะเอกสาร</span></a><li>
                                     <li><a href="<c:url value = "#"/>" ><i class="fa fa-user-plus" ></i><span>จัดการข้อมูลผู้ใช้งานภายนอก</span></a><li>
+                                       <c:if test="${fn:contains( user.userAuthTypeIds,9)}">
                                     <li><a href="<c:url value = "#"/>" ><i class="fa fa-unlock-alt" ></i><span>กำหนดสิทธิ์การใช้งาน</span></a><li>
+                                    </c:if>
                                     <li><a href="<c:url value = "/process/index.htm"/>" ><i class="fa fa-book" ></i><span>วิธีทดสอบ</span></a><li>
                                     <li><a href="<c:url value = "/model/index.htm"/>" ><i class="fa fa-key" ></i><span>จัดการแม่แบบ</span></a><li>
                                     <li><a href="<c:url value = "/calage/index.htm"/>" ><i class="fa fa-clock-o" ></i><span>จัดการช่วงเาลาสอบเทียบ</span></a><li>

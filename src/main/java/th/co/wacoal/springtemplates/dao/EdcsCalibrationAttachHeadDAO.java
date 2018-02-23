@@ -23,7 +23,7 @@ public interface EdcsCalibrationAttachHeadDAO {
 
     public int update(EdcsCalibrationAttachHead object);
 
-    public int add(EdcsCalibrationAttachHead object);
+    public int addAndReturnId(EdcsCalibrationAttachHead object);
 
     public EdcsCalibrationAttachHead find(int id);
 

@@ -142,7 +142,7 @@ public class EdcsMasStatusCaldocDAOImpl implements EdcsMasStatusCaldocDAO {
         }
         return ret;
     }
-    
+
     @Override
     public int isExistCount(String name, String id) {
         if (id == null) {

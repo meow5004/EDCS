@@ -1,105 +1,150 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <jsp:include page="include/include_header.jsp" flush="true"></jsp:include>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>   
+<%@ taglib uri = "http://java.sun.com/jsp/jstl/fmt" prefix = "fmt" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
 
-    <div class="row">
+<div class="row">
 
-        <div class="col-lg-12" style="text-align: left;">
-            <div class="box box-primary" id="loading-example">
-                <div class="box-header">
-                    <!-- tools box -->
-                    <i class="fa fa-cloud"></i>
+    <div class="col-lg-12" style="text-align: left;">
+        <div class="box box-primary" id="loading-example">
+            <div class="box-header">
+                <!-- tools box -->
+                <i class="fa fa-cloud"></i>
 
-                    <h3 class="box-title">ส่งอุปกรณ์สอบเทียบ</h3>
-                    <div style="float: right;"><div style="float: left; margin-top: 10px; margin-right: 5px;"><b>เลือกทั้งหมด</b></div><input type="checkbox" name="selectAllMeasureId" style="width: 35px; height: 35px;"></div>
-                </div><!-- /.box-header -->
-                <div class="box-body no-padding">
-                    <div class="row">
-                        <div class="col-sm-12">
+                <h3 class="box-title">ส่งอุปกรณ์สอบเทียบ</h3>
+                <div style="float: right;"><div style="float: left; margin-top: 10px; margin-right: 5px;"><b>เลือกทั้งหมด</b></div><input type="checkbox" name="selectAllMeasureId" style="width: 35px; height: 35px;"></div>
+            </div><!-- /.box-header -->
+            <div class="box-body container">
+                <div class="row text-center" style="border-right: 1px solid #f4f4f4">
+                    <div class="col-sm-4 col-sm-offset-3" style="text-align: left;font-size: 1.5em;border: 1px solid black">
+                        เลือกแผนก 
+                        <select id="calibDepsList">
+                            <c:forEach items="${deps}" var = "department">
+                                <c:choose>
+                                    <c:when test="${department.depId == user.depId}">
+                                        <option value="${department.depId}" selected>${department.fullName}</option>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <option value="${department.depId}">${department.fullName}</option>
+                                    </c:otherwise>
+                                </c:choose>
+                            </c:forEach>
+                        </select>
 
-                            <table id="checkDocTable" style="width: 90%;">
-                                <thead>
-                                    <tr>
-                                        <th style="text-align: center;">เลขที่</th>
-                                        <th style="text-align: center;">หน่วยงาน</th>
-                                        <th style="text-align: center;">รหัสเครื่องวัด</th>
-                                        <th style="text-align: center;">ชื่อเครื่องวัด</th>
-                                        <th style="text-align: center;">สอบเทียบล่าสุด</th>
-                                        <th style="text-align: center;">เหลืออายุสอบเทียบ</th>
-                                        <th style="text-align: center;">ผู้แจ้ง</th>
-                                        <th style="text-align: center;">เลือก</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <!--                                    <tr style="color: red;">
-                                                                            <th>7200007</th>
-                                                                            <td>ชิ้นส่วน</td>
-                                                                            <td>RI0001</td>
-                                                                            <td>สายวัดสีดำ</td>
-                                                                            <td>12/08/2016</td>
-                                                                            <td style="text-align: center;">19 วัน</td>
-                                                                            <td style="text-align: center;">nameTH</td>
-                                                                            <td style="text-align: center;"><input type="checkbox" style="width: 35px; height: 35px;"></td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <th>7200008</th>
-                                                                            <td>ชิ้นส่วน</td>
-                                                                            <td>RI0002</td>
-                                                                            <td>สายวัดสีดำ</td>
-                                                                            <td>12/09/2016</td>
-                                                                            <td style="text-align: center;">49 วัน</td>
-                                                                            <td style="text-align: center;">nameTH</td>
-                                                                            <td style="text-align: center;"><input type="checkbox" style="width: 35px; height: 35px;"></td>
-                                                                        </tr>  
-                                                                        <tr>
-                                                                            <th>7200009</th>
-                                                                            <td>ชิ้นส่วน</td>
-                                                                            <td>RI0003</td>
-                                                                            <td>สายวัดสีดำ</td>
-                                                                            <td>12/09/2016</td>
-                                                                            <td style="text-align: center;">49 วัน</td>
-                                                                            <td style="text-align: center;">nameTH</td>
-                                                                            <td style="text-align: center;"><input type="checkbox" style="width: 35px; height: 35px;"></td>
-                                                                        </tr>  -->
-                                </tbody>
-                            </table>
-
-                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <table id="checkDocTable"  class="dataTable hover cell-border nowrap compact" style="width: 100%">
+                            <thead>
+                                <tr>
+                                    <th>หน่วยงาน</th>
+                                    <th>รหัสเครื่องวัด</th>
+                                    <th>ชื่อเครื่องวัด</th>
+                                    <th>สอบเทียบล่าสุด</th>
+                                    <th>วันหมดอายุสอบเทียบ</th>
+                                    <th>ผู้แจ้ง</th>
+                                    <th>เลือกสภาพอุปกรณ์</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
                     </div><!-- /.row - inside box -->
-                </div><!-- /.box-body -->
-                <div class="box-footer">
-                    <div class="row">
-                        <div class="col-xs-12 text-center" style="border-right: 1px solid #f4f4f4">
-                            <div class="col-sm-12">
-                                <button class="btn btn-primary btn-lg" id="sendMeasureToApprove" style="width: 100%;">ส่งอุปกรณ์</button>
-                            </div>
+                </div>
+            </div><!-- /.box-body -->
+            <div class="box-footer">
+                <div class="row">
+                    <div class="col-xs-12 text-center" style="border-right: 1px solid #f4f4f4">
+                        <div class="col-sm-6" style="font-size:1.5em;text-align: right">
+                            ผู้อนุมัติ
+                            <select id="approverList">
+                                <option value="" selected></option>
+                                <c:forEach items="${approver}" var = "approverUser">
+                                    <option value="${approverUser.empId}">${approverUser.userName}</option>
+                                </c:forEach>
+                            </select>
                         </div>
-                    </div><!-- /.row -->
-                </div><!-- /.box-footer -->
-            </div><!-- /.box -->        
-
-        </div>
+                        <div class="col-sm-6">
+                            <button class="btn btn-primary btn-lg" id="sendMeasureToApprove" style="width: 100%;">ส่งอุปกรณ์</button>
+                        </div>
+                    </div>
+                </div>
+            </div><!-- /.box-footer -->
+        </div><!-- /.box -->        
 
     </div>
+
+</div>
 <jsp:include page="include/include_footer.jsp" flush="true"></jsp:include>
 <script>
     $(document).ready(function () {
         availableTable = $('#checkDocTable').DataTable({
+            columnDefs: [
+                {responsivePriority: 1, targets: 0},
+                {responsivePriority: 2, targets: -1}
+            ],
+            "dom": '<"row"f><"scrollBox row"ti>',
             "columns": [
-                {"data": "calCode", "target": 0},
-                {"data": "requestCommnet", "target": 1},
-                {"data": "measureId", "target": 2},
-                {"data": "associateMeasure.fullName", "target": 3},
-                {"data": "approveStatusOn", "target": 4},
-                {"data": "dueDate", "target": 5},
-                {"data": "requestBy", "target": 6},
-                {"data": "measureId", "target": 7, render: function (data, type, row, meta) {
-                        var choice = "<input type='checkbox' name='measureId[]' value='" + data + "'>";
-                        return choice
-                    }}
+                {"data": "associateDep.fullName", "target": 0},
+                {"data": "associateMeasure.measureCode", "target": 1, responsivePriority: 1},
+                {"data": "associateMeasure.fullName", "target": 2},
+                {"data": "approveStatusOn", "target": 3, render: function (data, type, row, meta) {
+
+                        if (data != null) {
+                            return formatDateFromJavaDateJSONEncoded(data);
+                        } else {
+                            return "<span style='font-weight:bolder;color:red'>ไม่เคยมีการสอบเทียบ</span>";
+                        }
+                    }},
+                {"data": "dueDate", "target": 4, render: function (data, type, row, meta) {
+
+                        if (data != null) {
+                            var time = moment.utc(formatDateFromJavaDateJSONEncoded(data), "DD/MM/YYYY");
+                            var dueDay = time.get("date") - moment().get("date");
+                            var formatted = moment.utc(data).add(1900, 'y').format("DD/MM/YYYY");
+                            if (dueDay == 0) {
+                                return formatted + "<span style='color:red'>( หมดอายุวันนี้ )</span>";
+                            } else if (dueDay < 0) {
+                                return formatted + "<span style='color:red;font-weight:bolder'>( หมดอายุไปแล้ว " + Math.abs(dueDay) + " วัน )</span>";
+                            } else {
+                                return formatted + "( อีก" + Math.abs(dueDay) + " วัน หมดอายุ )";
+                            }
+
+                        } else {
+                            return "<span style='font-weight:bolder;color:red'>ไม่เคยมีการสอบเทียบ</span>";
+                        }
+                    }},
+                {"data": "requestBy", "target": 5},
+                {"target": 6, responsivePriority: 1, "data": function (data, type, row, meta) {
+                        var choice = "<div class='container-fluid'>" +
+                                "<div class='row'>"
+                                + "<div class='col-sm-4 no-padding'>"
+                                + "<input style='margin:0px' type='checkbox' id='requestRow-" + meta.row + "' name='requestMeasureId[]' data-row='" + meta.row + "'data-comment='' value='" + data.measureId + "'>"
+                                + "</div>"
+                                + "<div class='col-sm-8'>"
+                                + "<button class='btn' id='comment-" + meta.row + "' data-row='" + meta.row + "'>"
+                                + "note"
+                                + "</button>"
+                                + "</div>";
+                        +"</div>";
+                        +"</div>";
+                        return choice;
+                    }, "createdCell": function (td, cellData, rowData, row, col) {
+                        $(td).find("select").trigger("change");
+                        $(td).css("white-space", "normal");
+                    }, "searchable": false}
             ],
             "createdRow": function (row, data, index) {
+
+                var time = moment.utc(data.dueDate).add(1900, 'y');
+                var dueDay = time.get("date") - moment().get("date");
                 if (data.calId < 1) {
-                    $(row).addClass('warning');
+                    $(row).addClass('newData');
+                } else if (dueDay < 0) {
+                    $(row).addClass('danger-alert');
                 }
             },
             "ajax": {
@@ -108,48 +153,136 @@
                     "dayDue": 30
                 }
             },
-            "dom": '<lf<t>ip>',
+            responsive: {
+                details: {
+                    type: 'inline'
+                }
+            },
             "order": [[0, 'asc']],
-            "displayLength": 10});
-
+            "paging": false,
+            "drawCallback": function (settings) {
+                var api = this.api();
+                api.columns.adjust().responsive.recalc();
+            }
+        });
+        availableTable.on('search.dt', function () {
+            var allCheckboxes = availableTable.$("input[type='checkbox'][name='requestMeasureId[]']", {"filter": "applied"});
+            var checked = availableTable.$("input[type='checkbox'][name='requestMeasureId[]']:checked", {"filter": "applied"});
+            if (allCheckboxes.length > checked.length) {
+                $("input[id='selectAllMeasureId'][type='checkbox']").prop('checked', false);
+            } else {
+                $("input[id='selectAllMeasureId'][type='checkbox']").prop('checked', true);
+            }
+        });
         $("#sendMeasureToApprove").on("click", function () {
-            var checkedValues = [];
-            $("input[type='checkbox'][name='measureId[]']:checked").each(function (i) {
-                checkedValues[i] = $(this).val();
-            });
-            console.log(checkedValues);
-            $.ajax({
-                type: "POST",
-                async: false,
-                url: "../calibration/createCalibration.htm",
-                data: {"checkedValues": checkedValues.toString()},
-                success: function (result)
-                {
-                    bootbox.alert({
-                        backdrop: true,
-                        className: "dangerFont",
-                        message: result,
-                        callback: function () { /* your callback code */
+            var approver = $("#approverList").val();
+            if (availableTable.$("input[type='checkbox'][name='requestMeasureId[]']:checked", {"filter": "applied"}).length > 0) {
+                if (approver !== null && approver.length > 0) {
+                    var calibrationRequestModels = [];
+                    availableTable.$("input[type='checkbox'][name='requestMeasureId[]']:checked").each(function (i) {
+                        var index = i;
+                        var calibrationRequestModel = {};
+                        calibrationRequestModel["measureId"] = $(this).val();
+                        calibrationRequestModel["requestComment"] = $(this).data("comment");
+                        calibrationRequestModel["approverId"] = approver;
+
+                        calibrationRequestModels.push(calibrationRequestModel);
+                    });
+                    reqModels = JSON.stringify({
+                        'calibrationRequestModels': calibrationRequestModels
+                    });
+                    $.ajax({
+                        type: "POST",
+                        async: false,
+                        url: "../calibration/createCalibration.htm",
+                        data: reqModels,
+                        dataType: "html",
+                        contentType: 'application/json',
+                        mimeType: 'application/json',
+                        success: function (result)
+                        {
+                            bootbox.alert({
+                                backdrop: true,
+                                className: "dangerFont",
+                                message: result,
+                                callback: function () { /* your callback code */
+                                }
+                            });
+                            location.reload();
                         }
                     });
-                    location.reload();
+                } else {
+                    bootbox.alert("<h3 style='color:red'>-กรุณาเลือกผู้อนุมัติก่อนส่งอุปกรณ์</h3>");
                 }
-            });
+            } else {
+                bootbox.alert("<h3 style='color:red'>-กรุณาเลือกอุปกรณ์ที่ต้องการส่งสอบเทียบ</h3>");
+            }
         });
+
+
+    });
+    $("input[name='selectAllMeasureId'][type='checkbox']").on("click", function (event) {
+        if (this.checked) {
+            // Iterate each checkbox
+            availableTable.$("input[type='checkbox'][name='requestMeasureId[]']", {"filter": "applied"}).each(function () {
+                this.checked = true;
+            });
+        } else {
+            availableTable.$("input[type='checkbox'][name='requestMeasureId[]']", {"filter": "applied"}).each(function () {
+                this.checked = false;
+            });
+        }
+    });
+
+    //approval cond comment section
+    $("#calibDepsList").on("change", function () {
+        var url = "../ajaxHelper/getNearDueAndNewCalibration.htm?dayDue=30&&depId=" + $(this).val();
+        availableTable.ajax.url(url).load();
+        $.ajax({
+            type: "POST",
+            url: "../ajaxHelper/getRequestApproverByDepId.htm",
+            data: {
+                depId: $(this).val()
+            },
+            success: function (result)
+            {
+                var arr = JSON.parse(result);
+                var options = "<option value=''></option>";
+                arr.forEach(function (item) {
+                    options += "<option value='" + item.empId + "'>" + item.userName + "</option>";
+                });
+                $("#approverList").html(options);
+            }
+        });
+
 
     });
 
-        $("input[name='selectAllMeasureId'][type='checkbox']").on("click", function (event) {
-            if (this.checked) {
-                // Iterate each checkbox
-                $("input[type='checkbox'][name='measureId[]']").each(function () {
-                    this.checked = true;
-                });
-            } else {
-                $("input[type='checkbox'][name='measureId[]']").each(function () {
-                    this.checked = false;
-                });
+
+    $(document).on("click", "button[id^=comment-]", function () {
+
+        var button = $(this);
+        var row = $(this).data("row");
+        var associateCheckbox = "input[type='checkbox'][id*='requestRow'][data-row='" + row + "']";
+        var oldComment = $(associateCheckbox).data("comment");
+        bootbox.prompt({
+            size: "small",
+            title: "ใส่คอมเมนท์",
+            value: oldComment,
+            inputType: "textarea",
+            callback: function (result) { /* result = String containing user input if OK clicked or null if Cancel clicked */
+                var comment = result;
+                if (comment != null) {
+                    $(associateCheckbox).data("comment", comment);
+                    $(associateCheckbox).attr("data-comment", comment);
+                    if (comment.length > 0) {
+                        $(button).addClass("btn-success");
+                    } else {
+                        $(button).removeClass("btn-success");
+                    }
+                }
             }
         });
+    });
 </script>
 

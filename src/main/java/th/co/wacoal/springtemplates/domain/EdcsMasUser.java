@@ -6,7 +6,9 @@
 package th.co.wacoal.springtemplates.domain;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -63,6 +65,15 @@ public class EdcsMasUser implements Serializable {
     @Size(max = 50)
     @Column(name = "CHANGE_BY")
     private String changeBy;
+
+    //custom property
+    private List<EdcsMasUserAuthType> userAuthTypes;
+    private List<EdcsMasUserType> userTypes;
+    private List<EdcsMasDepartment> viewableDepartments;
+    private List<Integer> userAuthTypeIds;
+    private List<Integer> userTypeIds;
+    private List<String> viewableDepartmentIds;
+    private Integer[] userRoleIds;
 
     public EdcsMasUser() {
     }
@@ -143,6 +154,77 @@ public class EdcsMasUser implements Serializable {
         this.changeBy = changeBy;
     }
 
+    public List<EdcsMasUserAuthType> getUserAuthTypes() {
+        return userAuthTypes;
+    }
+
+    public void setUserAuthTypes(List<EdcsMasUserAuthType> userAuthTypes) {
+        this.userAuthTypes = userAuthTypes;
+        List<Integer> userAuthTypeIdsTemp = new ArrayList<>();
+        for (EdcsMasUserAuthType userAuthType : userAuthTypes) {
+            userAuthTypeIdsTemp.add(userAuthType.getAuthTypeId());
+        }
+        this.userAuthTypeIds = userAuthTypeIdsTemp;
+    }
+
+    public List<EdcsMasUserType> getUserTypes() {
+        return userTypes;
+    }
+
+    public void setUserTypes(List<EdcsMasUserType> userTypes) {
+        this.userTypes = userTypes;
+        List<Integer> userTypeIdsTemp = new ArrayList<>();
+        for (EdcsMasUserType userType : userTypes) {
+            userTypeIdsTemp.add(userType.getUserTypeId());
+        }
+        this.userTypeIds = userTypeIdsTemp;
+    }
+
+    public List<EdcsMasDepartment> getViewableDepartments() {
+        return viewableDepartments;
+    }
+
+    public void setViewableDepartments(List<EdcsMasDepartment> viewableDepartments) {
+        List<String> viewableDepartmentIdsTemp = new ArrayList<>();
+        this.viewableDepartments = viewableDepartments;
+        for (EdcsMasDepartment dep : viewableDepartments) {
+            viewableDepartmentIdsTemp.add(dep.getDepId());
+        }
+        this.viewableDepartmentIds = viewableDepartmentIdsTemp;
+    }
+
+    public List<Integer> getUserAuthTypeIds() {
+        return userAuthTypeIds;
+    }
+
+    public void setUserAuthTypeIds(List<Integer> userAuthTypeIds) {
+        this.userAuthTypeIds = userAuthTypeIds;
+    }
+
+    public List<Integer> getUserTypeIds() {
+        return userTypeIds;
+    }
+
+    public void setUserTypeIds(List<Integer> userTypeIds) {
+        this.userTypeIds = userTypeIds;
+    }
+
+    public List<String> getViewableDepartmentIds() {
+        return viewableDepartmentIds;
+    }
+
+    public void setViewableDepartmentIds(List<String> viewableDepartmentIds) {
+        this.viewableDepartmentIds = viewableDepartmentIds;
+    }
+
+    public Integer[] getUserRoleIds() {
+        return userRoleIds;
+    }
+
+    public void setUserRoleIds(Integer[] userRoleIds) {
+        this.userRoleIds = userRoleIds;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -167,5 +249,5 @@ public class EdcsMasUser implements Serializable {
     public String toString() {
         return "th.co.wacoal.springtemplates.domain.EdcsMasUser[ empId=" + empId + " ]";
     }
-    
+
 }

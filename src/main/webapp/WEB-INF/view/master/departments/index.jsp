@@ -37,7 +37,7 @@
 
                 <div id="ajaxCRUDfield">
                 </div>
-                <table id="availableDepartmentTable" class="datatable hover cell-border ">
+                <table id="availableDepartmentTable" class="dataTable hover cell-border nowrap">
                     <thead>
                         <tr>
                             <th colspan="10" style="text-align: center"><spring:message code="department.table.avaliable" text="message not found"/></th>
@@ -47,17 +47,13 @@
                             <th><spring:message code="department.depId" text="message not found"/></th>
                             <th><spring:message code="department.depNameTh" text="message not found"/></th>
                             <th><spring:message code="department.depNameEn"  text="message not found" /></th>
-                            <th><spring:message code="department.createBy" text="message not found" /></th>
-                            <th><spring:message code="department.createOn" text="message not found"/></th>
-                            <th><spring:message code="department.changeBy" text="message not found"/></th>
-                            <th><spring:message code="department.changeOn" text="message not found"/></th>
                             <th></th>
                             <th><button class="deleteMultiple btn btn-danger"><spring:message code="department.delete" text="message not found"/><i class="fa fa-trash-o" aria-hidden="true"></i></th>
                         </tr> 
                     </thead>
                 </table>
                 <br/>
-                <table id="unavailableDepartmentTable" class="datatable hover cell-border">
+                <table id="unavailableDepartmentTable" class="dataTable hover cell-border nowrap">
                     <thead>
                         <tr>
                             <th colspan="10" style="text-align: center"><spring:message code="department.table.unavaliable" text="message not found"/></th>
@@ -67,10 +63,6 @@
                             <th><spring:message code="department.depId" text="message not found"/></th>
                             <th><spring:message code="department.depNameTh" text="message not found"/></th>
                             <th><spring:message code="department.depNameEn"  text="message not found" /></th>
-                            <th><spring:message code="department.createBy" text="message not found" /></th>
-                            <th><spring:message code="department.createOn" text="message not found"/></th>
-                            <th><spring:message code="department.changeBy" text="message not found"/></th>
-                            <th><spring:message code="department.changeOn" text="message not found"/></th>
                             <th><button class="reuseMultiple btn btn-success"><spring:message code="department.reuse" text="message not found"/><i class="fa fa-recycle" aria-hidden="true"></i></button></th>
                             <th><button class="realDeleteMultiple btn btn-danger"><spring:message code="department.realDelete" text="message not found"/><i class="fa fa-remove" aria-hidden="true"></i></button></th>
                         </tr> 
@@ -86,23 +78,24 @@
 <script>
     $(document).ready(function () {
         availableTable = $('#availableDepartmentTable').DataTable({
+            responsive: {
+                details: {
+                    type: 'inline'
+                }
+            },
             "columns": [
                 {"data": "associateBranchName", "target": 0, "visible": false},
                 {"data": "depId", "target": 1},
                 {"data": "depNameTh", "target": 2},
                 {"data": "depNameEn", "target": 3},
-                {"data": "createBy", "target": 4},
-                {"data": "createOn", "target": 5},
-                {"data": "changeBy", "target": 6},
-                {"data": "changeOn", "target": 7},
-                {"data": "actionLink", "target": 7, "searchable": false, "orderable": false},
-                {"data": "deleteCheck", "target": 8, "className": "dt-center", "searchable": false, "orderable": false}
+                {"data": "actionLink", "target": 4, "searchable": false, "orderable": false},
+                {"data": "deleteCheck", "target": 5, "className": "dt-center", "searchable": false, "orderable": false}
             ], rowGroup: {
                 dataSrc: 'associateBranchName',
                 startClassName: "bg-primary text-white"
             },
             "ajax": "./getAvailableDepartment.htm",
-            "dom": '<lf<t>ip>',
+            "dom": '<lftip>',
             "order": [[0, 'asc']],
             "displayLength": 10
         });
@@ -110,25 +103,26 @@
 
 
         unAvailableTable = $('#unavailableDepartmentTable').DataTable({
+            responsive: {
+                details: {
+                    type: 'inline'
+                }
+            },
             "columns": [
                 {"data": "associateBranchName", "target": 0, "visible": false},
                 {"data": "depId", "target": 1},
                 {"data": "depNameTh", "target": 2},
                 {"data": "depNameEn", "target": 3},
-                {"data": "createBy", "target": 4},
-                {"data": "createOn", "target": 5},
-                {"data": "changeBy", "target": 6},
-                {"data": "changeOn", "target": 7},
 //                {"data": "actionLink", "target": 7, "searchable": false, "orderable": false},
-                {"data": "reuseCheck", "target": 8, "className": "dt-center", "searchable": false, "orderable": false},
-                {"data": "realDeleteCheck", "target": 9, "className": "dt-center", "searchable": false, "orderable": false}
+                {"data": "reuseCheck", "target": 4, "className": "dt-center", "searchable": false, "orderable": false},
+                {"data": "realDeleteCheck", "target": 5, "className": "dt-center", "searchable": false, "orderable": false}
             ], rowGroup: {
                 dataSrc: 'associateBranchName',
                 startClassName: "bg-info",
                 endClassName: "closed-line"
             },
             "ajax": "./getUnavailableDepartment.htm",
-            "dom": '<lf<t>ip>',
+            "dom": '<lftip>',
             "order": [[0, 'asc']],
             "displayLength": 10
         });

@@ -25,7 +25,7 @@
 
                 <div id="ajaxCRUDfield">
                 </div>
-                <table id="availableMeasureGroupTable" class="datatable hover cell-border">
+                <table id="availableMeasureGroupTable" class="dataTable hover cell-border nowrap">
                     <thead>
                         <tr>
                             <th colspan="4" style="text-align: center"><spring:message code="measureGroup.table.avaliable" text="message not found"/></th>
@@ -39,7 +39,7 @@
                     </thead>
                 </table>
                 <br/>
-                <table id="unavailableMeasureGroup" class="datatable hover cell-border ">
+                <table id="unavailableMeasureGroup" class="dataTable hover cell-border ">
                     <thead>
                         <tr>
                             <th colspan="4" style="text-align: center"><spring:message code="measureGroup.table.unavaliable" text="message not found"/></th>
@@ -68,18 +68,28 @@
 
     $(document).ready(function () {
         availableTable = $('#availableMeasureGroupTable').DataTable({
+            responsive: {
+                details: {
+                    type: 'inline'
+                }
+            },
             "columns": [
                 {"data": "measureGroup", "target": 0},
                 {"data": "measureGroupName", "target": 1},
                 {"data": "actionLink", "target": 3, "searchable": false, "orderable": false},
-                {"data": "deleteCheck", "target":4, "className": "dt-center", "searchable": false, "orderable": false}
+                {"data": "deleteCheck", "target": 4, "className": "dt-center", "searchable": false, "orderable": false}
             ],
             "ajax": "./getAvailableMeasureGroup.htm",
-            "dom": '<lf<t>ip>',
+            "dom": '<lftip>',
             "order": [[0, 'asc']],
             "displayLength": 10});
 
         unAvailableTable = $('#unavailableMeasureGroup').DataTable({
+            responsive: {
+                details: {
+                    type: 'inline'
+                }
+            },
             "columns": [
                 {"data": "measureGroup", "target": 0},
                 {"data": "measureGroupName", "target": 1},
@@ -87,7 +97,7 @@
                 {"data": "realDeleteCheck", "target": 4, "className": "dt-center", "searchable": false, "orderable": false}
             ],
             "ajax": "./getUnavailableMeasureGroup.htm",
-            "dom": '<lf<t>ip>',
+            "dom": '<lftip>',
             "order": [[0, 'asc']],
             "displayLength": 10});
 
@@ -301,7 +311,7 @@
             type: "POST",
             url: "checkIfExisted.htm",
             async: false,
-            data: {measureGroupNameTh:$("#measureGroupNameTh").val().trim(), measureGroupNameEn:$("#measureGroupNameEn").val().trim(), id: id}, // serializes the form's elements.
+            data: {measureGroupNameTh: $("#measureGroupNameTh").val().trim(), measureGroupNameEn: $("#measureGroupNameEn").val().trim(), id: id}, // serializes the form's elements.
             success: function (result)
             {
                 if (result.trim().length > 0) {
@@ -316,7 +326,7 @@
                 }
             }
         });
-        
+
         return valid;
     }
 

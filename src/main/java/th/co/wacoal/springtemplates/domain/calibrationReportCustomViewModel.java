@@ -3,17 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package th.co.wacoal.springtemplates.dao;
-
-import java.util.List;
-import th.co.wacoal.springtemplates.domain.ChkMasBoxcode;
+package th.co.wacoal.springtemplates.domain;
 
 /**
  *
  * @author admin
  */
-public interface ChkMasBoxcodeDAO {
-    
-    public List<ChkMasBoxcode> findAll();
+public class calibrationReportCustomViewModel {
     
 }

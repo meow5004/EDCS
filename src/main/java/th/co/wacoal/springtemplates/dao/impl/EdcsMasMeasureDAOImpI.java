@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import th.co.wacoal.springtemplates.dao.EdcsMasMeasureDAO;
 import th.co.wacoal.springtemplates.db.Database;
@@ -20,52 +21,32 @@ import th.co.wacoal.springtemplates.domain.EdcsMasMeasure;
  * @author admin
  */
 public class EdcsMasMeasureDAOImpI implements EdcsMasMeasureDAO {
-
+    
     private final Database db;
-
+    
     public EdcsMasMeasureDAOImpI(Database db) {
         this.db = db;
+        
     }
-
+    
     @Override
     public List<EdcsMasMeasure> findAll() {
         String sql = "select * from EDCS_MAS_MEASURE";
         List<Map<String, Object>> rs = db.queryList(sql);
         List<EdcsMasMeasure> ret = new ArrayList<>();
         for (Map<String, Object> map : rs) {
-            EdcsMasMeasure p = new EdcsMasMeasure();
-            p.setMeasureGroupId((int) map.get("MEASURE_GROUP_ID"));
-            p.setMeasureId((int) map.get("MEASURE_ID"));
-            p.setMeasureCode((String) map.get("MEASURE_CODE"));
-            p.setMeasureNameTh((String) map.get("MEASURE_NAME_TH"));
-            p.setMeasureNameEn((String) map.get("MEASURE_NAME_EN"));
-            p.setRangeMin((double) map.get("RANGE_MIN"));
-            p.setRangeMax((double) map.get("RANGE_MAX"));
-            p.setUseRangeMin((double) map.get("USE_RANGE_MIN"));
-            p.setUseRangeMax((double) map.get("USE_RANGE_MAX"));
-            p.setDescription((String) map.get("DESCRIPTION"));
-            p.setMeasureTimes((int) map.get("MEASURE_TIMES"));
-            p.setAbType((String) map.get("AB_TYPE"));
-            p.setDepId((String) map.get("DEP_ID"));
-            p.setCalpointId((int) map.get("CALPOINT_ID"));
-            p.setCalpointId((int) map.get("MEASURE_GROUP_ID"));
-            p.setCreateBy((String) map.get("CREATE_BY"));
-            p.setCreateOn((Date) map.get("CREATE_ON"));
-            p.setChangeBy((String) map.get("CHANGE_BY"));
-            p.setChangeOn((Date) map.get("CHANGE_ON"));
-            p.setFlagDel((String) map.get("FLAG_DEL"));
-            ret.add(p);
+            ret.add(mappingResultSet(map));
         }
         return ret;
     }
-
+    
     @Override
     public int delete(int id, String userId) {
         String sql = "update EDCS_MAS_MEASURE SET FLAG_DEL = 1,CHANGE_ON=(getdate()),CHANGE_BY=? WHERE MEASURE_ID = ?";
         int result = db.update(sql, userId, id);
         return result;
     }
-
+    
     @Override
     public int deleteMutiple(Integer[] ids, String userId) {
         String group = StringUtils.join(ids, ",");
@@ -73,7 +54,7 @@ public class EdcsMasMeasureDAOImpI implements EdcsMasMeasureDAO {
         int result = db.update(sql, userId);
         return result;
     }
-
+    
     @Override
     public int realDeleteMutiple(Integer[] ids) {
         String group = StringUtils.join(ids, ",");
@@ -81,14 +62,14 @@ public class EdcsMasMeasureDAOImpI implements EdcsMasMeasureDAO {
         int result = db.update(sql);
         return result;
     }
-
+    
     @Override
     public int reuse(int id, String userId) {
         String sql = "update EDCS_MAS_MEASURE SET FLAG_DEL = 0,CHANGE_ON=(getdate()),CHANGE_BY=? WHERE MEASURE_ID = ?";
         int result = db.update(sql, userId, id);
         return result;
     }
-
+    
     @Override
     public int reuseMutiple(Integer[] ids, String userId) {
         String group = StringUtils.join(ids, ",");
@@ -96,10 +77,10 @@ public class EdcsMasMeasureDAOImpI implements EdcsMasMeasureDAO {
         int result = db.update(sql, userId);
         return result;
     }
-
+    
     @Override
     public int update(EdcsMasMeasure measure) {
-
+        
         String sql = "update EDCS_MAS_MEASURE  "
                 + "SET MEASURE_NAME_TH =?,MEASURE_NAME_EN =?,"
                 + "CHANGE_BY=?,CHANGE_ON=(getdate()),"
@@ -111,9 +92,10 @@ public class EdcsMasMeasureDAOImpI implements EdcsMasMeasureDAO {
                 + "CALPOINT_ID =?,"
                 + "MEASURE_GROUP_ID=?, "
                 + "DEP_ID=?,"
-                + "MEASURE_TIMES=?"
+                + "MEASURE_TIMES=?,"
+                + "BRAND=?"
                 + " where MEASURE_ID=?";
-
+        
         int rs = db.update(sql,
                 measure.getMeasureNameTh(),
                 measure.getMeasureNameEn(),
@@ -129,10 +111,11 @@ public class EdcsMasMeasureDAOImpI implements EdcsMasMeasureDAO {
                 measure.getMeasureGroupId(),
                 measure.getDepId(),
                 measure.getMeasureTimes(),
+                measure.getBrand(),
                 measure.getMeasureId());
         return rs;
     }
-
+    
     @Override
     public int add(EdcsMasMeasure measure) {
         // insert
@@ -150,11 +133,12 @@ public class EdcsMasMeasureDAOImpI implements EdcsMasMeasureDAO {
                 + "MEASURE_GROUP_ID,"
                 + "MEASURE_TIMES,"
                 + "DEP_ID,"
+                + "BRAND,"
                 + "FLAG_DEL)"
                 + " VALUES (?,?,"
                 + "?,(getdate()),"
                 + "?,(getdate()),"
-                + "?,?,?,?,?,?,?,?,?,?,?"
+                + "?,?,?,?,?,?,?,?,?,?,?,?"
                 + ",0)";
         int res = db.add(sql, measure.getMeasureNameTh(), measure.getMeasureNameEn(),
                 measure.getCreateBy(), measure.getChangeBy(),
@@ -166,174 +150,109 @@ public class EdcsMasMeasureDAOImpI implements EdcsMasMeasureDAO {
                 measure.getCalpointId(),
                 measure.getMeasureGroupId(),
                 measure.getMeasureTimes(),
-                measure.getDepId()
+                measure.getDepId(),
+                measure.getBrand()
         );
         return res;
     }
-
+    
     @Override
     public EdcsMasMeasure find(int id) {
         String sql = "select * from EDCS_MAS_MEASURE where MEASURE_ID = ?";
         Map<String, Object> map = db.querySingle(sql, id);
         EdcsMasMeasure p = new EdcsMasMeasure();
         if (map != null) {
-            p.setMeasureGroupId((int) map.get("MEASURE_GROUP_ID"));
-            p.setMeasureId((int) map.get("MEASURE_ID"));
-            p.setMeasureCode((String) map.get("MEASURE_CODE"));
-            p.setMeasureNameTh((String) map.get("MEASURE_NAME_TH"));
-            p.setMeasureNameEn((String) map.get("MEASURE_NAME_EN"));
-            p.setRangeMin((double) map.get("RANGE_MIN"));
-            p.setRangeMax((double) map.get("RANGE_MAX"));
-            p.setUseRangeMin((double) map.get("USE_RANGE_MIN"));
-            p.setUseRangeMax((double) map.get("USE_RANGE_MAX"));
-            p.setDescription((String) map.get("DESCRIPTION"));
-            p.setMeasureTimes((int) map.get("MEASURE_TIMES"));
-            p.setAbType((String) map.get("AB_TYPE"));
-            p.setDepId((String) map.get("DEP_ID"));
-            p.setCalpointId((int) map.get("CALPOINT_ID"));
-            p.setCreateBy((String) map.get("CREATE_BY"));
-            p.setCreateOn((Date) map.get("CREATE_ON"));
-            p.setChangeBy((String) map.get("CHANGE_BY"));
-            p.setChangeOn((Date) map.get("CHANGE_ON"));
-            p.setFlagDel((String) map.get("FLAG_DEL"));
+            p = mappingResultSet(map);
         }
         return p;
     }
-
+    
     @Override
     public List<EdcsMasMeasure> findByFlag(int flag) {
         String sql = "select * from EDCS_MAS_MEASURE where FLAG_DEL=?";
         List<Map<String, Object>> rs = db.queryList(sql, flag);
         List<EdcsMasMeasure> ret = new ArrayList<>();
         for (Map<String, Object> map : rs) {
-            EdcsMasMeasure p = new EdcsMasMeasure();
-            p.setMeasureGroupId((int) map.get("MEASURE_GROUP_ID"));
-            p.setMeasureId((int) map.get("MEASURE_ID"));
-            p.setMeasureCode((String) map.get("MEASURE_CODE"));
-            p.setMeasureNameTh((String) map.get("MEASURE_NAME_TH"));
-            p.setMeasureNameEn((String) map.get("MEASURE_NAME_EN"));
-            p.setRangeMin((double) map.get("RANGE_MIN"));
-            p.setRangeMax((double) map.get("RANGE_MAX"));
-            p.setUseRangeMin((double) map.get("USE_RANGE_MIN"));
-            p.setUseRangeMax((double) map.get("USE_RANGE_MAX"));
-            p.setDescription((String) map.get("DESCRIPTION"));
-            p.setMeasureTimes((int) map.get("MEASURE_TIMES"));
-            p.setAbType((String) map.get("AB_TYPE"));
-            p.setDepId((String) map.get("DEP_ID"));
-            p.setCalpointId((int) map.get("CALPOINT_ID"));
-
-            p.setCreateBy((String) map.get("CREATE_BY"));
-            p.setCreateOn((Date) map.get("CREATE_ON"));
-            p.setChangeBy((String) map.get("CHANGE_BY"));
-            p.setChangeOn((Date) map.get("CHANGE_ON"));
-            p.setFlagDel((String) map.get("FLAG_DEL"));
-
-            ret.add(p);
+            ret.add(mappingResultSet(map));
         }
         return ret;
     }
-
+    
     @Override
     public Map<Integer, EdcsMasMeasure> findByFlagListMappingById(int flag) {
         String sql = "select * from EDCS_MAS_MEASURE where FLAG_DEL=?";
         List<Map<String, Object>> rs = db.queryList(sql, flag);
         Map<Integer, EdcsMasMeasure> ret = new HashMap<>();
         for (Map<String, Object> map : rs) {
-            EdcsMasMeasure p = new EdcsMasMeasure();
             int id = (int) map.get("MEASURE_ID");
-            p.setMeasureId(id);
-            p.setMeasureGroupId((int) map.get("MEASURE_GROUP_ID"));
-            p.setMeasureCode((String) map.get("MEASURE_CODE"));
-            p.setMeasureNameTh((String) map.get("MEASURE_NAME_TH"));
-            p.setMeasureNameEn((String) map.get("MEASURE_NAME_EN"));
-            p.setRangeMin((double) map.get("RANGE_MIN"));
-            p.setRangeMax((double) map.get("RANGE_MAX"));
-            p.setUseRangeMin((double) map.get("USE_RANGE_MIN"));
-            p.setUseRangeMax((double) map.get("USE_RANGE_MAX"));
-            p.setDescription((String) map.get("DESCRIPTION"));
-            p.setMeasureTimes((int) map.get("MEASURE_TIMES"));
-            p.setAbType((String) map.get("AB_TYPE"));
-            p.setDepId((String) map.get("DEP_ID"));
-            p.setCalpointId((int) map.get("CALPOINT_ID"));
-
-            p.setCreateBy((String) map.get("CREATE_BY"));
-            p.setCreateOn((Date) map.get("CREATE_ON"));
-            p.setChangeBy((String) map.get("CHANGE_BY"));
-            p.setChangeOn((Date) map.get("CHANGE_ON"));
-            p.setFlagDel((String) map.get("FLAG_DEL"));
-            ret.put(id, p);
+            ret.put(id, mappingResultSet(map));
         }
         return ret;
     }
-
+    
     @Override
     public List<EdcsMasMeasure> findByCalpointIdByFlag(int id, String flag) {
+        
         String sql = "select * from EDCS_MAS_MEASURE where CALPOINT_ID=? AND FLAG_DEL=?";
         List<Map<String, Object>> rs = db.queryList(sql, id, flag);
         List<EdcsMasMeasure> ret = new ArrayList<>();
         for (Map<String, Object> map : rs) {
-            EdcsMasMeasure p = new EdcsMasMeasure();
-            p.setMeasureGroupId((int) map.get("MEASURE_GROUP_ID"));
-            p.setMeasureId((int) map.get("MEASURE_ID"));
-            p.setMeasureCode((String) map.get("MEASURE_CODE"));
-            p.setMeasureNameTh((String) map.get("MEASURE_NAME_TH"));
-            p.setMeasureNameEn((String) map.get("MEASURE_NAME_EN"));
-            p.setRangeMin((double) map.get("RANGE_MIN"));
-            p.setRangeMax((double) map.get("RANGE_MAX"));
-            p.setUseRangeMin((double) map.get("USE_RANGE_MIN"));
-            p.setUseRangeMax((double) map.get("USE_RANGE_MAX"));
-            p.setDescription((String) map.get("DESCRIPTION"));
-            p.setMeasureTimes((int) map.get("MEASURE_TIMES"));
-            p.setAbType((String) map.get("AB_TYPE"));
-            p.setDepId((String) map.get("DEP_ID"));
-            p.setCalpointId((int) map.get("CALPOINT_ID"));
-
-            p.setCreateBy((String) map.get("CREATE_BY"));
-            p.setCreateOn((Date) map.get("CREATE_ON"));
-            p.setChangeBy((String) map.get("CHANGE_BY"));
-            p.setChangeOn((Date) map.get("CHANGE_ON"));
-            p.setFlagDel((String) map.get("FLAG_DEL"));
-
-            ret.add(p);
+            ret.add(mappingResultSet(map));
         }
         return ret;
     }
-
+    
     @Override
     public List<EdcsMasMeasure> findByGroupIdByFlag(int id, String flag) {
         String sql = "select * from EDCS_MAS_MEASURE where MEASURE_GROUP_ID=? AND FLAG_DEL=?";
         List<Map<String, Object>> rs = db.queryList(sql, id, flag);
         List<EdcsMasMeasure> ret = new ArrayList<>();
         for (Map<String, Object> map : rs) {
-            EdcsMasMeasure p = new EdcsMasMeasure();
-            p.setMeasureGroupId((int) map.get("MEASURE_GROUP_ID"));
-            p.setMeasureId((int) map.get("MEASURE_ID"));
-            p.setMeasureCode((String) map.get("MEASURE_CODE"));
-            p.setMeasureNameTh((String) map.get("MEASURE_NAME_TH"));
-            p.setMeasureNameEn((String) map.get("MEASURE_NAME_EN"));
-            p.setRangeMin((double) map.get("RANGE_MIN"));
-            p.setRangeMax((double) map.get("RANGE_MAX"));
-            p.setUseRangeMin((double) map.get("USE_RANGE_MIN"));
-            p.setUseRangeMax((double) map.get("USE_RANGE_MAX"));
-            p.setDescription((String) map.get("DESCRIPTION"));
-            p.setMeasureTimes((int) map.get("MEASURE_TIMES"));
-            p.setAbType((String) map.get("AB_TYPE"));
-
-            p.setCalpointId((int) map.get("CALPOINT_ID"));
-            p.setDepId((String) map.get("DEP_ID"));
-            p.setCreateBy((String) map.get("CREATE_BY"));
-            p.setCreateOn((Date) map.get("CREATE_ON"));
-            p.setChangeBy((String) map.get("CHANGE_BY"));
-            p.setChangeOn((Date) map.get("CHANGE_ON"));
-            p.setFlagDel((String) map.get("FLAG_DEL"));
-
-            ret.add(p);
+            ret.add(mappingResultSet(map));
         }
         return ret;
     }
-
+    
     @Override
-    public int isExistCount(String nameTh, String nameEn, String id) {
+    public List<EdcsMasMeasure> findByDepIdByGroupIdByFlag(String depId, Integer groupid, Integer flag) {
+        String queryCondition = "";
+        int conditionCount = 0;
+        depId = StringEscapeUtils.escapeJava(depId);
+        
+        if (depId != null) {
+            queryCondition += "DEP_ID='" + depId + "'";
+            conditionCount++;
+        }
+        if (groupid != null) {
+            if (conditionCount > 0) {
+                queryCondition += " AND ";
+            }
+            queryCondition += "MEASURE_GROUP_ID=" + groupid;
+            conditionCount++;
+        }
+        if (flag != null) {
+            if (conditionCount > 0) {
+                queryCondition += " AND ";
+            }
+            queryCondition += "FLAG_DEL=" + flag;
+            conditionCount++;
+        }
+        
+        if (conditionCount > 0) {
+            queryCondition = "where " + queryCondition;
+        }
+        String sql = "select * from EDCS_MAS_MEASURE " + queryCondition;
+        List<Map<String, Object>> rs = db.queryList(sql);
+        List<EdcsMasMeasure> ret = new ArrayList<>();
+        for (Map<String, Object> map : rs) {
+            ret.add(mappingResultSet(map));
+        }
+        return ret;
+    }
+    
+    @Override
+    public int isExistCount(String nameTh, String nameEn, String id
+    ) {
         if (id == null) {
             id = "0";
         }
@@ -346,5 +265,32 @@ public class EdcsMasMeasureDAOImpI implements EdcsMasMeasureDAO {
         }
         return count;
     }
-
+    
+    @Override
+    public EdcsMasMeasure mappingResultSet(Map<String, Object> map
+    ) {
+        EdcsMasMeasure p = new EdcsMasMeasure();
+        p.setMeasureGroupId((int) map.get("MEASURE_GROUP_ID"));
+        p.setMeasureId((int) map.get("MEASURE_ID"));
+        p.setBrand((String) map.get("BRAND"));
+        p.setMeasureCode((String) map.get("MEASURE_CODE"));
+        p.setMeasureNameTh((String) map.get("MEASURE_NAME_TH"));
+        p.setMeasureNameEn((String) map.get("MEASURE_NAME_EN"));
+        p.setRangeMin((double) map.get("RANGE_MIN"));
+        p.setRangeMax((double) map.get("RANGE_MAX"));
+        p.setUseRangeMin((double) map.get("USE_RANGE_MIN"));
+        p.setUseRangeMax((double) map.get("USE_RANGE_MAX"));
+        p.setDescription((String) map.get("DESCRIPTION"));
+        p.setMeasureTimes((int) map.get("MEASURE_TIMES"));
+        p.setAbType((String) map.get("AB_TYPE"));
+        p.setCalpointId((int) map.get("CALPOINT_ID"));
+        p.setDepId((String) map.get("DEP_ID"));
+        p.setCreateBy((String) map.get("CREATE_BY"));
+        p.setCreateOn((Date) map.get("CREATE_ON"));
+        p.setChangeBy((String) map.get("CHANGE_BY"));
+        p.setChangeOn((Date) map.get("CHANGE_ON"));
+        p.setFlagDel((String) map.get("FLAG_DEL"));
+        return p;
+    }
+    
 }

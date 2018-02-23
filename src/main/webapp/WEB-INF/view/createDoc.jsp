@@ -14,7 +14,7 @@
 
                     <h3 class="box-title">รายงานผลการสอบเทียบ</h3>
                 </div><!-- /.box-header -->
-                <div class="box-body no-padding">
+                <div class="box-body container">
                     <jsp:useBean id="now" class="java.util.Date" />
                     <fmt:formatDate value="${now}"  
                                     type="date" 
@@ -24,195 +24,309 @@
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="pad">
-                                <div class="col-sm-6">
-                                    <div style="width:40%; float: left;"><b>เลขที่</b></div><div style="width:60%; float: left;"><form:input path="calId"  class="form-control" required="required"  readonly="true"/></div>
-                                </div>
-                                <div class="col-sm-6">
-<!--                                    <div style="width:40%; float: left;"><b>วันที่รายงาน</b></div><div style="width:60%; float: left;"><form:input path="calibrationStatusOn" value="${theFormattedDate}" class="form-control" required="required"  readonly="true"/></div>-->
-                                    <div style="width:40%; float: left;"><b>วันที่รายงาน</b></div><div style="width:60%; float: left;">${theFormattedDate}</div>
-                                </div>
-
-
-                                <div class="col-sm-12">
-                                    <hr>
-                                </div>
-                                <div class="col-sm-6">
-                                    <div style="width:40%; float: left;"><b>หน่วยงาน/บริษัท</b></div><div style="width:60%; float: left;"> 
-                                        <form:select path="depId" class="form-control" required="required" >
-                                            <form:options items="${departments}" itemLabel="fullName" itemValue="depId" />
-                                        </form:select></div>
-                                </div>
-
-
-
-                                <div class="col-sm-12">
-                                    <hr>
-                                </div>
-                                <form:input path="measureId"  class="form-control" required="required"  type="hidden"/>
-                                <div class="col-sm-6">
-                                    <div style="width:100%; float: left;"><b>ชื่อเครื่องวัด/ทดสอบ</b>
-                                        <input type="text" name="measureFullName" style="width:100%;" value="${calibration.associateMeasure.fullName}" disabled>
+                                <div class="row">
+                                    <form:hidden path="calId"  class="form-control" required="required" />
+                                    <form:hidden path="calibrationStatusBy"  class="form-control" required="required" />
+                                    <div class="col-sm-2">
+                                        <b>เลขที่</b>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <form:input path="calCode"  class="form-control" required="required"  readonly="true"/>
+                                    </div>
+<!--                                   <form:input path="calibrationStatusOn" value="${theFormattedDate}" class="form-control" required="required"  readonly="true"/></div>-->
+                                    <div class="col-sm-2">
+                                        <b>วันที่รายงาน</b>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        ${theFormattedDate}
                                     </div>
                                 </div>
-                                <div class="col-sm-6">
-                                    <div style="width:100%; float: left;"><b>รหัสเครื่องวัดและทดสอบ</b>
+
+                                <div class="row">
+                                    <hr>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-2">
+                                        <b>หน่วยงาน/บริษัท</b>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <form:input path="associateDep.fullName" readonly="true" class="form-control"/>
+                                        <form:hidden path="depId" readonly="true" class="form-control" required="required"/>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <hr>
+                                </div>
+                                <div class="row">
+                                    <form:input path="measureId"  class="form-control" required="required"  type="hidden"/>
+                                    <div class="col-sm-2">
+                                        <b>ชื่อเครื่องวัด/ทดสอบ</b>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <input type="text" name="measureFullName" style="width:100%;" value="${calibration.associateMeasure.fullName}" disabled>
+                                    </div>
+
+                                    <div class="col-sm-2"><b>รหัสเครื่องวัดและทดสอบ</b>
+                                    </div>
+                                    <div class="col-sm-4">
                                         <input type="text" name="measureCode" style="width:100%;" value=" ${calibration.associateMeasure.measureCode}" disabled>
                                     </div>
                                 </div>
+                                <div class="row">
+                                    <hr>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-2">
+                                        <b>
+                                            สภาพภายนอก : 
+                                        </b>
+                                    </div>
 
+                                    <div class="col-sm-4"> 
+                                        <form:radiobuttons  path="equipConId" items="${equipConditions}" itemLabel="fullName" itemValue="equipConId" required="required" />
+                                    </div>
+                                    <div class="col-sm-4 no-padding"> 
+                                        <form:input type="text" path="requestComment"/>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <hr>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-2">
+                                        <b>
+                                            สถานที่สอบเทียบ : 
+                                        </b>
+                                    </div>
+                                    <div class="col-sm-4"> 
+                                        <span>
+                                            <form:radiobutton path="calibrationLocation" value="inside" required="required"/>สถานที่ภายใน
+                                        </span>
+                                        <span>                                   
+                                            <form:radiobutton path="calibrationLocation" value="outside" required="required"/>สถานที่ภายนอก
+                                        </span>
+                                    </div>
+                                </div>
                                 <div class="col-sm-12">
                                     <hr>
                                 </div>
-                                <div class="col-sm-12 row">
-                                    <div style="col-sm-9">สภาพภายนอก :  
-                                        <form:radiobuttons  path="equipConId" items="${equipConditions}" itemLabel="fullName" itemValue="equipConId" required="required" />
-                                        <form:input type="text" path="conditionComment"/></div>
+                                <div class="row">
+                                    <div class="col-sm-4"><b>มาตรฐานเปรียบเทียบอ้างอิง</b></div>
                                 </div>
-                            </div>
-
-                            <div class="col-sm-12">
-                                <hr>
-                            </div>
-                            <div><b>มาตรฐานเปรียบเทียบอ้างอิง</b></div>
-                            <div class="col-sm-6">
-                                <div style="width:40%; float: left;">รายงานเลขที่</div>
-                                <div style="width:60%; float: left;"><input type="text" name="cerNo" style="width:100%;" disabled></div>
-                                <div style="width:40%; float: left;">แม่แบบ รหัส</div>
-                                <div style="width:60%; float: left;"> 
-                                    <form:select path="modelId" class="form-control" required="required" >
-                                        <form:options items="${models}" itemLabel="modelCode" itemValue="modelId" />
-                                    </form:select>
+                                <br/>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="col-md-4">รายงานเลขที่</div>
+                                        <div class="col-md-6"><input type="text" name="cerNo" style="width:100%;" disabled></div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="col-md-4">โดย</div>
+                                        <div class="col-md-6"><input type="text" name="locationBy" style="width:100%;" value="สมาคมส่งเสริมเทคโนโลยี (ไทย-ญี่ปุ่น)" disabled></div>
+                                    </div>
                                 </div>
-                                <div style="width:40%; float: left;">การสอบกลับ</div>
-                                <div style="width:60%; float: left;"><input type="text" name="locationReturn" style="width:100%;" value="สมาคมส่งเสริมเทคโนโลยี (ไทย-ญี่ปุ่น)" disabled></div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div style="width:40%; float: left;">โดย</div>
-                                <div style="width:60%; float: left;"><input type="text" name="locationBy" style="width:100%;" value="สมาคมส่งเสริมเทคโนโลยี (ไทย-ญี่ปุ่น)" disabled></div>
-                                <div style="width:40%; float: left;">ชื่อ</div>
-                                <div style="width:60%; float: left;"><input type="text" name="measureName" style="width:100%;" value="STEEL RULE 7" disabled></div>
-                                <div style="width:40%; float: left;">CER.NO</div>
-                                <div style="width:60%; float: left;"><input type="text" name="cerNo" disabled style="width:100%;"></div>
-                            </div>
-
-
-
-
-
-                            <div class="col-sm-12">
-                                <hr>
-                            </div>
-                            <div class="col-sm-6">
-                                <div style="width:40%; float: left;">วิธีการวัด/ทดสอบ</div>
-                                <div style="width:60%; float: left;">
-                                    <form:select path="processId" class="form-control" required="required" >
-                                        <form:options items="${processes}" itemLabel="processCode" itemValue="processId" />
-                                    </form:select>
+                                <br/>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="col-md-4">แม่แบบ รหัส</div>
+                                        <div class="col-md-6"> 
+                                            <form:select path="modelId" class="form-control" required="required" >
+                                                <form:option value="" label="" />
+                                                <form:options items="${models}" itemLabel="modelCode" itemValue="modelId" />
+                                            </form:select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="col-md-4">ชื่อ</div>
+                                        <div class="col-md-6"><input type="text" name="measureName" style="width:100%;" value="STEEL RULE 7" disabled></div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div style="width:20%; float: left;">เรื่อง</div><div style="width:80%; float: left;"><input type="text" name="processSubject" style="width:80%;" value="สมาคมส่งเสริมเทคโนโลยี (ไทย-ญี่ปุ่น)" disabled></div>
-                            </div>
-                            <div class="col-sm-12">
-                                <div style="width:10%; float: left;">โดย</div><div style="width:90%; float: left;"><input type="text" name="processBy" style="width:80%;" value="วัดเปรียบเทียบกับค่ามาตรฐาน (ไม้บรรทัดมาตรฐาน) เป็นช่วงๆ ช่วงละเท่าๆ กัน" disabled></div>
-                            </div>
-
-                            <div class="col-sm-12">
-                                <hr>
-                            </div>
-                            <div class="col-sm-6">
-                                <div style="width:40%; float: left;">หน่วยวัด</div>
-                                <div style="width:60%; float: left;">
-                                    <form:select path="unitId" class="form-control" required="required" >
-                                        <form:options items="${units}" itemLabel="unitNameTh" itemValue="unitId" />
-                                    </form:select>
+                                <br/>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="col-md-4">การสอบกลับ</div>
+                                        <div class="col-md-6"><input type="text" name="locationReturn" style="width:100%;" value="สมาคมส่งเสริมเทคโนโลยี (ไทย-ญี่ปุ่น)" disabled></div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="col-md-4">CER.NO</div>
+                                        <div class="col-md-6"><input type="text" name="cerNo" disabled style="width:100%;"></div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-sm-12">
-                                <hr>
-                            </div>
-                            <div class="col-sm-12">
-                                <div style="width:40%; float: left;">ผู้สอบเทียบ:/ผู้ตรวจสอบ</div><div style="width:60%; float: left;"><input type="text" style="width:100%;" value="กมล" disabled></div>
-                            </div>
-                            <div class="col-sm-12">
-                                <div style="width:40%; float: left;">ผู้อนุมัติ</div>
-                                <div style="width:60%; float: left;">
-                                    <select class="selectpicker" id="colIds" data-title="รายชื่อผู้อนุมัติ" data-width="100%">
-                                        <option value="1">name   surname</option>
-                                        <option value="2">name   surname</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div><!-- /.pad -->
-                    </div>
-                </div><!-- /.row - inside box -->
 
-            </div><!-- /.box-body -->
-            <div class="box-footer">
-                <div class="row">
-                    <div class="col-xs-4 text-center" style="border-right: 1px solid #f4f4f4">
-                        <div class="col-sm-6">
-                            <input class="btn btn-primary btn-lg" type="submit" id="cancelSubmit">บันทึกรายการสอบเทียบ</button>
+
+
+                                <div class="row">
+                                    <hr>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <b>วิธีการวัด</b>
+                                    </div>
+                                </div>
+                                <br/>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="col-sm-4"> รหัส</div>
+                                        <div class="col-sm-6">
+                                            <form:select path="processId" class="form-control" required="required" >
+                                                <form:option value="" label="" />
+                                                <form:options items="${processes}" itemLabel="processCode" itemValue="processId" />
+                                            </form:select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="col-sm-4">เรื่อง</div> 
+                                        <div class="col-sm-6"><input type="text" name="processSubject" style="width:80%;" value="สมาคมส่งเสริมเทคโนโลยี (ไทย-ญี่ปุ่น)" disabled></div>
+                                    </div>
+                                </div>
+                                <br/>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="col-md-4">
+                                            โดย
+                                        </div> 
+                                        <div class="col-md-6">
+                                            <textarea name="processBy" cols="40" rows="4"  disabled>
+                                            
+                                            </textarea>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <hr>
+                                </div>
+                                <div class="row">
+                                    <div  class="col-md-2"><b>หน่วยวัด</b></div>
+                                    <div  class="col-md-4">
+                                        <form:select path="unitId" class="form-control" required="required" >
+                                            <form:option value="" label="" />
+                                            <form:options items="${units}" itemLabel="unitNameTh" itemValue="unitId" />
+                                        </form:select>
+                                        <%--${unitNameEn}--%>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <hr>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-2">
+                                        <b>
+                                            ค่าความผิดพลาดที่ยอมรับได้หรือเท่ากับ( + / - )
+                                        </b>
+                                    </div>
+                                    <div class="col-sm-1">
+                                        <form:input required="required" path="calError" type="number" step="any" onchange="this.value=Math.abs(this.value);" /></div>
+                                    <div class="unitLabel">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <hr>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <b>
+                                            ผู้สอบเทียบ:/ผู้ตรวจสอบ
+                                        </b>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <input type="text" value="${calibrator.userName}" style="width: 80%" disabled>
+                                    </div>
+                                    <form:hidden path="calibratorBy"/>
+                                </div>
+                                <br/>
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <b>
+                                            ผู้อนุมัติ
+                                        </b>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <form:select path="approveStatusBy" required="required"  data-width="100%">
+                                            <form:option value="" label="" />
+                                            <form:options items="${approvers}" itemLabel="userName" itemValue="empId"></form:options>
+                                        </form:select>
+                                    </div>
+                                </div>
+                            </div><!-- /.pad -->
                         </div>
-                    </div>
-                </div><!-- /.row -->
-            </div><!-- /.box-footer -->
-        </div><!-- /.box -->        
-    </form:form>
-</div>
-</div>
-<script>
-    $(document).ready(function () {
-        $('.selectpicker').selectpicker();
-        $('.selectpicker').selectpicker('refresh');
+                    </div><!-- /.row - inside box -->
 
-        $("#modelId").on("change", function () {
-            var id = $(this).find('option:selected').val();
-            $.ajax({
-                url: "../ajaxHelper/findModel.htm",
-                data: {"modelId": id}, // serializes the form's elements.
-                success: function (result)
-                {
-                    var obj = JSON.parse(result);
-                    $("input[name='locationBy']").val(obj.locationBy);
-                    $("input[name='locationReturn']").val(obj.locationReturn);
-                    $("input[name='cerNo']").each(function (i, cerNoInput) {
-                        $(cerNoInput).val(obj.cerNo);
-                    });
-                    $.ajax({
-                        url: "../ajaxHelper/findMeasure.htm",
-                        data: {"measureId": obj.measureId}, // serializes the form's elements.
-                        success: function (result)
-                        {
-                            var obj = JSON.parse(result);
-                            $("input[name='measureName']").val(obj.fullName);
+                </div><!-- /.box-body -->
+                <div class="box-footer">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <input class="btn btn-primary" type="submit" id="cancelSubmit" value="บันทึกรายการสอบเทียบ">
+                        </div>
+                        <div class="col-sm-6">
+                            <button class="btn btn-default" onclick="window.history.back()">กลับไปหน้าที่แล้ว</button>
 
-                        }
-                    });
-                }
+                        </div>
+
+                    </div><!-- /.row -->
+                </div><!-- /.box-footer -->
+            </div><!-- /.box -->        
+        </form:form>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            $('.selectpicker').selectpicker();
+            $('.selectpicker').selectpicker('refresh');
+
+            $("#modelId").on("change", function () {
+                var id = $(this).find('option:selected').val();
+                $.ajax({
+                    url: "../ajaxHelper/findModel.htm",
+                    data: {"modelId": id}, // serializes the form's elements.
+                    success: function (result)
+                    {
+                        var obj = JSON.parse(result);
+                        $("input[name='locationBy']").val(obj.locationBy);
+                        $("input[name='locationReturn']").val(obj.locationReturn);
+                        $("input[name='cerNo']").each(function (i, cerNoInput) {
+                            $(cerNoInput).val(obj.cerNo);
+                        });
+                        $.ajax({
+                            url: "../ajaxHelper/findMeasure.htm",
+                            data: {"measureId": obj.measureId}, // serializes the form's elements.
+                            success: function (result)
+                            {
+                                var obj = JSON.parse(result);
+                                $("input[name='measureName']").val(obj.fullName);
+
+                            }
+                        });
+                    }
+                });
             });
+
+            $("#processId").on("change", function () {
+                var id = $(this).find('option:selected').val();
+                $.ajax({
+                    url: "../ajaxHelper/findProcess.htm",
+                    data: {"processId": id}, // serializes the form's elements.
+                    success: function (result)
+                    {
+                        var obj = JSON.parse(result);
+                        $("input[name='processCode']").val(obj.processCode);
+                        $("input[name='processSubject']").val(obj.processSubject);
+                        $("textarea[name='processBy']").val(obj.processBy);
+
+                    }
+                });
+            });
+
+
+            $('#unitId').on('change', function () {
+                $(".unitLabel").text($(this).children(':selected').text());
+            });
+
+            $("#unitId").trigger("change");
+            $("#modelId").trigger("change");
+            $("#processId").trigger("change");
         });
 
-        $("#processId").on("change", function () {
-            var id = $(this).find('option:selected').val();
-            $.ajax({
-                url: "../ajaxHelper/findProcess.htm",
-                data: {"processId": id}, // serializes the form's elements.
-                success: function (result)
-                {
-                    var obj = JSON.parse(result);
-                    $("input[name='processCode']").val(obj.processCode);
-                    $("input[name='processSubject']").val(obj.processSubject);
-                    $("input[name='processBy']").val(obj.processBy);
-
-                }
-            });
-        });
-
-        $("#modelId").trigger("change");
-        $("#processId").trigger("change");
-    });
-
-</script>
-<jsp:include page="include/include_footer.jsp" flush="true"></jsp:include>
+    </script>
+    <jsp:include page="include/include_footer.jsp" flush="true"></jsp:include>
 

@@ -6,8 +6,8 @@
 package th.co.wacoal.springtemplates.domain;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -31,6 +31,14 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "EdcsCalibration.findAll", query = "SELECT e FROM EdcsCalibration e")})
 public class EdcsCalibration implements Serializable {
+
+    @Size(max = 50)
+    @Column(name = "CALIBRATION_LOCATION")
+    private String calibrationLocation;
+
+    @Size(max = 10)
+    @Column(name = "FLAG_ACTIVE")
+    private String flagActive;
 
     @Size(max = 50)
     @Column(name = "CALIBRATION_ATTACH_STATUS")
@@ -88,8 +96,8 @@ public class EdcsCalibration implements Serializable {
     @Column(name = "REQUEST_BY")
     private String requestBy;
     @Size(max = 200)
-    @Column(name = "REQUEST_COMMNET")
-    private String requestCommnet;
+    @Column(name = "REQUEST_COMMENT")
+    private String requestComment;
     @Column(name = "REQUEST_ON")
     @Temporal(TemporalType.TIMESTAMP)
     private Date requestOn;
@@ -170,7 +178,20 @@ public class EdcsCalibration implements Serializable {
     private EdcsMasProcess associateProcess;
     private EdcsMasModel associateModel;
     private EdcsMasDepartment associateDep;
-    private Collection<EdcsCalibrationAttachHead> edcsCalibrationAttachHeadCollection;
+    private EdcsMasMeasure associateModelMeasure;
+//custom user proerty
+
+    private EdcsMasUser associateRequestByUser;
+    private EdcsMasUser associateCalibrationAttachStatusByUser;
+    private EdcsMasUser associateRequestApproverByUser;
+    private EdcsMasUser associateCalibratorByUser;
+    private EdcsMasUser associateReceiveStatusByUser;
+    private EdcsMasUser associateCalibrationStatusByUser;
+    private EdcsMasUser associateApproveStatusByUser;
+    private EdcsMasUser associateStickerStatusByUser;
+    private EdcsMasUser associateReturnStatusByUser;
+//custom property
+    private List<EdcsCalibrationAttachHead> edcsCalibrationAttachHeadList;
 
     public EdcsCalibration() {
     }
@@ -179,12 +200,13 @@ public class EdcsCalibration implements Serializable {
         this.calId = calId;
     }
 
-    public Collection<EdcsCalibrationAttachHead> getEdcsCalibrationAttachHeadCollection() {
-        return edcsCalibrationAttachHeadCollection;
+    //custom property method
+    public List<EdcsCalibrationAttachHead> getEdcsCalibrationAttachHeadList() {
+        return edcsCalibrationAttachHeadList;
     }
 
-    public void setEdcsCalibrationAttachHeadCollection(Collection<EdcsCalibrationAttachHead> edcsCalibrationAttachHeadCollection) {
-        this.edcsCalibrationAttachHeadCollection = edcsCalibrationAttachHeadCollection;
+    public void setEdcsCalibrationAttachHeadList(List<EdcsCalibrationAttachHead> edcsCalibrationAttachHeadList) {
+        this.edcsCalibrationAttachHeadList = edcsCalibrationAttachHeadList;
     }
 
     public Integer getCalId() {
@@ -299,12 +321,12 @@ public class EdcsCalibration implements Serializable {
         this.requestBy = requestBy;
     }
 
-    public String getRequestCommnet() {
-        return requestCommnet;
+    public String getRequestComment() {
+        return requestComment;
     }
 
-    public void setRequestCommnet(String requestCommnet) {
-        this.requestCommnet = requestCommnet;
+    public void setRequestComment(String requestComment) {
+        this.requestComment = requestComment;
     }
 
     public Date getRequestOn() {
@@ -626,6 +648,102 @@ public class EdcsCalibration implements Serializable {
 
     public void setCalibrationAttachStatusBy(String calibrationAttachStatusBy) {
         this.calibrationAttachStatusBy = calibrationAttachStatusBy;
+    }
+
+    public EdcsMasMeasure getAssociateModelMeasure() {
+        return associateModelMeasure;
+    }
+
+    public void setAssociateModelMeasure(EdcsMasMeasure associateModelMeasure) {
+        this.associateModelMeasure = associateModelMeasure;
+    }
+
+    public EdcsMasUser getAssociateRequestByUser() {
+        return associateRequestByUser;
+    }
+
+    public void setAssociateRequestByUser(EdcsMasUser associateRequestByUser) {
+        this.associateRequestByUser = associateRequestByUser;
+    }
+
+    public EdcsMasUser getAssociateCalibrationAttachStatusByUser() {
+        return associateCalibrationAttachStatusByUser;
+    }
+
+    public void setAssociateCalibrationAttachStatusByUser(EdcsMasUser associateCalibrationAttachStatusByUser) {
+        this.associateCalibrationAttachStatusByUser = associateCalibrationAttachStatusByUser;
+    }
+
+    public EdcsMasUser getAssociateRequestApproverByUser() {
+        return associateRequestApproverByUser;
+    }
+
+    public void setAssociateRequestApproverByUser(EdcsMasUser associateRequestApproverByUser) {
+        this.associateRequestApproverByUser = associateRequestApproverByUser;
+    }
+
+    public EdcsMasUser getAssociateCalibratorByUser() {
+        return associateCalibratorByUser;
+    }
+
+    public void setAssociateCalibratorByUser(EdcsMasUser associateCalibratorByUser) {
+        this.associateCalibratorByUser = associateCalibratorByUser;
+    }
+
+    public EdcsMasUser getAssociateReceiveStatusByUser() {
+        return associateReceiveStatusByUser;
+    }
+
+    public void setAssociateReceiveStatusByUser(EdcsMasUser associateReceiveStatusByUser) {
+        this.associateReceiveStatusByUser = associateReceiveStatusByUser;
+    }
+
+    public EdcsMasUser getAssociateCalibrationStatusByUser() {
+        return associateCalibrationStatusByUser;
+    }
+
+    public void setAssociateCalibrationStatusByUser(EdcsMasUser associateCalibrationStatusByUser) {
+        this.associateCalibrationStatusByUser = associateCalibrationStatusByUser;
+    }
+
+    public EdcsMasUser getAssociateApproveStatusByUser() {
+        return associateApproveStatusByUser;
+    }
+
+    public void setAssociateApproveStatusByUser(EdcsMasUser associateApproveStatusByUser) {
+        this.associateApproveStatusByUser = associateApproveStatusByUser;
+    }
+
+    public EdcsMasUser getAssociateStickerStatusByUser() {
+        return associateStickerStatusByUser;
+    }
+
+    public void setAssociateStickerStatusByUser(EdcsMasUser associateStickerStatusByUser) {
+        this.associateStickerStatusByUser = associateStickerStatusByUser;
+    }
+
+    public EdcsMasUser getAssociateReturnStatusByUser() {
+        return associateReturnStatusByUser;
+    }
+
+    public void setAssociateReturnStatusByUser(EdcsMasUser associateReturnStatusByUser) {
+        this.associateReturnStatusByUser = associateReturnStatusByUser;
+    }
+
+    public String getFlagActive() {
+        return flagActive;
+    }
+
+    public void setFlagActive(String flagActive) {
+        this.flagActive = flagActive;
+    }
+
+    public String getCalibrationLocation() {
+        return calibrationLocation;
+    }
+
+    public void setCalibrationLocation(String calibrationLocation) {
+        this.calibrationLocation = calibrationLocation;
     }
 
 }

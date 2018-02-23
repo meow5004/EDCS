@@ -19,11 +19,11 @@ import th.co.wacoal.springtemplates.domain.EdcsCalibrationAttachHead;
  *
  * @author admin
  */
-public class EdcsCalibrationAttachHeadImpI implements EdcsCalibrationAttachHeadDAO {
+public class EdcsCalibrationAttachHeadDAOImpI implements EdcsCalibrationAttachHeadDAO {
 
     private final Database db;
 
-    public EdcsCalibrationAttachHeadImpI(Database db) {
+    public EdcsCalibrationAttachHeadDAOImpI(Database db) {
         this.db = db;
     }
 
@@ -62,7 +62,7 @@ public class EdcsCalibrationAttachHeadImpI implements EdcsCalibrationAttachHeadD
                 + "TEMPERATURE=? ,HUMIDITY=? ,"
                 + "COORDINATE=? ,ACTIVE_RANGE=?,"
                 + "ACCEPTANCE =?,AB_TYPE =?  ,"
-                + "CAL_DATE=(getdate()))"
+                + "CAL_DATE=(getdate())"
                 + " where CAL_ATTACH_HEAD_ID=?";
 
         int res = db.update(sql,
@@ -75,7 +75,7 @@ public class EdcsCalibrationAttachHeadImpI implements EdcsCalibrationAttachHeadD
     }
 
     @Override
-    public int add(EdcsCalibrationAttachHead header) {
+    public int addAndReturnId(EdcsCalibrationAttachHead header) {
         // insert
         String sql = "INSERT INTO EDCS_CALIBRATION_ATTACH_HEAD "
                 + "("
@@ -89,13 +89,22 @@ public class EdcsCalibrationAttachHeadImpI implements EdcsCalibrationAttachHeadD
                 + "?,?,"
                 + "?,?,"
                 + "?,?,"
-                + "(getdate()) ";
-        int res = db.add(sql,
+                + "(getdate()))";
+        int rowAffected = db.add(sql,
                 header.getCalId(), header.getCalState(),
                 header.getTemperature(), header.getHumidity(),
                 header.getCoordinate(), header.getActiveRange(),
                 header.getAcceptance(), header.getAbType());
-        return res;
+
+        String sqlReturnId = "SELECT CAL_ATTACH_HEAD_ID FROM EDCS_CALIBRATION_ATTACH_HEAD WHERE CAL_ID=? AND AB_TYPE=?";
+        Map<String, Object> map = db.querySingle(sqlReturnId, header.getCalId(), header.getAbType());
+        int id = 0;
+        if (map != null) {
+            EdcsCalibrationAttachHead added = mappingResult(map);
+            id = added.getCalAttachHeadId();
+        }
+
+        return id;
     }
 
     @Override
@@ -123,7 +132,7 @@ public class EdcsCalibrationAttachHeadImpI implements EdcsCalibrationAttachHeadD
     @Override
     public EdcsCalibrationAttachHead mappingResult(Map<String, Object> map) {
         EdcsCalibrationAttachHead head = new EdcsCalibrationAttachHead();
-        EdcsCalibrationAttachItemDAO itemDAO = new EdcsCalibrationAttachitemDAOImpl(db);
+        EdcsCalibrationAttachItemDAO itemDAO = new EdcsCalibrationAttachItemDAOImpl(db);
         Integer headerId = (Integer) map.get("CAL_ATTACH_HEAD_ID");
         head.setCalAttachHeadId(headerId);
         head.setAbType((String) map.get("AB_TYPE"));
@@ -136,7 +145,7 @@ public class EdcsCalibrationAttachHeadImpI implements EdcsCalibrationAttachHeadD
         head.setHumidity((String) map.get("HUMIDITY"));
         head.setTemperature((String) map.get("TEMPERATURE"));
 
-        head.setEdcsCalibrationAttachItemCollection(itemDAO.findByHeaderId(headerId));
+        head.setEdcsCalibrationAttachItemList(itemDAO.findByHeaderId(headerId));
         return head;
     }
 

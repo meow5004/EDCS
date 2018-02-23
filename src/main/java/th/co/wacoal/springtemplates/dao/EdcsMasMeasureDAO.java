@@ -41,5 +41,10 @@ public interface EdcsMasMeasureDAO {
 
     public List<EdcsMasMeasure> findByGroupIdByFlag(int id, String flag);
 
+    public List<EdcsMasMeasure> findByDepIdByGroupIdByFlag(String depId, Integer groupid, Integer flag);
+
     public Map<Integer, EdcsMasMeasure> findByFlagListMappingById(int flag);
+
+    public EdcsMasMeasure mappingResultSet(Map<String, Object> map);
+
 }

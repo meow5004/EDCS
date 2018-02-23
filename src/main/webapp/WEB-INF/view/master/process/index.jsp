@@ -25,7 +25,7 @@
 
                 <div id="ajaxCRUDfield">
                 </div>
-                <table id="availableProcessTable" class="datatable hover cell-border">
+                <table id="availableProcessTable" class="dataTable hover cell-border nowrap">
                     <thead>
                         <tr>
                             <th colspan="5" style="text-align: center"><spring:message code= "process.table.avaliable" text="message not found"/></th>
@@ -40,7 +40,7 @@
                     </thead>
                 </table>
                 <br/>
-                <table id="unavailableProcessTable" class="datatable hover cell-border">
+                <table id="unavailableProcessTable" class="dataTable hover cell-border nowrap">
                     <thead>
                         <tr>
                             <th colspan="5" style="text-align: center"><spring:message code= "process.table.unavaliable" text="message not found"/></th>
@@ -70,6 +70,11 @@
 
     $(document).ready(function () {
         availableTable = $('#availableProcessTable').DataTable({
+            responsive: {
+                details: {
+                    type: 'inline'
+                }
+            },
             "columns": [
                 {"data": "processCode", "target": 0},
                 {"data": "processSubject", "target": 1},
@@ -78,11 +83,16 @@
                 {"data": "deleteCheck", "target": 4, "className": "dt-center", "searchable": false, "orderable": false}
             ],
             "ajax": "./getAvailableProcess.htm",
-            "dom": '<lf<t>ip>',
+            "dom": '<lftip>',
             "order": [[0, 'asc']],
             "displayLength": 10});
 
         unAvailableTable = $('#unavailableProcessTable').DataTable({
+            responsive: {
+                details: {
+                    type: 'inline'
+                }
+            },
             "columns": [
                 {"data": "processCode", "target": 0},
                 {"data": "processSubject", "target": 1},
@@ -91,7 +101,7 @@
                 {"data": "realDeleteCheck", "target": 4, "className": "dt-center", "searchable": false, "orderable": false}
             ],
             "ajax": "./getUnavailableProcess.htm",
-            "dom": '<lf<t>ip>',
+            "dom": '<lftip>',
             "order": [[0, 'asc']],
             "displayLength": 10});
 

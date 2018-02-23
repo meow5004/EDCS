@@ -16,7 +16,7 @@
         <div align="center container">
             <form:form id="addForm"  class="form-inline" action="add.htm" method="post" modelAttribute="measure" onsubmit="return false;">
                 <div class="col-md-10">
-                    <div class="row">
+                    <div class="row centralize-flex">
                         <div class="col-md-3">
                             <spring:message code="measure.depId" text="message not found"/>:
                         </div>
@@ -26,7 +26,7 @@
                             </form:select>
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row centralize-flex">
                         <div class="col-md-3">
                             <spring:message code="measure.measureCode" text="message not found"/>:
                         </div>
@@ -44,7 +44,7 @@
 
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row centralize-flex">
                         <div class="col-md-3">
                             <spring:message code="measure.measureNameTh" text="message not found"/>:
                         </div>
@@ -56,6 +56,14 @@
                         </div>
                         <div class="col-md-3">
                             <form:input path="measureNameEn"  class="form-control" required="required" />
+                        </div>
+                    </div>
+                    <div class="row centralize-flex">
+                        <div class="col-md-3">
+                            <spring:message code="measure.brand" text="message not found"/>:
+                        </div>
+                        <div class="col-md-3">
+                            <form:input path="brand"  class="form-control" required="required" />
                         </div>
                     </div>
                     <div class= "row">
@@ -70,7 +78,7 @@
                         </div>
 
                     </div>
-                    <div class="row">
+                    <div class="row centralize-flex">
                         <div class="col-md-3">
                             <spring:message code="measure.range" text="message not found"/>:
                         </div>
@@ -84,7 +92,7 @@
                             <form:input path="rangeMax"  type="number" min="0" class="form-control positiveNum" required="required" />
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row centralize-flex">
                         <div class="col-md-3 ">
                             <spring:message code="measure.useRange" text="message not found"/>:
                         </div>
@@ -98,7 +106,7 @@
                             <form:input path="useRangeMax"  type="number" min="0" class="form-control positiveNum" required="required" />
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row centralize-flex">
                         <div class="col-md-3">
                             <spring:message code="measure.description" text="message not found"/>:
                         </div>
@@ -107,7 +115,7 @@
                         </div>
 
                     </div>
-                    <div class="row">
+                    <div class="row centralize-flex">
                         <div class="col-md-3">
                             <spring:message code="measure.abtype" text="message not found"/>:
                         </div>
@@ -120,7 +128,7 @@
                         <div class="col-md-2">
                             <spring:message code="measure.measureTimes" text="message not found"/>:
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-1 no-padding">
                             <form:input path="measureTimes"  style="width:100%" class="form-control" type="number" value="3" required="required" />
                         </div>
                     </div>

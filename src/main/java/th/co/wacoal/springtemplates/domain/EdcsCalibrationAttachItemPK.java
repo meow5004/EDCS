@@ -31,6 +31,8 @@ public class EdcsCalibrationAttachItemPK implements Serializable {
     @Column(name = "CAL_TIME")
     private int calTime;
 
+
+
     public EdcsCalibrationAttachItemPK() {
     }
 
@@ -96,5 +98,7 @@ public class EdcsCalibrationAttachItemPK implements Serializable {
     public String toString() {
         return "th.co.wacoal.springtemplates.domain.EdcsCalibrationAttachItemPK[ calAttachHeadId=" + calAttachHeadId + ", calAttachLine=" + calAttachLine + ", calTime=" + calTime + " ]";
     }
+
+    
     
 }

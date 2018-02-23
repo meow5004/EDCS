@@ -25,7 +25,7 @@
 
                 <div id="ajaxCRUDfield">
                 </div>
-                <table id="availableStatusCaldocTable" class="datatable hover cell-border">
+                <table id="availableStatusCaldocTable" class="dataTable hover cell-border nowrap">
                     <thead>
                         <tr>
                             <th colspan="4" style="text-align: center"><spring:message code="statusCaldoc.table.avaliable" text="message not found"/></th>
@@ -39,7 +39,7 @@
                     </thead>
                 </table>
                 <br/>
-                <table id="unavailableStatusCaldocTable" class="datatable hover cell-border">
+                <table id="unavailableStatusCaldocTable" class="dataTable hover cell-border nowrap">
                     <thead>
                         <tr>
                             <th colspan="4" style="text-align: center"><spring:message code="statusCaldoc.table.unavaliable" text="message not found"/></th>
@@ -68,6 +68,11 @@
 
     $(document).ready(function () {
         availableTable = $('#availableStatusCaldocTable').DataTable({
+            responsive: {
+                details: {
+                    type: 'inline'
+                }
+            },
             "columns": [
                 {"data": "statusCaldocId", "target": 0},
                 {"data": "statusCaldocName", "target": 1},
@@ -75,11 +80,16 @@
                 {"data": "deleteCheck", "target": 3, "className": "dt-center", "searchable": false, "orderable": false}
             ],
             "ajax": "./getAvailableStatusCaldoc.htm",
-            "dom": '<lf<t>ip>',
+            "dom": '<lftip>',
             "order": [[0, 'asc']],
             "displayLength": 10});
 
         unAvailableTable = $('#unavailableStatusCaldocTable').DataTable({
+            responsive: {
+                details: {
+                    type: 'inline'
+                }
+            },
             "columns": [
                 {"data": "statusCaldocId", "target": 0},
                 {"data": "statusCaldocName", "target": 1},
@@ -87,7 +97,7 @@
                 {"data": "realDeleteCheck", "target": 3, "className": "dt-center", "searchable": false, "orderable": false}
             ],
             "ajax": "./getUnavailableStatusCaldoc.htm",
-            "dom": '<lf<t>ip>',
+            "dom": '<lftip>',
             "order": [[0, 'asc']],
             "displayLength": 10});
 

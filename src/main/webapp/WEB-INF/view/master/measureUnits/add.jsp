@@ -16,7 +16,7 @@
         <div align="center container">
             <form:form id="addForm"  class="form-inline" action="add.htm" method="post" modelAttribute="measureUnit" onsubmit="return false;">
                 <div class="col-md-8">
-                    <div class="row">
+                    <div class="row centralize-flex">
                         <div class="col-md-6">
                             <div class="col-md-6">
                                 <spring:message code="measureUnit.unitNameTh" text="message not found"/>:
@@ -34,7 +34,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row centralize-flex">
                         <div class="col-md-6">
                             <div class="col-md-6">
                                 <spring:message code="measureUnit.unitNameEn" text="message not found"/>:

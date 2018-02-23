@@ -25,7 +25,7 @@
 
                 <div id="ajaxCRUDfield">
                 </div>
-                <table id="availableModelTable" class="datatable hover cell-border">
+                <table id="availableModelTable" class="dataTable hover cell-border nowrap">
                     <thead>
                         <tr>
                             <th colspan="10" style="text-align: center"><spring:message code="model.table.avaliable" text="message not found"/></th>
@@ -47,7 +47,7 @@
                     </thead>
                 </table>
                 <br/>
-                <table id="unavailableModelGroup" class="datatable hover cell-border ">
+                <table id="unavailableModelGroup" class="dataTable hover cell-border ">
                     <thead>
                         <tr>
                             <th colspan="10" style="text-align: center"><spring:message code="model.table.unavaliable" text="message not found"/></th>
@@ -84,10 +84,15 @@
 
     $(document).ready(function () {
         availableTable = $('#availableModelTable').DataTable({
+            responsive: {
+                details: {
+                    type: 'inline'
+                }
+            },
             "columns": [
-                {"data": "modelId", "target": 0,"visible": false},
+                {"data": "modelId", "target": 0, "visible": false},
                 {"data": "modelCode", "target": 1},
-                {"data": "measureId", "target": 2,"visible": false},
+                {"data": "measureId", "target": 2, "visible": false},
                 {"data": "measureCode", "target": 3},
                 {"data": "measureName", "target": 4},
                 {"data": "cerNo", "target": 5},
@@ -97,14 +102,19 @@
                 {"data": "deleteCheck", "target": 9, "className": "dt-center", "searchable": false, "orderable": false}
             ],
             "ajax": "./getAvailableModel.htm",
-            "dom": '<lf<t>ip>',
+            "dom": '<lftip>',
             "order": [[0, 'asc']],
             "displayLength": 10});
         unAvailableTable = $('#unavailableModelGroup').DataTable({
+            responsive: {
+                details: {
+                    type: 'inline'
+                }
+            },
             "columns": [
-                {"data": "modelId", "target": 0,"visible": false},
+                {"data": "modelId", "target": 0, "visible": false},
                 {"data": "modelCode", "target": 1},
-                {"data": "measureId", "target": 2,"visible": false},
+                {"data": "measureId", "target": 2, "visible": false},
                 {"data": "measureCode", "target": 3},
                 {"data": "measureName", "target": 4},
                 {"data": "cerNo", "target": 5},
@@ -114,7 +124,7 @@
                 {"data": "realDeleteCheck", "target": 9, "className": "dt-center", "searchable": false, "orderable": false}
             ],
             "ajax": "./getUnavailableModel.htm",
-            "dom": '<lf<t>ip>',
+            "dom": '<lftip>',
             "order": [[0, 'asc']],
             "displayLength": 10});
         $(document).on("click", ".addData,.editData", showFormByClick);

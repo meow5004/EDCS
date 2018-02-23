@@ -8,6 +8,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>   
 <style>
     tr.group,
     tr.group:hover {
@@ -25,55 +26,108 @@
             <div class="box-header">
                 <h3 class="box-title"><i class="fa fa-cog"></i> <spring:message code="measure.title" text="message not found"/></h3>
         </div>
-        <div class="box-body">
+        <div class="box-body container-fluid">
 
-            <div id="ajaxCRUDfield">
+            <div id="ajaxCRUDfield" class="row">
             </div>
-            <table id="availableMeasureTable" class="datatable hover cell-border">
-                <thead>
-                    <tr>
-                        <th colspan="13" style="text-align: center"><spring:message code="measure.table.avaliable" text="message not found"/></th>
-                    </tr>
-                    <tr class="alt" >
-                        <th><spring:message code="measure.measure" text="message not found"/></th>
-                        <th><spring:message code="measure.measureCode" text="message not found"/></th>
-                        <th><spring:message code="measure.measureName" text="message not found"/></th>
-                        <th><spring:message code="measure.measureGroup" text="message not found"/></th>
-                        <th><spring:message code="measure.calpointId" text="message not found"/></th>
-                        <th><spring:message code="measure.range" text="message not found"/></th>
-                        <th><spring:message code="measure.useRange" text="message not found"/></th>
-                        <th><spring:message code="measure.description" text="message not found"/></th>
-                        <th><spring:message code="measure.measureTimes" text="message not found"/></th>
-                        <th><spring:message code="measure.abtype" text="message not found"/></th>
-                        <th><spring:message code="measure.depName" text="message not found"/></th>
-                        <th></th>
-                        <th><button class="deleteMultiple btn btn-danger"><spring:message code="measure.delete" text="message not found"/><i class="fa fa-trash-o" aria-hidden="true"></i></button></th>
-                    </tr> 
-                </thead>
-            </table>
+            <hr style="background-color: black;color:black;height: 5px"/>
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3">
+                    <h3>เลือกแผนก/กลุ่มเครื่องวัดเพื่อแสดงเครื่องวัด</h4>
+                </div>
+            </div>
             <br/>
-            <table id="unavailableMeasureTable" class="datatable hover cell-border ">
-                <thead>
-                    <tr>
-                        <th colspan="13" style="text-align: center"><spring:message code="measure.table.unavaliable" text="message not found"/></th>
-                    </tr>
-                    <tr class="alt" >
-                        <th><spring:message code="measure.measure" text="message not found"/></th>
-                        <th><spring:message code="measure.measureCode" text="message not found"/></th>
-                        <th><spring:message code="measure.measureName" text="message not found"/></th>
-                        <th><spring:message code="measure.measureGroup" text="message not found"/></th>
-                        <th><spring:message code="measure.calpointId" text="message not found"/></th>
-                        <th><spring:message code="measure.range" text="message not found"/></th>
-                        <th><spring:message code="measure.useRange" text="message not found"/></th>
-                        <th><spring:message code="measure.description" text="message not found"/></th>
-                        <th><spring:message code="measure.measureTimes" text="message not found"/></th>
-                        <th><spring:message code="measure.abtype" text="message not found"/></th>
-                        <th><spring:message code="measure.depName" text="message not found"/></th>
-                        <th><button class="reuseMultiple btn btn-success"><spring:message code="measure.reuse" text="message not found"/><i class="fa fa-recycle" aria-hidden="true"></i></button></th>
-                        <th><button class="realDeleteMultiple btn btn-danger"><spring:message code="measure.realDelete" text="message not found"/><i class="fa fa-remove" aria-hidden="true"></i></button></th>
-                    </tr> 
-                </thead>
-            </table>
+            <div class="row">
+                <div class="col-md-1">
+                    เลือกแผนก :
+                </div>
+                <div class="col-md-3">
+                    <select id="departmentFilter" class="datatableFilterSelection">
+                        <option value="" selected disabled="disabled"></option>
+                        <option value="">ทุกแผนก</option>
+                        <c:forEach items="${departments}" var="dep">
+                            <option value="${dep.depId}">${dep.fullName}</option>
+                        </c:forEach>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    เลือกกลุ่มเครื่องวัด :
+                </div>
+                <div class="col-md-3">
+                    <select id="measureGroupFilter" class="datatableFilterSelection">
+                        <option value="" selected disabled="disabled"></option>
+                        <option value="">ทุกกลุ่ม</option>
+                        <c:forEach items="${measureGroups}" var="group">
+                            <option value="${group.measureGroupId}">${group.fullName}</option>
+                        </c:forEach>
+                    </select>
+                </div>
+
+            </div>
+            <br/>
+            <div class="table-responsive row">
+                <table id="availableMeasureTable" class="dataTable hover cell-border nowrap">
+                    <thead>
+                        <tr>
+                            <th colspan="13" style="text-align: center"><spring:message code="measure.table.avaliable" text="message not found"/></th>
+                        </tr>
+                        <tr class="alt" >
+                            <th><spring:message code="measure.measure" text="message not found"/></th>
+                            <th><spring:message code="measure.measureGroup" text="message not found"/></th>
+                            <th><spring:message code="measure.depName" text="message not found"/></th>
+                            <th><spring:message code="measure.measureCode" text="message not found"/></th>
+                            <th><spring:message code="measure.measureName" text="message not found"/></th>
+                            <th><spring:message code="measure.calpointId" text="message not found"/></th>
+                            <th><spring:message code="measure.range" text="message not found"/></th>
+                            <th><spring:message code="measure.useRange" text="message not found"/></th>
+                            <th><spring:message code="measure.description" text="message not found"/></th>
+                            <th><spring:message code="measure.measureTimes" text="message not found"/></th>
+                            <th><spring:message code="measure.abtype" text="message not found"/></th>
+                            <th></th>
+                            <th><button class="deleteMultiple btn btn-danger"><spring:message code="measure.delete" text="message not found"/><i class="fa fa-trash-o" aria-hidden="true"></i></button></th>
+                        </tr> 
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td  colspan="13">
+                                <h1>เลือกแผนก และ/หรือกลุ่มเครื่องวัดเพื่อแสดงข้อมูล</h1>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <br/>
+            <div class="table-responsive row">
+                <table id="unavailableMeasureTable" class="dataTable hover cell-border no-wrap">
+                    <thead>
+                        <tr>
+                            <th colspan="13" style="text-align: center"><spring:message code="measure.table.unavaliable" text="message not found"/></th>
+                        </tr>
+                        <tr class="alt" >
+                            <th><spring:message code="measure.measure" text="message not found"/></th>
+                            <th><spring:message code="measure.measureGroup" text="message not found"/></th>
+                            <th><spring:message code="measure.depName" text="message not found"/></th>
+                            <th><spring:message code="measure.measureCode" text="message not found"/></th>
+                            <th><spring:message code="measure.measureName" text="message not found"/></th>
+                            <th><spring:message code="measure.calpointId" text="message not found"/></th>
+                            <th><spring:message code="measure.range" text="message not found"/></th>
+                            <th><spring:message code="measure.useRange" text="message not found"/></th>
+                            <th><spring:message code="measure.description" text="message not found"/></th>
+                            <th><spring:message code="measure.measureTimes" text="message not found"/></th>
+                            <th><spring:message code="measure.abtype" text="message not found"/></th>
+                            <th><button class="reuseMultiple btn btn-success"><spring:message code="measure.reuse" text="message not found"/><i class="fa fa-recycle" aria-hidden="true"></i></button></th>
+                            <th><button class="realDeleteMultiple btn btn-danger"><spring:message code="measure.realDelete" text="message not found"/><i class="fa fa-remove" aria-hidden="true"></i></button></th>
+                        </tr> 
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td  colspan="13">
+                                <h1>เลือกแผนก และ/หรือกลุ่มเครื่องวัดเพื่อแสดงข้อมูล</h1>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 
@@ -89,65 +143,84 @@
 <script>
 
     $(document).ready(function () {
-        availableTable = $('#availableMeasureTable').DataTable({
-            "columns": [
-                {"data": "measureId", "target": 0,"visible": false},
-                {"data": "measureCode", "target": 1},
-                {"data": "measureName", "target": 2},
-                {"data": "measureGroupName", "target": 3},
-                {"data": "calpointId", "target": 4},
-                {"data": "range", "target": 5},
-                {"data": "useRange", "target": 6},
-                {"data": "description", "target": 7},
-                {"data": "measureTime", "target": 8},
-                {"data": "abtype", "target": 9, "render": function (data, type, row, meta) {
-                        if (data === "A") {
-                            return "วัดหน้าเดียว";
-                        } else if (data === "AB") {
-                            return "วัดสองหน้า";
-                        } else {
-                            return 'ไม่ได้ระบุ';
+        var availableTable;
+        var unAvailableTable;
+        $(".datatableFilterSelection").on("change", function () {
+            var groupId = $("#measureGroupFilter").val();
+            var depId = $("#departmentFilter").val();
+            if (availableTable == null && unAvailableTable == null) {
+                //if not init then start initilize
+                availableTable = $('#availableMeasureTable').DataTable({
+                    "columns": [
+                        {"data": "measureId", "target": 0, "visible": false},
+                        {"data": "measureGroupName", "target": 1},
+                        {"data": "depName", "target": 2},
+                        {"data": "measureCode", "target": 3},
+                        {"data": "measureName", "target": 4},
+                        {"data": "calpointId", "target": 5},
+                        {"data": "range", "target": 6},
+                        {"data": "useRange", "target": 7},
+                        {"data": "description", "target": 8},
+                        {"data": "measureTime", "target": 9},
+                        {"data": "abtype", "target": 10, "render": function (data, type, row, meta) {
+                                if (data === "A") {
+                                    return "วัดหน้าเดียว";
+                                } else if (data === "AB") {
+                                    return "วัดสองหน้า";
+                                } else {
+                                    return 'ไม่ได้ระบุ';
+                                }
+                            }},
+                        {"data": "actionLink", "target": 11, "searchable": false, "orderable": false},
+                        {"data": "deleteCheck", "target": 12, "className": "dt-center", "searchable": false, "orderable": false}
+                    ],
+                    'ajax': {
+                        'contentType': 'application/json',
+                        'url': "./getAvailableMeasure.htm?depId=" + depId + "&measureGroupId=" + groupId,
+                        'type': 'POST',
+                        'data': function (d) {
+                            return JSON.stringify(d);
                         }
-                    }},
-                {"data": "depName", "target": 10},
-                {"data": "actionLink", "target": 11, "searchable": false, "orderable": false},
-                {"data": "deleteCheck", "target": 12, "className": "dt-center", "searchable": false, "orderable": false}
-            ],
-            scrollX: true,
-            "ajax": "./getAvailableMeasure.htm",
-            "dom": '<lf<t>ip>',
-            "order": [[0, 'asc']],
-            "displayLength": 10});
-        unAvailableTable = $('#unavailableMeasureTable').DataTable({
-            "columns": [
-                {"data": "measureId", "target": 0,"visible": false},
-                {"data": "measureCode", "target": 1},
-                {"data": "measureName", "target": 2},
-                {"data": "measureGroupName", "target": 3},
-                {"data": "calpointId", "target": 4},
-                {"data": "range", "target": 5},
-                {"data": "useRange", "target": 6},
-                {"data": "description", "target": 7},
-                {"data": "measureTime", "target": 8},
-                {"data": "abtype", "target": 9, render: function (data, type, row, meta) {
-                        if (data === "A") {
-                            return "วัดหน้าเดียว";
-                        } else if (data === "AB") {
-                            return "วัดสองหน้า";
-                        } else {
-                            return 'ไม่ได้ระบุ';
-                        }
-                    }
-                },
-                {"data": "depName", "target": 10},
-                {"data": "reuseCheck", "target": 11, "className": "dt-center", "searchable": false, "orderable": false},
-                {"data": "realDeleteCheck", "target": 12, "className": "dt-center", "searchable": false, "orderable": false}
-            ],
-            "ajax": "./getUnavailableMeasure.htm",
-            "dom": '<lf<t>ip>',
-            "order": [[0, 'asc']],
-            scrollX: true,
-            "displayLength": 10});
+                    },
+                    "dom": '<lftip>',
+                    "order": [[0, 'asc']],
+                    "displayLength": 10});
+                unAvailableTable = $('#unavailableMeasureTable').DataTable({
+                    "columns": [
+                        {"data": "measureId", "target": 0, "visible": false},
+                         {"data": "measureGroupName", "target": 1},
+                             {"data": "depName", "target": 2},
+                        {"data": "measureCode", "target": 3},
+                        {"data": "measureName", "target": 4},
+                        {"data": "calpointId", "target": 5},
+                        {"data": "range", "target": 6},
+                        {"data": "useRange", "target": 7},
+                        {"data": "description", "target": 8},
+                        {"data": "measureTime", "target": 9},
+                        {"data": "abtype", "target": 10, render: function (data, type, row, meta) {
+                                if (data === "A") {
+                                    return "วัดหน้าเดียว";
+                                } else if (data === "AB") {
+                                    return "วัดสองหน้า";
+                                } else {
+                                    return 'ไม่ได้ระบุ';
+                                }
+                            }
+                        },
+                        {"data": "reuseCheck", "target": 11, "className": "dt-center", "searchable": false, "orderable": false},
+                        {"data": "realDeleteCheck", "target": 12, "className": "dt-center", "searchable": false, "orderable": false}
+                    ],
+                    "ajax": "./getUnavailableMeasure.htm?depId=" + depId + "&measureGroupId=" + groupId,
+                    "dom": '<lftip>',
+                    "order": [[0, 'asc']],
+                    "displayLength": 10});
+            } else {
+                //if already initlize then reload data
+                availableTable.ajax.url("./getAvailableMeasure.htm?depId=" + depId + "&measureGroupId=" + groupId).load();
+                unAvailableTable.ajax.url("./getUnavailableMeasure.htm?depId=" + depId + "&measureGroupId=" + groupId).load();
+            }
+        });
+
         $(document).on("click", ".addData,.editData", showFormByClick);
         $(document).on("submit", "#addForm,#editForm", sendDataPOSTByAction);
         $(document).on("click", ".deleteMultiple", deleteMultiple);

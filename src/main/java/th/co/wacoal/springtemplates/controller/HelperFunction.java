@@ -5,6 +5,11 @@
  */
 package th.co.wacoal.springtemplates.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+import th.co.wacoal.springtemplates.domain.EdcsCalibration;
+import th.co.wacoal.springtemplates.domain.EdcsMasUser;
+
 /**
  *
  * @author admin
@@ -25,6 +30,25 @@ public class HelperFunction {
         return intarray;
     }
 
-    
+    protected static List<EdcsCalibration> calibrationFilterPerUserViewableDepartments(EdcsMasUser user, List<EdcsCalibration> calibs) {
+        List<String> ViewableDepId = user.getViewableDepartmentIds();
+        List<EdcsCalibration> filteredCalib = new ArrayList<>();
+        for (EdcsCalibration calib : calibs) {
+            if (ViewableDepId.contains(calib.getDepId())) {
+                filteredCalib.add(calib);
+            }
+        }
+        return filteredCalib;
+    }
+
+    protected static List<EdcsCalibration> calibrationFilterByDepartments(String calibId, List<EdcsCalibration> calibs) {
+        List<EdcsCalibration> filteredCalib = new ArrayList<>();
+        for (EdcsCalibration calib : calibs) {
+            if (calibId.equals(calib.getDepId())) {
+                filteredCalib.add(calib);
+            }
+        }
+        return filteredCalib;
+    }
 
 }

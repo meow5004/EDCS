@@ -43,7 +43,7 @@ public class EdcsMasEquipconDAOImpl implements EdcsMasEquipconDAO {
             p.setChangeOn((Date) map.get("CHANGE_ON"));
             p.setFlagDel((String) map.get("FLAG_DEL"));
             p.setFlagComment((String) map.get("FLAG_COMMENT"));
-           
+
             ret.add(p);
         }
         return ret;
@@ -124,7 +124,6 @@ public class EdcsMasEquipconDAOImpl implements EdcsMasEquipconDAO {
             p.setChangeOn((Date) map.get("CHANGE_ON"));
             p.setFlagDel((String) map.get("FLAG_DEL"));
             p.setFlagComment((String) map.get("FLAG_COMMENT"));
-          
 
         }
         return p;
@@ -147,7 +146,7 @@ public class EdcsMasEquipconDAOImpl implements EdcsMasEquipconDAO {
             p.setChangeOn((Date) map.get("CHANGE_ON"));
             p.setFlagDel((String) map.get("FLAG_DEL"));
             p.setFlagComment((String) map.get("FLAG_COMMENT"));
-           
+
             ret.add(p);
         }
         return ret;
@@ -183,7 +182,7 @@ public class EdcsMasEquipconDAOImpl implements EdcsMasEquipconDAO {
             result = 0;
         } else {
             db.update(sql, "1", userid, id);
-               result = 1;
+            result = 1;
         }
         return result;
     }

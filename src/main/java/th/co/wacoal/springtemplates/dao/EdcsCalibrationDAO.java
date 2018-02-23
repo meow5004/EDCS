@@ -8,6 +8,8 @@ package th.co.wacoal.springtemplates.dao;
 import java.util.List;
 import java.util.Map;
 import th.co.wacoal.springtemplates.domain.EdcsCalibration;
+import th.co.wacoal.springtemplates.domain.calibrationDeviceCheckModel;
+import th.co.wacoal.springtemplates.domain.calibrationRequestModel;
 
 /**
  *
@@ -15,38 +17,63 @@ import th.co.wacoal.springtemplates.domain.EdcsCalibration;
  */
 public interface EdcsCalibrationDAO {
 
-    public EdcsCalibration findByCode(int id);
-
-    public List<EdcsCalibration> findAll();
-
     public int update(EdcsCalibration object);
 
     public int add(EdcsCalibration object);
 
-    public int addNewCalibrationByMeasureIdAndPreviousCalibration(int measureId);
+    public int addNewCalibrationCombineWithPreviousCalibrationIfAny(EdcsCalibration baseCalib);
 
+    public List<EdcsCalibration> getNewAndNearExpireCalibration(int dayCountToExpired);
+
+    public List<EdcsCalibration> getRequestedApprover(String approverId);
+
+    public void saveCalibrationHeader(EdcsCalibration calibration);
+
+    public void finalizeDataAndMarkCalibrationAsComplete(EdcsCalibration calib);
+
+    public void approverRequested(calibrationRequestModel approvingReqModel);
+
+    //search function
     public EdcsCalibration find(int id);
 
     public List<EdcsCalibration> findByFlag(int flag);
 
-    public List<EdcsCalibration> getNewAndNearExpireCalibrationMoreThanDays(int dayCountToExpired);
+    public EdcsCalibration findByCode(int id);
 
-    public List<EdcsCalibration> getRequestedCalibration();
-
-    public EdcsCalibration mappingResultSetToCalibration(Map<String, Object> map);
+    public List<EdcsCalibration> findAll();
 
     public String getRunningCode();
 
-    public void approverRequested(int calId);
-
     public List<EdcsCalibration> getApprovedDevice();
 
-    public void receivedDevice(int thisCalId);
-
-    public List<EdcsCalibration> getApprovedAndReceiverdDevice();
+    public List<EdcsCalibration> getCalibrationListInSystem();
 
     public List<EdcsCalibration> listNonFinishCalibration();
-    
-    public void saveCalibrationHeader(EdcsCalibration calibration);
+
+    public EdcsCalibration mappingResultSetToCalibration(Map<String, Object> map);
+
+    public void markCalibrationForApproval(int thisCalId, String approverId);
+
+
+    public List<EdcsCalibration> listStickeredDevicesCalibration();
+
+    public List<EdcsCalibration> listLabAppovedCalibration();
+
+    public void approveLabResult(int calId, String userId);
+
+    public void disapproveLabResult(int calId, String userId);
+
+    public void printedStickerCheck(int calId, String userId);
+
+    public void returnedDeviceCheck(int calId, String userId);
+
+    public List<EdcsCalibration> listDisapprovedCalibration();
+
+    public List<EdcsCalibration> listFinishCalibrationWaitForApproval(String approverId);
+
+    public void receivedDevice(calibrationDeviceCheckModel recModel);
+
+    public void returnedDeviceCheck(calibrationDeviceCheckModel recModel);
+
 
 }

@@ -4,18 +4,84 @@
         <param-name>contextConfigLocation</param-name>
         <param-value>/WEB-INF/applicationContext.xml</param-value>
     </context-param>
-    <listener>
-        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-    </listener>
-        <filter>
-        <filter-name>ThaiFilter</filter-name>
-        <filter-class>th.co.wacoal.sprintemplates.controller.ThaiFilter</filter-class>
+    <filter>
+        <filter-name>approveDocFilter</filter-name>
+        <filter-class>th.co.wacoal.springtemplates.filter.approveDocFilter</filter-class>
     </filter>
+    <filter>
+        <filter-name>calibrateReportCreateFilter</filter-name>
+        <filter-class>th.co.wacoal.springtemplates.filter.calibrateReportCreateFilter</filter-class>
+    </filter>
+    <filter>
+        <filter-name>checkDocFilter</filter-name>
+        <filter-class>th.co.wacoal.springtemplates.filter.checkDocFilter</filter-class>
+    </filter>
+    <filter>
+        <filter-name>deviceReceiveFilter</filter-name>
+        <filter-class>th.co.wacoal.springtemplates.filter.deviceReceiveFilter</filter-class>
+    </filter>
+    <filter>
+        <filter-name>labApproveFilter</filter-name>
+        <filter-class>th.co.wacoal.springtemplates.filter.labApproveFilter</filter-class>
+    </filter>
+    <filter>
+        <filter-name>printStickerFilter</filter-name>
+        <filter-class>th.co.wacoal.springtemplates.filter.printStickerFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>loginFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
     <filter-mapping>
         <filter-name>ThaiFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
-    
+    <filter-mapping>
+        <filter-name>UTF8EncodingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>checkDocFilter</filter-name>
+        <url-pattern>/index/checkDoc.htm</url-pattern>
+        <url-pattern>/checkDoc.htm</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>approveDocFilter</filter-name>
+        <url-pattern>/index/approveDoc.htm</url-pattern>
+        <url-pattern>/approveDoc.htm</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>labApproveFilter</filter-name>
+        <url-pattern>/index/labApprove.htm</url-pattern>
+        <url-pattern>/labApprove.htm</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>printStickerFilter</filter-name>
+        <url-pattern>/index/printSticker.htm</url-pattern>
+        <url-pattern>/printSticker.htm</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>calibrateReportCreateFilter</filter-name>
+        <url-pattern>/index/createSearch.htm</url-pattern>
+        <url-pattern>/createSearch.htm</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>deviceReceiveFilter</filter-name>
+        <url-pattern/>
+        <url-pattern>/index/deviceReceivce.htm</url-pattern>
+        <url-pattern>/deviceReceivce.htm</url-pattern>
+    </filter-mapping>
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+    <filter>
+        <filter-name>ThaiFilter</filter-name>
+        <filter-class>th.co.wacoal.sprintemplates.controller.ThaiFilter</filter-class>
+    </filter>
+    <filter>
+        <filter-name>loginFilter</filter-name>
+        <filter-class>th.co.wacoal.springtemplates.filter.loginFilter</filter-class>
+    </filter>
     <filter>
         <filter-name>UTF8EncodingFilter</filter-name>
         <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
@@ -28,10 +94,6 @@
             <param-value>true</param-value>
         </init-param>
     </filter>
-    <filter-mapping>
-        <filter-name>UTF8EncodingFilter</filter-name>
-        <url-pattern>/*</url-pattern>
-    </filter-mapping>
     <servlet>
         <servlet-name>dispatcher</servlet-name>
         <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>

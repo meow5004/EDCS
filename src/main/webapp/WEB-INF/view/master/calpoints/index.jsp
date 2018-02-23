@@ -25,7 +25,7 @@
 
                 <div id="ajaxCRUDfield">
                 </div>
-                <table id="availableCalpointTable" class="datatable hover cell-border">
+                <table id="availableCalpointTable" class="dataTable hover cell-border nowrap">
                     <thead>
                         <tr>
                             <th colspan="5" style="text-align: center"><spring:message code="calpoint.table.avaliable" text="message not found"/></th>
@@ -40,7 +40,7 @@
                     </thead>
                 </table>
                 <br/>
-                <table id="unavailableCalpointTable" class="datatable hover cell-border">
+                <table id="unavailableCalpointTable" class="dataTable hover cell-border nowrap">
                     <thead>
                         <tr>
                             <th colspan="5" style="text-align: center"><spring:message code="calpoint.table.unavaliable" text="message not found"/></th>
@@ -69,6 +69,11 @@
 
     $(document).ready(function () {
         availableTable = $('#availableCalpointTable').DataTable({
+            responsive: {
+                details: {
+                    type: 'inline'
+                }
+            },
             "columns": [
                 {"data": "calpointId", "target": 0},
                 {"data": "calpointMin", "target": 1},
@@ -77,11 +82,16 @@
                 {"data": "deleteCheck", "target": 4, "className": "dt-center", "searchable": false, "orderable": false}
             ],
             "ajax": "./getAvailableCalpoint.htm",
-            "dom": '<lf<t>ip>',
+            "dom": '<lftip>',
             "order": [[0, 'asc']],
             "displayLength": 10});
 
         unAvailableTable = $('#unavailableCalpointTable').DataTable({
+            responsive: {
+                details: {
+                    type: 'inline'
+                }
+            },
             "columns": [
                 {"data": "calpointId", "target": 0},
                 {"data": "calpointMin", "target": 1},
@@ -90,7 +100,7 @@
                 {"data": "realDeleteCheck", "target": 4, "className": "dt-center", "searchable": false, "orderable": false}
             ],
             "ajax": "./getUnavailableCalpoint.htm",
-            "dom": '<lf<t>ip>',
+            "dom": '<lftip>',
             "order": [[0, 'asc']],
             "displayLength": 10});
 

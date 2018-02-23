@@ -42,7 +42,7 @@ public class EdcsMasBranchDAOImpl implements EdcsMasBranchDAO {
             p.setChangeBy((String) map.get("CHANGE_BY"));
             p.setChangeOn((Date) map.get("CHANGE_ON"));
             p.setFlagDel((String) map.get("FLAG_DEL"));
-          
+
             ret.add(p);
         }
         return ret;
@@ -123,8 +123,6 @@ public class EdcsMasBranchDAOImpl implements EdcsMasBranchDAO {
             p.setChangeOn((Date) map.get("CHANGE_ON"));
             p.setFlagDel((String) map.get("FLAG_DEL"));
 
-          
-
         }
         return p;
     }
@@ -145,7 +143,6 @@ public class EdcsMasBranchDAOImpl implements EdcsMasBranchDAO {
             p.setChangeBy((String) map.get("CHANGE_BY"));
             p.setChangeOn((Date) map.get("CHANGE_ON"));
             p.setFlagDel((String) map.get("FLAG_DEL"));
-         
 
             ret.add(p);
         }

@@ -25,7 +25,7 @@
 
                 <div id="ajaxCRUDfield">
                 </div>
-                <table id="availableEquipconTable" class="datatable hover cell-border">
+                <table id="availableEquipconTable" class="dataTable hover cell-border nowrap">
                     <thead>
                         <tr>
                             <th colspan="10" style="text-align: center"><spring:message code="equipcon.table.avaliable" text="message not found"/></th>
@@ -41,7 +41,7 @@
                     </thead>
                 </table>
                 <br/>
-                <table id="unavailableEquipconTable" class="datatable hover cell-border">
+                <table id="unavailableEquipconTable" class="dataTable hover cell-border nowrap">
                     <thead>
                         <tr>
                             <th colspan="9" style="text-align: center"><spring:message code="equipcon.table.unavaliable" text="message not found"/></th>
@@ -70,6 +70,11 @@
 
     $(document).ready(function () {
         availableTable = $('#availableEquipconTable').DataTable({
+            responsive: {
+                details: {
+                    type: 'inline'
+                }
+            },
             "columns": [
                 {"data": "equipConId", "target": 0},
                 {"data": "equipConNameTh", "target": 1},
@@ -79,11 +84,16 @@
                 {"data": "deleteCheck", "target": 5, "className": "dt-center", "searchable": false, "orderable": false}
             ],
             "ajax": "./getAvailableEquipcon.htm",
-            "dom": '<lf<t>ip>',
+            "dom": '<lftip>',
             "order": [[0, 'asc']],
             "displayLength": 10});
 
         unAvailableTable = $('#unavailableEquipconTable').DataTable({
+            responsive: {
+                details: {
+                    type: 'inline'
+                }
+            },
             "columns": [
                 {"data": "equipConId", "target": 0},
                 {"data": "equipConNameTh", "target": 1},
@@ -92,7 +102,7 @@
                 {"data": "realDeleteCheck", "target": 4, "className": "dt-center", "searchable": false, "orderable": false}
             ],
             "ajax": "./getUnavailableEquipcon.htm",
-            "dom": '<lf<t>ip>',
+            "dom": '<lftip>',
             "order": [[0, 'asc']],
             "displayLength": 10});
 
