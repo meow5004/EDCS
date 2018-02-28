@@ -306,7 +306,7 @@
             });
         }
 
-        var id = $("measureGroup").val();
+        var id = $("#measureGroupId").val();
         $.ajax({
             type: "POST",
             url: "checkIfExisted.htm",

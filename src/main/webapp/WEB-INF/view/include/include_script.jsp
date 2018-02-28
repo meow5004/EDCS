@@ -49,6 +49,26 @@
 
 <script>
     $(function () {
+        //locale en overwrite
+        //th locale broken
+        moment.updateLocale('en', {
+            relativeTime: {
+                future: "%s",
+                past: "%s ที่แล้ว",
+                s: 'อีกไม่กี่วินาที',
+                ss: '%d วินาที',
+                m: "หนึ่งนาที",
+                mm: "%d นาที",
+                h: "หนึ่งชั่วโมง",
+                hh: "%d ชั่วโมง",
+                d: "หนึ่งวัน",
+                dd: "%d วัน",
+                M: "หนึ่งเดือน",
+                MM: "%d เดือน",
+                y: "หนึ่งปี",
+                yy: "%d ปี"
+            }
+        });
         //regex psudo selector
         jQuery.expr[':'].regex = function (elem, index, match) {
             var regex = new RegExp(match[3]),
@@ -230,8 +250,11 @@
     td:first-child{border-left: 1px solid black;border-right: 1px solid black}
     td{border-right: 1px solid black}
 
-    input[type=text][class*=inputCell]:focus {
-      background-color: #00c0ef;
+    input[class*=inputCell]:focus {
+        border-color: #6265e4 !important;
+        background-color: #5cb85c!important;
+        box-shadow: 0 0 5px rgba(98, 101, 228, 1) !important;
+        color:white;
     }
 
     .inputTable {border-collapse: collapse;border: 1px solid black;}
@@ -263,9 +286,11 @@
     }
     .danger-alert{
         background-color:red;
+         color:white;
     }
     .alert{
-        background-color:#e4b9c0;
+        background-color:#bc4f5e;
+        color:white;
     }
 
     /*add red color if link = #*/

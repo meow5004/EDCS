@@ -21,10 +21,11 @@
                                     <th style="text-align: center;">หน่วยงาน</th>
                                     <th style="text-align: center;">รหัสเครื่องวัด</th>
                                     <th style="text-align: center;">ชื่อเครื่องวัด</th>
-                                    <th style="text-align: center;">สอบเทียบวันที่่</th>
-                                    <th style="text-align: center;">รายงานโดย</th>
-                                    <th style="text-align: center;">ผลสอบเทียบ</th>
-                                    <th style="text-align: center;">แสดงรายงานสอบเทียบ</th>
+                                    <th style="text-align: center;">อนุมัติคำขอ</th>
+                                    <th style="text-align: center;">รับเครื่อง</th>
+                                    <th style="text-align: center;">สอบเทียบ</th>
+                                    <th style="text-align: center;">ผล</th>
+                                    <th style="text-align: center;">รายละเอียด</th>
                                     <th style="text-align: center;">เลือก</th>
                                 </tr>
                             </thead>
@@ -51,6 +52,8 @@
 
     </div>
 <jsp:include page="include/include_footer.jsp" flush="true"></jsp:include>
+<!-- Font Awesome Icons -->
+<script src="../font-awesome/js/fontawesome-all.js" type="text/javascript"></script>
 <script>
     $(document).ready(function () {
         availableTable = $('#checkLabTable').DataTable({
@@ -67,27 +70,126 @@
                 {"data": "associateDep.fullName", "target": 1},
                 {"data": "associateMeasure.measureCode", "target": 2, responsivePriority: 1},
                 {"data": "associateMeasure.fullName", "target": 3},
-                {"data": "calibrationAttachStatusOn", "target": 4, render: function (data, type, row, meta) {
-                        return formatDateFromJavaDateJSONEncoded(data);
-                    }},
-                {"data": "associateCalibrationAttachStatusByUser", "target": 5, render: function (data, type, row, meta) {
-                        if (data != null) {
-                            return data.empId + " " + data.userName;
+                {"data": "requestApproverStatus", "target": 4, render: function (data, type, row, meta) {
+                        var userApprover = row.associateRequestApproverByUser;
+                        var message = row.requestComment;
+                        var sender = "<div class='row'>" +
+                                userApprover.userName
+                                + "</div>";
+                        var bootboxFunction = "bootbox.alert({size:\"small\",title:\"ความคิดเห็นคำขอสอบเทียบ\",message:$(this).data(\"reqcomment\")})";
+                        var requestDataComment = "<div class='row'>"
+                                + "<button class=\"btn btn-success\" data-reqcomment='" + message + "' onclick='" + bootboxFunction + "'>"
+                                + "<i class=\"fa fa-comment\"></i>"
+                                + "</button>"
+                                + "</div>";
+                        var showData = "";
+                        if (userApprover != null) {
+                            showData += sender;
+                            if (message != null && message.length > 0) {
+                                showData += requestDataComment;
+                            }
+                        }
+                        return showData;
+                    }, "createdCell": function (td, cellData, rowData, row, col) {
+                        if (rowData.requestApproverOn != null) {
+                            var date = formatDateFromJavaDateJSONEncoded(rowData.requestApproverOn);
+                            var title = " อนุมัติการขอสอบเทียบเมื่อวันที่ " + date;
+                            $(td).prop("title", title);
+                        }
+                    }
+                    , searchable: false},
+                {"data": "receiveStatus", "target": 5, render: function (data, type, row, meta) {
+                        var userApprover = row.associateReceiveStatusByUser;
+                        var condition = row.associateEquipCon.equipConNameTh;
+                        var message = row.conditionComment;
+                        var conditionMessage = condition + " " + message;
+                        var sender = "<div class='row' style='padding:5px'>" +
+                                "<div class='col-sm-12 '>" +
+                                userApprover.userName
+                                + "</div>"
+                                + "</div>";
+                        var bootboxFunction = "bootbox.alert({size:\"small\",title:\"สถานะเครื่อง\",message:$(this).data(\"conditionmessage\")})";
+                        var requestDataComment = "<div class='row'>"
+                                + "<button class=\"btn btn-success\" data-equipconcomment='" + message + "' data-contition='" + condition + "' data-conditionmessage='" + conditionMessage + "' onclick='" + bootboxFunction + "'>"
+                                + '<i class=\"fa fa-comment\"></i>'
+                                + "</button>"
+                                + "</div>";
+                        var showData = "";
+                        if (userApprover != null) {
+                            showData += sender;
+                            if (message != null && message.length > 0) {
+                                showData += requestDataComment;
+                            }
+                        }
+                        return showData;
+                    }, "createdCell": function (td, cellData, rowData, row, col) {
+                        if (rowData.receiveStatusOn != null) {
+                            var date = formatDateFromJavaDateJSONEncoded(rowData.receiveStatusOn);
+                            var title = " รับอุปกรณ์เข้าสอบเทียบวันที่ " + date;
+                            $(td).prop("title", title);
+                        }
+                    }, searchable: false
+                },
+                {
+                    "data": "associateCalibrationAttachStatusByUser", target: "6", render: function (data, type, row, meta) {
+                        return data.userName;
+                    }, "createdCell": function (td, cellData, rowData, row, col) {
+                        if (rowData.calibrationAttachStatusOn != null) {
+                            var date = formatDateFromJavaDateJSONEncoded(rowData.calibrationAttachStatusOn);
+                            var title = " สอบเทียบวันที่ " + date;
+                            $(td).prop("title", title);
                         }
                     }
                 },
-                {"data": "associateStatusCaldoc.statusCaldocName", "target": 6, render: function (data, type, row, meta) {
-                        if (row.comment !== null && row.comment.length > 0) {
-                            return data + "( " + row.comment + " ) ";
+                {"data": "associateStatusCaldoc.statusCaldocName", "target": 7, render: function (data, type, row, meta) {
+                        var message = row.comment;
+                        var colorizationResult = "";
+                        if (data == "ผ่าน") {
+                            colorizationResult = "<span style='color:green;font-weight:bold;font-size:1.5em'>" + data + "</span>";
+                        } else if (data == "ไม่ผ่าน") {
+                            colorizationResult = "<span style='color:red;font-weight:bold;font-size:1.5em'>" + data + "</span>";
                         } else {
+                            colorizationResult = "<span style=font-weight:bold;font-size:1.5em'>" + data + "</span>";
+                        }
+                        var calibrateResult = "<div class='row' style='padding:5px'>" +
+                                "<div class='col-sm-10 '>" +
+                                colorizationResult
+                                + "</div>"
+                                + "</div>";
+
+                        var bootboxFunction = "bootbox.alert({size:\"small\",title:\"หมายเหตุ\",message:$(this).data(\"comment\")})";
+                        var requestDataComment = "<div class='row'>"
+                                + "<button class=\"btn btn-success \" data-comment='" + message + "' onclick='" + bootboxFunction + "'>"
+                                + "<i class=\"fa fa-comment\"></i>"
+                                + "</button>"
+                                + "</div>";
+                        var showData = "";
+                        if (calibrateResult != null && calibrateResult.length > 0) {
+                            showData += calibrateResult;
+                        }
+                        if (message != null && message.length > 0) {
+                            showData += requestDataComment;
+                        }
+                        if (type == "filter") {
                             return data;
                         }
+                        return showData;
 
-                    }},
-                {"data": function (data, type, row, meta) {
-                        return '<a href="../ajaxHelper/previewReportFromInputDataModel.htm?calId=' + data.calId + '" target="_blank" class="btn btn-default">รายละเอียด</a>';
-                    }, "target": 7},
+                    }, "createdCell": function (td, cellData, rowData, row, col) {
+                        if (rowData.calibrationAttachStatusOn != null) {
+                            var date = formatDateFromJavaDateJSONEncoded(rowData.calibrationAttachStatusOn);
+                            var title = " สอบเทียบวันที่ " + date;
+                            $(td).prop("title", title);
+                        }
+                    }
+                },
                 {"data": "calId", "target": 8, render: function (data, type, row, meta) {
+                        var previewData = "<div class='row' style='padding:5px'>" +
+                                '<a href="../ajaxHelper/previewReportFromInputDataModel.htm?calId=' + data + '" target="_blank" class="btn btn-default"><i class=\"fa fa-table fa-3x\"></i></a>'
+                                + "</div>";
+                        return previewData;
+                    }, "searchable": false},
+                {"data": "calId", "target": 9, render: function (data, type, row, meta) {
                         var choice = "<input type='checkbox' name='calId[]' value='" + data + "'>";
                         return choice;
                     }, "searchable": false}
@@ -97,7 +199,7 @@
             "ajax": {
                 "url": "../ajaxHelper/listFinishCalibrationWaitForApproval.htm"
             },
-            "dom": '<"row"f><"scrollBox row"ti>',
+            "dom": '<"row"f><"row"ti>',
             "order": [[0, 'asc']],
             "paging": false
         });
@@ -136,14 +238,14 @@
                 data: {"checkedValues": checkedValues.toString()},
                 success: function (result)
                 {
-                    bootbox.alert({
-                        backdrop: true,
-                        className: "successFont",
-                        message: result,
-                        callback: function () { /* your callback code */
-                        }
-                    });
-                    location.reload();
+//                    bootbox.alert({
+//                        backdrop: true,
+//                        className: "successFont",
+//                        message: result,
+//                        callback: function () { /* your callback code */
+//                        }
+//                    });
+                    availableTable.ajax.reload();
                 }
             });
         });

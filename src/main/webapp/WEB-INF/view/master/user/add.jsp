@@ -78,7 +78,7 @@
                 // autocomplete user
                 $("#empId").autocomplete({
                     delay: 0,
-                    minLength: 3,
+                    minLength: 4,
                     source: function (request, response) {
                         jQuery.get("../user/getUsersFromLdapByWildCardEmpId.htm", {
                             wildcardEmpId: request.term

@@ -77,7 +77,7 @@
                     }},
                 {"data": "associateApproveStatusByUser", "target": 5, render: function (data, type, row, meta) {
                         if (data != null) {
-                            return data.empId + " " + data.userName;
+                            return data.userName;
                         }
                     }
                 },
@@ -96,7 +96,7 @@
             "ajax": {
                 "url": "../ajaxHelper/getLabApporvedDevice.htm"
             },
-            "dom": '<"row"f><"scrollBox row"ti>',
+            "dom": '<"row"f><"row"ti>',
             "order": [[0, 'asc']],
             "paging": false
         });
@@ -129,7 +129,7 @@
                         callback: function () { /* your callback code */
                         }
                     });
-                    location.reload();
+               availableTable.ajax.reload();
                 }
             });
         });

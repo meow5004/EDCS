@@ -27,8 +27,8 @@
                                         <th style="text-align: center;">หน่วยงาน</th>
                                         <th style="text-align: center;">รหัสเครื่องวัด</th>
                                         <th style="text-align: center;">ชื่อเครื่องวัด</th>
-                                        <th style="text-align: center;">วันที่รับเครื่อง</th>
-                                        <th style="text-align: center;">ผู้รับเครื่อง</th>
+                                        <th style="text-align: center;">อนุมัติใบคำขอ</th>
+                                        <th style="text-align: center;">รับอุปกรณ์</th>
                                         <th style="text-align: center;">รายงาน</th>
                                         <th style="text-align: center;">ผลสอบเทียบ</th>
                                         <th style="text-align: center;">เลือก</th>
@@ -49,8 +49,8 @@
                                         <th style="text-align: center;">หน่วยงาน</th>
                                         <th style="text-align: center;">รหัสเครื่องวัด</th>
                                         <th style="text-align: center;">ชื่อเครื่องวัด</th>
-                                        <th style="text-align: center;">วันที่รับเครื่อง</th>
-                                        <th style="text-align: center;">ผู้รับเครื่อง</th>
+                                        <th style="text-align: center;">อนุมัติใบคำขอ</th>
+                                        <th style="text-align: center;">รับอุปกรณ์</th>
                                         <th style="text-align: center;">รายงาน</th>
                                         <th style="text-align: center;">ผลสอบเทียบ</th>
                                         <th style="text-align: center;">เลือก</th>
@@ -94,42 +94,95 @@
                     {"data": "associateDep.fullName", "target": 1},
                     {"data": "associateMeasure.measureCode", "target": 2, responsivePriority: 1},
                     {"data": "associateMeasure.fullName", "target": 3},
-                    {"data": "receiveStatusOn", "target": 4, render: function (data, type, row, meta) {
-                            if (data != null) {
-                                return formatDateFromJavaDateJSONEncoded(data);
+                    {"data": "requestApproverStatus", "target": 4, render: function (data, type, row, meta) {
+                            var userApprover = row.associateRequestApproverByUser;
+                            var message = row.requestComment;
+                            var sender = "<div class='row' style='padding:5px'>" +
+                                    "<div class='col-sm-12 '>" +
+                                    userApprover.userName
+                                    + "</div>"
+                                    + "</div>";
+                            var bootboxFunction = "bootbox.alert({size:\"small\",title:\"หมายเหตุ\",message:$(this).data(\"comment\")})";
+                            var requestDataComment = "<div class='row'>"
+                                    + "<button class=\"btn btn-success\" data-comment='" + message + "' onclick='" + bootboxFunction + "'>"
+                                    + '<i class=\"fa fa-comment\"></i>'
+                                    + "</button>"
+                                    + "</div>";
+                            var showData = "";
+                            if (userApprover != null) {
+                                showData += sender;
+                                if (message != null && message.length > 0) {
+                                    showData += requestDataComment;
+                                }
                             }
-                        }},
-                    {"data": "associateReceiveStatusByUser", "target": 5, render: function (data, type, row, meta) {
-                            if (data != null) {
-                                return data.empId + " " + data.userName;
+                            return showData;
+                        }, "createdCell": function (td, cellData, rowData, row, col) {
+                            if (rowData.requestApproverOn != null) {
+                                var date = formatDateFromJavaDateJSONEncoded(rowData.requestApproverOn);
+                                var title = " อนุมัติการขอสอบเทียบเมื่อวันที่ " + date;
+                                $(td).prop("title", title);
                             }
                         }
+                        , searchable: false},
+                    {"data": "receiveStatus", "target": 5, render: function (data, type, row, meta) {
+                            var userApprover = row.associateReceiveStatusByUser;
+                            var condition = row.associateEquipCon.equipConNameTh;
+                            var message = row.conditionComment;
+                            var conditionMessage = condition + " " + message;
+                            var sender = "<div class='row' style='padding:5px'>" +
+                                    "<div class='col-sm-12 '>" +
+                                    userApprover.userName
+                                    + "</div>"
+                                    + "</div>";
+                            var bootboxFunction = "bootbox.alert({size:\"small\",title:\"สถานะเครื่อง\",message:$(this).data(\"conditionmessage\")})";
+                            var requestDataComment = "<div class='row'>"
+                                    + "<button class=\"btn btn-success\" data-comment='" + message + "' data-contition='" + condition + "' data-conditionmessage='" + conditionMessage + "' onclick='" + bootboxFunction + "'>"
+                                    + '<i class=\"fa fa-comment\"></i>'
+                                    + "</button>"
+                                    + "</div>";
+                            var showData = "";
+                            if (userApprover != null) {
+                                showData += sender;
+                                if (message != null && message.length > 0) {
+                                    showData += requestDataComment;
+                                }
+                            }
+                            return showData;
+
+                        }, "createdCell": function (td, cellData, rowData, row, col) {
+                            if (rowData.receiveStatusOn != null) {
+                                var date = formatDateFromJavaDateJSONEncoded(rowData.receiveStatusOn);
+                                var title = " รับอุปกรณ์เข้าสอบเทียบวันที่ " + date;
+                                $(td).prop("title", title);
+                            }
+                        }, searchable: false
                     },
                     {"data": "calibrationStatus", "target": 6, render: function (data, type, row, meta) {
                             if (data == 1) {
-                                return "<a href='createDoc.htm?calId=" + row.calId + "'> <img src='../images/icons/BallIconCheck.png' alt='' style='width: 40px; height: 40px;'/>";
+//                                return "<a href='createDoc.htm?calId=" + row.calId + "'> <img src='../images/icons/BallIconCheck.png' alt='' style='width: 40px; height: 40px;'/>";
+                                return "<a class=\"text-success\" href='createDoc.htm?calId=" + row.calId + "'> <i class=\"fa fa-file fa-3x bg-success\"></i>";
                             } else {
-                                return "<a href='createDoc.htm?calId=" + row.calId + "'> <img src='../images/icons/BallIconCancel.png'  alt='' style='width: 40px; height: 40px;'/>";
+                                return "<a  class=\"text-danger\" href='createDoc.htm?calId=" + row.calId + "'> <i class=\"fa fa-file fa-3x bg-alert\"></i>";
+//                                return "<a href='createDoc.htm?calId=" + row.calId + "'> <img src='../images/icons/BallIconCancel.png'  alt='' style='width: 40px; height: 40px;'/>";
                             }
                         }},
                     {"data": "calibrationAttachStatus", "target": 7, render: function (data, type, row, meta) {
                             if (data == 1) {
-                                return "<a href='createDetail.htm?calId=" + row.calId + "'> <img src='../images/icons/BallIconCheck.png' alt='' style='width: 40px; height: 40px;'/>";
+                                return "<a class=\"text-success\" href='createDetail.htm?calId=" + row.calId + "'> <i class=\"fa fa-table fa-3x bg-success\"></i>";
                             } else {
                                 if (row.calibrationStatus == 1) {
-                                    return "<a href='createDetail.htm?calId=" + row.calId + "'> <img src='../images/icons/BallIconCancel.png' alt='' style='width: 40px; height: 40px;'/>";
+                                    return "<a class=\"text-danger\" href='createDetail.htm?calId=" + row.calId + "'><i class=\"fa fa-table fa-3x bg-alert\"></i>";
                                 } else {
-//                                    return "<img src='../images/icons/BallIconCancel.png' alt='' style='width: 40px; height: 40px;'/>";
                                     return "";
                                 }
 
                             }
                         }, "createdCell": function (td, cellData, rowData, row, col) {
-                            if (rowData.calibrationStatus != 1) {
-                                $(td).css("backgroundColor", "gray");
-                            }
+//                            if (rowData.calibrationStatus != 1) {
+//                                $(td).css("backgroundColor", "gray");
+//                            }
                         }
-                    }, {"data": "calId", "target": 7, render: function (data, type, row, meta) {
+                    }, {"data": "calId", "target": 8, render: function (data, type, row, meta) {
                             var choice = "<img src='../images/icons/BallIconCancel.png' alt='' style='width: 40px; height: 40px;'/>";
                             if (row.calibrationAttachStatus == 1 && row.calibrationStatus == 1) {
                                 choice = "<input type='checkbox' name='calId[]' value='" + data + "'>";
@@ -138,9 +191,9 @@
                             }
                             return choice
                         }, "createdCell": function (td, cellData, rowData, row, col) {
-                            if (rowData.calibrationAttachStatus != 1) {
-                                $(td).css("backgroundColor", "gray");
-                            }
+//                            if (rowData.calibrationAttachStatus != 1) {
+//                                $(td).css("backgroundColor", "gray");
+//                            }
                         }
                     }
                 ],
@@ -152,14 +205,14 @@
                 "ajax": {
                     "url": "../ajaxHelper/listNonFinishCalibration.htm",
                 },
-                "dom": '<"row"f><"scrollBox row"ti>',
+                "dom": '<"row"f><"row"ti>',
                 "order": [[0, 'asc']],
                 "paging": false
             });
             availableTable.on('search.dt', function () {
                 var allCheckboxes = availableTable.$("input[type='checkbox'][name='calId[]']", {"filter": "applied"});
                 var checked = availableTable.$("input[type='checkbox'][name='calId[]']:checked", {"filter": "applied"});
-                if (allCheckboxes.length > checked.length||allCheckboxes.length <= 0) {
+                if (allCheckboxes.length > checked.length || allCheckboxes.length <= 0) {
                     $("input[id='waitApproveCalSelectAll'][type='checkbox']").prop('checked', false);
                 } else {
                     $("input[id='waitApproveCalSelectAll'][type='checkbox']").prop('checked', true);
@@ -180,31 +233,89 @@
                     {"data": "depId", "target": 1},
                     {"data": "associateMeasure.measureCode", "target": 2, responsivePriority: 1},
                     {"data": "associateMeasure.fullName", "target": 3},
-                    {"data": "receiveStatusOn", "target": 4, render: function (data, type, row, meta) {
-                            if (data != null) {
-                                return formatDateFromJavaDateJSONEncoded(data);
+                    {"data": "requestApproverStatus", "target": 4, render: function (data, type, row, meta) {
+                            var userApprover = row.associateRequestApproverByUser;
+                            var message = row.requestComment;
+                            var sender = "<div class='row' style='padding:5px'>" +
+                                    "<div class='col-sm-10 '>" +
+                                    userApprover.userName
+                                    + "</div>"
+                                    + "</div>";
+                            var bootboxFunction = "bootbox.alert({size:\"small\",title:\"หมายเหตุ\",message:$(this).data(\"comment\")})";
+                            var requestDataComment = "<div class='row'>"
+                                    + "<button class=\"btn btn-success\" data-comment='" + message + "' onclick='" + bootboxFunction + "'>"
+                                    + '<i class=\"fa fa-comment\"></i>'
+                                    + "</button>"
+                                    + "</div>";
+                            var showData = "";
+                            if (userApprover != null) {
+                                showData += sender;
+                                if (message != null && message.length > 0) {
+                                    showData += requestDataComment;
+                                }
                             }
-                        }},
-                    {"data": "associateReceiveStatusByUser", "target": 5, render: function (data, type, row, meta) {
-                            if (data != null) {
-                                return data.empId + " " + data.userName;
-                            }
+                            return showData;
+                        }, "createdCell": function (td, cellData, rowData, row, col) {
+                            var date = formatDateFromJavaDateJSONEncoded(rowData.requestApproverOn);
+                            var title = " อนุมัติการขอสอบเทียบเมื่อวันที่ " + date;
+                            $(td).prop("title", title);
                         }
+                        , searchable: false},
+                    {"data": "receiveStatus", "target": 5, render: function (data, type, row, meta) {
+                            var condition = row.associateEquipCon.equipConNameTh;
+                            var userApprover = row.associateReceiveStatusByUser;
+                            var message = row.conditionComment;
+                            var conditionMessage = condition + " " + message;
+                            var sender = "<div class='row' style='padding:5px'>" +
+                                    "<div class='col-sm-10 '>" +
+                                    userApprover.userName
+                                    + "</div>"
+                                    + "</div>";
+                            var bootboxFunction = "bootbox.alert({size:\"small\",title:\"สถานะเครื่อง\",message:$(this).data(\"conditionmessage\"))})";
+                            var requestDataComment = "<div class='row'>"
+                                    + "<button class=\"btn btn-success\" data-comment='" + message + "' data-contition='" + condition + "' data-conditionmessage='" + conditionMessage + "' onclick='" + bootboxFunction + "'>"
+                                    + '<i class=\"fa fa-comment\"></i>'
+                                    + "</button>"
+                                    + "</div>";
+                            var showData = "";
+                            if (userApprover != null) {
+                                showData += sender;
+                                if (message != null && message.length > 0) {
+                                    showData += requestDataComment;
+                                }
+                            }
+                            return showData;
+
+                        }, "createdCell": function (td, cellData, rowData, row, col) {
+                            var date = formatDateFromJavaDateJSONEncoded(rowData.receiveStatusOn);
+                            var title = " รับอุปกรณ์เข้าสอบเทียบวันที่ " + date;
+                            $(td).prop("title", title);
+                        }, searchable: false
                     },
                     {"data": "calibrationStatus", "target": 6, render: function (data, type, row, meta) {
                             if (data == 1) {
-                                return "<a href='createDoc.htm?calId=" + row.calId + "'> <img src='../images/icons/BallIconCheck.png' alt='' style='width: 40px; height: 40px;'/>";
+//                                return "<a href='createDoc.htm?calId=" + row.calId + "'> <img src='../images/icons/BallIconCheck.png' alt='' style='width: 40px; height: 40px;'/>";
+                                return "<a class=\"text-success\" href='createDoc.htm?calId=" + row.calId + "'> <i class=\"fa fa-file fa-3x bg-success\"></i>";
                             } else {
-                                return "<a href='createDoc.htm?calId=" + row.calId + "'> <img src='../images/icons/BallIconCancel.png'  alt='' style='width: 40px; height: 40px;'/>";
+                                return "<a  class=\"text-danger\" href='createDoc.htm?calId=" + row.calId + "'> <i class=\"fa fa-file fa-3x bg-alert\"></i>";
+//                                return "<a href='createDoc.htm?calId=" + row.calId + "'> <img src='../images/icons/BallIconCancel.png'  alt='' style='width: 40px; height: 40px;'/>";
                             }
-                        }, "searchable": false},
+                        }},
                     {"data": "calibrationAttachStatus", "target": 7, render: function (data, type, row, meta) {
                             if (data == 1) {
-                                return "<a href='createDetail.htm?calId=" + row.calId + "'> <img src='../images/icons/BallIconCheck.png' alt='' style='width: 40px; height: 40px;'/>";
+                                return "<a class=\"text-success\" href='createDetail.htm?calId=" + row.calId + "'> <i class=\"fa fa-table fa-3x bg-success\"></i>";
                             } else {
-                                return "<a href='createDetail.htm?calId=" + row.calId + "'> <img src='../images/icons/BallIconCancel.png' alt='' style='width: 40px; height: 40px;'/>";
+                                if (row.calibrationStatus == 1) {
+                                    return "<a class=\"text-danger\" href='createDetail.htm?calId=" + row.calId + "'><i class=\"fa fa-table fa-3x bg-alert\"></i>";
+                                } else {
+                                    return "";
+                                }
+
                             }
-                        }, "searchable": false},
+                        }, "createdCell": function (td, cellData, rowData, row, col) {
+
+                        }
+                    },
                     {"data": "calId", "target": 8, render: function (data, type, row, meta) {
                             var choice = "<input type='checkbox' name='calId[]' value='" + data + "'>";
                             return choice
@@ -218,13 +329,13 @@
                 "ajax": {
                     "url": "../ajaxHelper/listDisapprovedCalibration.htm"
                 },
-                "dom": '<"row"f><"scrollBox row"ti>',
+                "dom": '<"row"f><"row"ti>',
                 "order": [[0, 'asc']],
                 "paging": false,
                 fnInitComplete: function () {
                     if ($(this).find('.dataTables_empty').length > 0) {
                         $(this).parent().parent().hide();
-                          $("input[id='disApproveCalSelectAll'][type='checkbox']").parent().hide();
+                        $("input[id='disApproveCalSelectAll'][type='checkbox']").parent().hide();
                     }
                 }
             });
@@ -254,14 +365,15 @@
                     data: {"checkedValues": checkedValues.toString()},
                     success: function (result)
                     {
-                        bootbox.alert({
-                            backdrop: true,
-                            className: "dangerFont",
-                            message: result,
-                            callback: function () { /* your callback code */
-                            }
-                        });
-                        location.reload();
+//                        bootbox.alert({
+//                            backdrop: true,
+//                            className: "dangerFont",
+//                            message: result,
+//                            callback: function () { /* your callback code */
+//                            }
+//                        });
+                        availableTable.ajax.reload();
+                        disapprovedTable.ajax.reload();
                     }
                 });
             });

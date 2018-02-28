@@ -308,7 +308,7 @@ public class EdcsCalibrationDAOImpI implements EdcsCalibrationDAO {
     @Override
     public void returnedDeviceCheck(calibrationDeviceCheckModel checkedModel) {
         String sql = "UPDATE EDCS_CALIBRATION SET ,EQUIP_CON_ID=?,CONDITION_COMMENT=?,RETURN_STATUS_BY=?,RETURN_STATUS_ON=(getdate()),RETURN_STATUS=1 WHERE CAL_ID=?";
-        int result = db.update(sql, checkedModel.getEquipConId(), checkedModel.getConditionComment(), checkedModel.getInspector());
+        int result = db.update(sql, checkedModel.getEquipConId(), checkedModel.getConditionComment(), checkedModel.getInspector(),checkedModel.getCalId());
     }
 
     @Override

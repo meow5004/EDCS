@@ -288,13 +288,19 @@
                                 <br>
                                 <div class="row">
                                     <div class="col-sm-2">ผลสรุป</div>
-                                    <div class="col-sm-8"><form:radiobuttons  path="statusCaldocId" items="${calDocConditions}" itemLabel="statusCaldocName" itemValue="statusCaldocId" required="required" />
-                                        <span>    <form:input path="comment" /></span>
+                                    <div class="col-sm-1">
+                                        <form:select  path="statusCaldocId" items="${calDocConditions}" itemLabel="statusCaldocName" itemValue="statusCaldocId" required="required" />   
+                                    </div>
+                                    <div class="col-sm-1 no-padding" >
+                                        เนื่องจาก   
+                                    </div>
+                                    <div class="col-sm-4 no-padding" >
+                                        <form:textarea style="width:100%" path="comment" />
                                     </div>
                                 </div>
                                 <br/>
                                 <div class="row">
-                                    <div class="col-sm-2">ปีที่ใช้งานผลสอบเทียบ</div>
+                                    <div class="col-sm-2">อายุผลสอบเทียบ</div>
                                     <div class="col-sm-4">
                                         <select name="calAgeId">
                                             <c:forEach var="calage" items="${calAges}" >
@@ -315,7 +321,7 @@
                     <div class="row">
 
                         <div class="col-sm-4">
-                            <input type="submit" value="บันทึกผลการสอบเทียบ">
+                            <input type="submit" class="btn btn-primary" value="บันทึกผลการสอบเทียบ">
                         </div>
                         <div class="col-sm-6">
                             <button onclick="window.history.back()">กลับไปหน้าที่แล้ว</button>
@@ -340,10 +346,10 @@
             }
         });
         //end
-        $('input[id^="edcsCalibrationAttachHeadList"][id$="calDate"],input[id*="dueDate"]').datepicker({
-            dateFormat: 'dd/mm/yy',
-            changeYear: true,
-            changeMonth: true});
+//        $('input[id^="edcsCalibrationAttachHeadList"][id$="calDate"],input[id*="dueDate"]').datepicker({
+//            dateFormat: 'dd/mm/yy',
+//            changeYear: true,
+//            changeMonth: true});
 
 //adjust result table colspan
         $(".summaryTable .spanDependOnInputTable").attr("colspan", $("table.inputTable ").length);
@@ -494,7 +500,7 @@
         var newClassName = $(this).attr("class");
         if (charCode == 37) {
             currentCol--;
-             if (currentCol < 1) {
+            if (currentCol < 1) {
                 currentCol = maxCol;
             }
             newClassName = className.replace(/col-(.*?)-inputCell/, "col-" + currentCol + "-inputCell");
@@ -508,7 +514,7 @@
         }
         if (charCode == 39) {
             currentCol++;
-             if (currentCol > maxCol) {
+            if (currentCol > maxCol) {
                 currentCol = 1;
             }
             newClassName = className.replace(/col-(.*?)-inputCell/, "col-" + currentCol + "-inputCell");

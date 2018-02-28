@@ -18,20 +18,8 @@
             </div><!-- /.box-header -->
             <div class="box-body container">
                 <div class="row text-center" style="border-right: 1px solid #f4f4f4">
-                    <div class="col-sm-4 col-sm-offset-3" style="text-align: left;font-size: 1.5em;border: 1px solid black">
-                        เลือกแผนก 
-                        <select id="calibDepsList">
-                            <c:forEach items="${deps}" var = "department">
-                                <c:choose>
-                                    <c:when test="${department.depId == user.depId}">
-                                        <option value="${department.depId}" selected>${department.fullName}</option>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <option value="${department.depId}">${department.fullName}</option>
-                                    </c:otherwise>
-                                </c:choose>
-                            </c:forEach>
-                        </select>
+                    <div class="col-sm-4 col-sm-offset-3" style="text-align: left;font-size: 1.5em;margin:-20px;">
+
 
                     </div>
                 </div>
@@ -40,13 +28,31 @@
                         <table id="checkDocTable"  class="dataTable hover cell-border nowrap compact" style="width: 100%">
                             <thead>
                                 <tr>
+                                    <th colspan="8">
+                                        แผนก 
+                                        <select id="calibDepsList" style="color: black">
+                                            <c:forEach items="${deps}" var = "department">
+                                                <c:choose>
+                                                    <c:when test="${department.depId == user.depId}">
+                                                        <option value="${department.depId}" selected>${department.fullName}</option>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <option value="${department.depId}">${department.fullName}</option>
+                                                    </c:otherwise>
+                                                </c:choose>
+                                            </c:forEach>
+                                        </select>
+                                    </th>
+                                </tr>
+                                <tr>
                                     <th>หน่วยงาน</th>
                                     <th>รหัสเครื่องวัด</th>
                                     <th>ชื่อเครื่องวัด</th>
                                     <th>สอบเทียบล่าสุด</th>
                                     <th>วันหมดอายุสอบเทียบ</th>
                                     <th>ผู้แจ้ง</th>
-                                    <th>เลือกสภาพอุปกรณ์</th>
+                                    <th>หมายเหตุ</th>
+                                    <th>เลือก</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -59,7 +65,7 @@
                 <div class="row">
                     <div class="col-xs-12 text-center" style="border-right: 1px solid #f4f4f4">
                         <div class="col-sm-6" style="font-size:1.5em;text-align: right">
-                            ผู้อนุมัติ
+                            เลือกผู้อนุมัติ
                             <select id="approverList">
                                 <option value="" selected></option>
                                 <c:forEach items="${approver}" var = "approverUser">
@@ -79,6 +85,8 @@
 
 </div>
 <jsp:include page="include/include_footer.jsp" flush="true"></jsp:include>
+<!-- Font Awesome Icons -->
+<script src="../font-awesome/js/fontawesome-all.js" type="text/javascript"></script>
 <script>
     $(document).ready(function () {
         availableTable = $('#checkDocTable').DataTable({
@@ -86,7 +94,7 @@
                 {responsivePriority: 1, targets: 0},
                 {responsivePriority: 2, targets: -1}
             ],
-            "dom": '<"row"f><"scrollBox row"ti>',
+            "dom": '<"row"f><"row"ti>',
             "columns": [
                 {"data": "associateDep.fullName", "target": 0},
                 {"data": "associateMeasure.measureCode", "target": 1, responsivePriority: 1},
@@ -100,41 +108,43 @@
                         }
                     }},
                 {"data": "dueDate", "target": 4, render: function (data, type, row, meta) {
-
                         if (data != null) {
-                            var time = moment.utc(formatDateFromJavaDateJSONEncoded(data), "DD/MM/YYYY");
-                            var dueDay = time.get("date") - moment().get("date");
-                            var formatted = moment.utc(data).add(1900, 'y').format("DD/MM/YYYY");
-                            if (dueDay == 0) {
-                                return formatted + "<span style='color:red'>( หมดอายุวันนี้ )</span>";
-                            } else if (dueDay < 0) {
-                                return formatted + "<span style='color:red;font-weight:bolder'>( หมดอายุไปแล้ว " + Math.abs(dueDay) + " วัน )</span>";
-                            } else {
-                                return formatted + "( อีก" + Math.abs(dueDay) + " วัน หมดอายุ )";
-                            }
-
+                            var date = formatDateFromJavaDateJSONEncoded(data);
+                            var end = moment(date, "DD/MM/YY");
+                            return date + "<br/> (" + end.fromNow() + ")";
                         } else {
-                            return "<span style='font-weight:bolder;color:red'>ไม่เคยมีการสอบเทียบ</span>";
+                            return "-";
+                        }
+                    },
+                    "createdCell": function (td, cellData, rowData, row, col) {
+                        if (cellData != null) {
+                            var date = formatDateFromJavaDateJSONEncoded(cellData);
+                            var end = moment(date, "DD/MM/YY");
+                            if (end.isBefore(moment().add('days', 30))) {
+                                $(td).css("color", "red");
+                            }
+                            if (end.isBefore()) {
+                                $(td).css("font-weight", "bolder");
+                            }
                         }
                     }},
-                {"data": "requestBy", "target": 5},
-                {"target": 6, responsivePriority: 1, "data": function (data, type, row, meta) {
-                        var choice = "<div class='container-fluid'>" +
-                                "<div class='row'>"
-                                + "<div class='col-sm-4 no-padding'>"
-                                + "<input style='margin:0px' type='checkbox' id='requestRow-" + meta.row + "' name='requestMeasureId[]' data-row='" + meta.row + "'data-comment='' value='" + data.measureId + "'>"
-                                + "</div>"
-                                + "<div class='col-sm-8'>"
-                                + "<button class='btn' id='comment-" + meta.row + "' data-row='" + meta.row + "'>"
-                                + "note"
-                                + "</button>"
-                                + "</div>";
-                        +"</div>";
-                        +"</div>";
+                {"data": "requestBy", "target": 5, render: function (data, type, row, meta) {
+                        if (data != null && data.length > 0) {
+                            return data;
+                        } else {
+                            return "<span style='font-weight:bolder;color:red'>&#x2014;</span>";
+                        }
+                    }
+                },
+                {"target": 6, "data": function (data, type, row, meta) {
+                        var choice = "<button class='btn' id='reqcomment-" + meta.row + "' data-row='" + meta.row + "'>"
+                                + '<i class="fas fa-pencil-alt" data-fa-transform="shrink-10 up-.5" data-fa-mask="fas fa-comment fa-2x" style="font-size:2em"></i>'
+                                + "</button>";
                         return choice;
-                    }, "createdCell": function (td, cellData, rowData, row, col) {
-                        $(td).find("select").trigger("change");
-                        $(td).css("white-space", "normal");
+                    }, "searchable": false},
+                {"target": 7, responsivePriority: 1, "data": function (data, type, row, meta) {
+                        var choice = "<input style='margin:0px' type='checkbox' id='requestRow-" + meta.row + "' name='requestMeasureId[]' data-row='" + meta.row + "'data-reqcomment='' value='" + data.measureId + "'>"
+                        return choice;
                     }, "searchable": false}
             ],
             "createdRow": function (row, data, index) {
@@ -183,9 +193,8 @@
                         var index = i;
                         var calibrationRequestModel = {};
                         calibrationRequestModel["measureId"] = $(this).val();
-                        calibrationRequestModel["requestComment"] = $(this).data("comment");
+                        calibrationRequestModel["requestComment"] = $(this).data("reqcomment");
                         calibrationRequestModel["approverId"] = approver;
-
                         calibrationRequestModels.push(calibrationRequestModel);
                     });
                     reqModels = JSON.stringify({
@@ -201,14 +210,14 @@
                         mimeType: 'application/json',
                         success: function (result)
                         {
-                            bootbox.alert({
-                                backdrop: true,
-                                className: "dangerFont",
-                                message: result,
-                                callback: function () { /* your callback code */
-                                }
-                            });
-                            location.reload();
+//                            bootbox.alert({
+//                                backdrop: true,
+//                                className: "dangerFont",
+//                                message: result,
+//                                callback: function () { /* your callback code */
+//                                }
+//                            });
+                            $("#calibDepsList").trigger("change");
                         }
                     });
                 } else {
@@ -218,8 +227,6 @@
                 bootbox.alert("<h3 style='color:red'>-กรุณาเลือกอุปกรณ์ที่ต้องการส่งสอบเทียบ</h3>");
             }
         });
-
-
     });
     $("input[name='selectAllMeasureId'][type='checkbox']").on("click", function (event) {
         if (this.checked) {
@@ -233,8 +240,7 @@
             });
         }
     });
-
-    //approval cond comment section
+    //approval cond reqcomment section
     $("#calibDepsList").on("change", function () {
         var url = "../ajaxHelper/getNearDueAndNewCalibration.htm?dayDue=30&&depId=" + $(this).val();
         availableTable.ajax.url(url).load();
@@ -254,28 +260,24 @@
                 $("#approverList").html(options);
             }
         });
-
-
     });
-
-
-    $(document).on("click", "button[id^=comment-]", function () {
+    $(document).on("click", "button[id^=reqcomment-]", function () {
 
         var button = $(this);
         var row = $(this).data("row");
         var associateCheckbox = "input[type='checkbox'][id*='requestRow'][data-row='" + row + "']";
-        var oldComment = $(associateCheckbox).data("comment");
+        var oldComment = $(associateCheckbox).data("reqcomment");
         bootbox.prompt({
             size: "small",
             title: "ใส่คอมเมนท์",
             value: oldComment,
             inputType: "textarea",
             callback: function (result) { /* result = String containing user input if OK clicked or null if Cancel clicked */
-                var comment = result;
-                if (comment != null) {
-                    $(associateCheckbox).data("comment", comment);
-                    $(associateCheckbox).attr("data-comment", comment);
-                    if (comment.length > 0) {
+                var reqcomment = result;
+                if (reqcomment != null) {
+                    $(associateCheckbox).data("reqcomment", reqcomment);
+                    $(associateCheckbox).attr("data-reqcomment", reqcomment);
+                    if (reqcomment.length > 0) {
                         $(button).addClass("btn-success");
                     } else {
                         $(button).removeClass("btn-success");

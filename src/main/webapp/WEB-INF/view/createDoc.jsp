@@ -84,10 +84,13 @@
                                     </div>
 
                                     <div class="col-sm-4"> 
-                                        <form:radiobuttons  path="equipConId" items="${equipConditions}" itemLabel="fullName" itemValue="equipConId" required="required" />
+                                        <form:select  path="equipConId" items="${equipConditions}" itemLabel="fullName" itemValue="equipConId" required="required" style="width:100%" />
                                     </div>
-                                    <div class="col-sm-4 no-padding"> 
-                                        <form:input type="text" path="requestComment"/>
+                                    <div class="col-sm-2"> 
+                                        เนื่องจาก
+                                    </div>
+                                    <div class="col-sm-4 "> 
+                                        <form:textarea  path="requestComment" style="width:100%" />
                                     </div>
                                 </div>
                                 <div class="row">
@@ -100,12 +103,10 @@
                                         </b>
                                     </div>
                                     <div class="col-sm-4"> 
-                                        <span>
-                                            <form:radiobutton path="calibrationLocation" value="inside" required="required"/>สถานที่ภายใน
-                                        </span>
-                                        <span>                                   
-                                            <form:radiobutton path="calibrationLocation" value="outside" required="required"/>สถานที่ภายนอก
-                                        </span>
+                                        <form:select path="calibrationLocation" required="required" style="width:100%">
+                                            <form:option  value="inside" label="สถานที่ภายใน" />           
+                                            <form:option  value="outside" label="สถานที่ภายนอก" /> 
+                                        </form:select>
                                     </div>
                                 </div>
                                 <div class="col-sm-12">
@@ -230,7 +231,7 @@
                                         </b>
                                     </div>
                                     <div class="col-md-4">
-                                        <input type="text" value="${calibrator.userName}" style="width: 80%" disabled>
+                                        <input type="text" value="${calibrator.userName}" style="width: 100%" disabled>
                                     </div>
                                     <form:hidden path="calibratorBy"/>
                                 </div>
@@ -241,8 +242,8 @@
                                             ผู้อนุมัติ
                                         </b>
                                     </div>
-                                    <div class="col-md-6">
-                                        <form:select path="approveStatusBy" required="required"  data-width="100%">
+                                    <div class="col-md-4">
+                                        <form:select path="approveStatusBy" required="required"  data-width="100%"  style="width: 100%">
                                             <form:option value="" label="" />
                                             <form:options items="${approvers}" itemLabel="userName" itemValue="empId"></form:options>
                                         </form:select>

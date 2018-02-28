@@ -26,8 +26,9 @@
                                     <th style="text-align: center;">หน่วยงาน</th>
                                     <th style="text-align: center;">รหัสเครื่องวัด</th>
                                     <th style="text-align: center;">ชื่อเครื่องวัด</th>
-                                    <th style="text-align: center;">อนุมัติการแจ้งสอบเทียบวันที่</th>
-                                    <th style="text-align: center;">ผู้อนุมัติการแจ้งสอบเทียบ</th>
+                                    <th style="text-align: center;">อนุมัติแจ้งวันที่</th>
+                                    <th style="text-align: center;">ผู้อนุมัติแจ้ง</th>
+                                    <th style="text-align: center;">สถานะเครื่อง</th>
                                     <th style="text-align: center;">เลือก</th>
                                 </tr>
                             </thead>
@@ -53,6 +54,8 @@
 
 </div>
 <jsp:include page="include/include_footer.jsp" flush="true"></jsp:include>
+    <!-- Font Awesome Icons -->
+    <script src="../font-awesome/js/fontawesome-all.js" type="text/javascript"></script>
     <script>
         $(document).ready(function () {
             availableTable = $('#receiveDeviceTable').DataTable({
@@ -75,33 +78,48 @@
                                 return formatDateFromJavaDateJSONEncoded(data);
                             }
                         }},
-                    {"data": "associateRequestApproverByUser", "target": 6, render: function (data, type, row, meta) {
+                    {"data": "associateRequestApproverByUser", "target": 5, render: function (data, type, row, meta) {
+                            var message = row.requestComment;
+                            var sender = "<div class='row'>" +
+                                    data.userName
+                                    + "</div>";
+                            var bootboxFunction = "bootbox.alert({size:\"small\",title:\"ความคิดเห็นคำขอสอบเทียบ\",message:$(this).data(\"reqcomment\")})";
+                            var requestDataComment = "<div class='row'>"
+                                    + "<button class=\"btn btn-success\" data-reqcomment='" + message + "' onclick='" + bootboxFunction + "'>"
+                                    + '<i class=\"fa fa-comment\"></i>'
+                                    + "</button>"
+                                    + "</div>";
+                            var showData = "";
                             if (data != null) {
-                                return data.empId + " " + data.userName;
+                                showData += sender;
+                                if (message != null && message.length > 0) {
+                                    showData += requestDataComment;
+                                }
                             }
-                        }},
-                    {"data": function (data, type, row, meta) {
-                            var choice = "<div class='container-fluid'>" +
-                                    "<div class='row'>"
-                                    + "<div class='col-sm-2 no-padding'>"
-                                    + "<input type='checkbox' id='receivceRow-" + meta.row + "' name='receivceCalId[]' data-row='" + meta.row + "'data-equipconcomment='" + data.conditionComment + "' data-equipconId='" + data.equipConId + "' value='" + data.calId + "'>"
-                                    + "</div>"
-                                    + "<div class='col-sm-6'>"
+                            return showData;
+                        }, "searchable": false
+                    },
+                    {target:6,"data": function (data, type, row, meta) {
+                            var choice = "<div class='container-fluid'>"
+                                    + "<div class='row'>"
                                     + "<select id='condition-" + meta.row + "' data-row='" + meta.row + "'>"
                                     + "<c:forEach items='${conditions}' var = 'condition'>"
                                     + "<option value='${condition.equipConId}'>${condition.equipConNameTh}</option>"
                                     + "</c:forEach>"
                                     + "</select>"
                                     + "</div>"
-                                    + "<div class='col-sm-2'>"
+                                    + "<div class='row'>"
                                     + "<button class='btn' id='equipconcomment-" + meta.row + "' data-row='" + meta.row + "'>"
-                                    + "note"
+                                    + '<i class="fas fa-pencil-alt" data-fa-transform="shrink-10 up-.5" data-fa-mask="fas fa-comment fa-2x" style="font-size:2em"></i>'
                                     + "</button>"
-                                    + "</div>"
                                     + "</div>"
                                     + "</div>";
                             return choice;
                         }, "searchable": false
+                    }, {
+                        data: function (data, type, row, meta) {
+                            return  "<input type='checkbox' id='receivceRow-" + meta.row + "' name='receivceCalId[]' data-row='" + meta.row + "'data-equipconcomment='" + data.conditionComment + "' data-equipconId='" + data.equipConId + "' value='" + data.calId + "'>";
+                        }
                     }
                 ],
                 "createdRow": function (row, data, index) {
@@ -109,7 +127,7 @@
                 "ajax": {
                     "url": "../ajaxHelper/getApprovedDevice.htm"
                 },
-                "dom": '<"row"f><"scrollBox row"ti>',
+                "dom": '<"row"f><"row"ti>',
                 "order": [[0, 'asc']],
                 "paging": false
             });
@@ -147,7 +165,7 @@
                     mimeType: 'application/json',
                     success: function (result)
                     {
-                        location.reload();
+                        availableTable.ajax.reload();
                     }
                 });
 
@@ -199,6 +217,7 @@
             });
             $("select[id^=condition-]").trigger("change");
         });
+
 
 </script>
 
