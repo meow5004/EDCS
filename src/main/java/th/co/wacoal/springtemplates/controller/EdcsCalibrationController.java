@@ -29,7 +29,7 @@ import th.co.wacoal.springtemplates.dao.EdcsCalibrationAttachHeadDAO;
 import th.co.wacoal.springtemplates.dao.EdcsCalibrationAttachItemDAO;
 import th.co.wacoal.springtemplates.dao.EdcsCalibrationDAO;
 import th.co.wacoal.springtemplates.dao.impl.EdcsCalibrationAttachHeadDAOImpI;
-import th.co.wacoal.springtemplates.dao.impl.EdcsCalibrationAttachItemDAOImpl;
+import th.co.wacoal.springtemplates.dao.impl.EdcsCalibrationAttachitemDAOImpl;
 import th.co.wacoal.springtemplates.dao.impl.EdcsCalibrationDAOImpI;
 import th.co.wacoal.springtemplates.db.Database;
 import th.co.wacoal.springtemplates.domain.EdcsCalibration;
@@ -122,7 +122,7 @@ public class EdcsCalibrationController {
         Database db = new Database("sqlServer");
         try {
             EdcsCalibrationAttachHeadDAO headDAO = new EdcsCalibrationAttachHeadDAOImpI(db);
-            EdcsCalibrationAttachItemDAO itemDAO = new EdcsCalibrationAttachItemDAOImpl(db);
+            EdcsCalibrationAttachItemDAO itemDAO = new EdcsCalibrationAttachitemDAOImpl(db);
             EdcsCalibrationDAO calibDAO = new EdcsCalibrationDAOImpI(db);
             EdcsCalibration calib = calibrationOfRequestedItem;
             List<EdcsCalibrationAttachHead> associateHeadAttactment = calib.getEdcsCalibrationAttachHeadList();

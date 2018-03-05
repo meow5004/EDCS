@@ -15,6 +15,9 @@ import java.util.List;
 import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import th.co.wacoal.springtemplates.dao.EdcsMasDepartmentDAO;
+import th.co.wacoal.springtemplates.dao.EdcsMasUserAuthTypeDAO;
+import th.co.wacoal.springtemplates.dao.EdcsMasUserDAO;
+import th.co.wacoal.springtemplates.dao.EdcsMasUserTypeDAO;
 import th.co.wacoal.springtemplates.dao.EdcsUserRoleDAO;
 import th.co.wacoal.springtemplates.db.Database;
 import th.co.wacoal.springtemplates.domain.EdcsUserRole;
@@ -26,13 +29,17 @@ import th.co.wacoal.springtemplates.domain.EdcsUserRole;
 public class EdcsUserRoleDAOImpI implements EdcsUserRoleDAO {
 
     private final Database db;
-    EdcsMasUserDAOImpI userDAO = null;
+    EdcsMasUserDAO userDAO = null;
     EdcsMasDepartmentDAO depDAO = null;
-    EdcsMasUserAuthTypeDAOImpI authDAO = null;
-    EdcsMasUserTypeDAOImpI userTypeDAO = null;
+    EdcsMasUserAuthTypeDAO authDAO = null;
+    EdcsMasUserTypeDAO userTypeDAO = null;
 
     public EdcsUserRoleDAOImpI(Database db) {
         this.db = db;
+        userDAO = new EdcsMasUserDAOImpI(db);
+        depDAO = new EdcsMasDepartmentDAOImpl(db);
+        authDAO = new EdcsMasUserAuthTypeDAOImpI(db);
+        userTypeDAO = new EdcsMasUserTypeDAOImpI(db);
     }
 
     @Override

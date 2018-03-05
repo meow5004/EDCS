@@ -107,7 +107,8 @@ public class EdcsCalibrationDAOImpI implements EdcsCalibrationDAO {
                 + " ,[REQUEST_ON]"
                 + " ,[COMMENT]"
                 + " ,[CAL_AGE_ID]"
-                + " ,[CAL_ERROR])"
+                + " ,[CAL_ERROR]"
+                + " ,[FLAG_ACTIVE])"
                 + " VALUES"
                 + " ("
                 + " ?"
@@ -130,12 +131,13 @@ public class EdcsCalibrationDAOImpI implements EdcsCalibrationDAO {
                 + " ,getdate()"
                 + " ,?"
                 + " ,?"
+                + " ,?"
                 + " ,?)";
         int res = db.add(sql,
                 calib.getCalCode(), calib.getCreateBy(), calib.getDepId(), calib.getMeasureId(),
                 calib.getModelId(), calib.getProcessId(), calib.getUnitId(), calib.getEquipConId(),
                 calib.getConditionComment(), calib.getStatusCaldocId(), calib.getDueDate(), calib.getRequestBy(),
-                calib.getRequestComment(), calib.getRequestStatus(), calib.getRequestApproverBy(), calib.getRequestApproverStatus(), calib.getComment(), calib.getCalAgeId(), calib.getCalError()
+                calib.getRequestComment(), calib.getRequestStatus(), calib.getRequestApproverBy(), calib.getRequestApproverStatus(), calib.getComment(), calib.getCalAgeId(), calib.getCalError(), calib.getFlagActive()
         );
         return res;
     }
@@ -148,11 +150,15 @@ public class EdcsCalibrationDAOImpI implements EdcsCalibrationDAO {
         //find old calib
         String sql = "select top 1 * "
                 + "from EDCS_CALIBRATION t "
-                + "WHERE t.APPROVE_STATUS_ON = (select max(t2.APPROVE_STATUS_ON) from EDCS_CALIBRATION t2) "
+                + "WHERE FLAG_ACTIVE=1 "
                 + "AND MEASURE_ID=?";
         Map<String, Object> map = db.querySingle(sql, measureId);
         EdcsCalibration p = baseCalib;
+
+        //deactivate old and activate lastest
         if (map != null) {
+            String deactivateOldCalibration = "update EDCS_CALIBRATION set FLAG_ACTIVE=0 where MEASURE_ID = (select MEASURE_ID FROM EDCS_CALIBRATION where CAL_ID=?)";
+            db.update(deactivateOldCalibration, (Integer) map.get("CAL_ID"));
             p.setDepId((String) map.get("DEP_ID"));
             p.setModelId((Integer) map.get("MODEL_ID"));
             p.setProcessId((Integer) map.get("PROCESS_ID"));
@@ -170,7 +176,7 @@ public class EdcsCalibrationDAOImpI implements EdcsCalibrationDAO {
         p.setRequestOn(new Date());
 
         p.setRequestApproverStatus("0");
-
+        p.setFlagActive("1");
         add(p);
         return 1;
     }
@@ -261,13 +267,9 @@ public class EdcsCalibrationDAOImpI implements EdcsCalibrationDAO {
     @Override
     public void approveLabResult(int calId, String userId) {
         db.beginTransaction();
-        String deactivateOldCalibration = "update EDCS_CALIBRATION set FLAG_ACTIVE=0 where MEASURE_ID = (select MEASURE_ID FROM EDCS_CALIBRATION where CAL_ID=?)";
-        db.update(deactivateOldCalibration, calId);
-        //deactivate old and activate lastest
         String sql = "update EDCS_CALIBRATION "
                 + "set "
                 + "APPROVE_STATUS=1,"
-                + "FLAG_ACTIVE=1,"
                 + "APPROVE_STATUS_ON=getdate(),"
                 + "APPROVE_STATUS_BY=? "
                 + "WHERE CAL_ID=?";
@@ -308,7 +310,7 @@ public class EdcsCalibrationDAOImpI implements EdcsCalibrationDAO {
     @Override
     public void returnedDeviceCheck(calibrationDeviceCheckModel checkedModel) {
         String sql = "UPDATE EDCS_CALIBRATION SET ,EQUIP_CON_ID=?,CONDITION_COMMENT=?,RETURN_STATUS_BY=?,RETURN_STATUS_ON=(getdate()),RETURN_STATUS=1 WHERE CAL_ID=?";
-        int result = db.update(sql, checkedModel.getEquipConId(), checkedModel.getConditionComment(), checkedModel.getInspector(),checkedModel.getCalId());
+        int result = db.update(sql, checkedModel.getEquipConId(), checkedModel.getConditionComment(), checkedModel.getInspector(), checkedModel.getCalId());
     }
 
     @Override

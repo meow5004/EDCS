@@ -132,7 +132,7 @@ public class EdcsCalibrationAttachHeadDAOImpI implements EdcsCalibrationAttachHe
     @Override
     public EdcsCalibrationAttachHead mappingResult(Map<String, Object> map) {
         EdcsCalibrationAttachHead head = new EdcsCalibrationAttachHead();
-        EdcsCalibrationAttachItemDAO itemDAO = new EdcsCalibrationAttachItemDAOImpl(db);
+        EdcsCalibrationAttachItemDAO itemDAO = new EdcsCalibrationAttachitemDAOImpl(db);
         Integer headerId = (Integer) map.get("CAL_ATTACH_HEAD_ID");
         head.setCalAttachHeadId(headerId);
         head.setAbType((String) map.get("AB_TYPE"));

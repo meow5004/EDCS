@@ -24,65 +24,115 @@
                     <hr>
                 </div>
                 <div class="row">
-                    <div class="col-sm-12 col-md-offset-1">
-                        อ้างอิงรายงานหมายเลข <span style="font-weight: bolder;font-size: 1.5em;color:red">${calibration.calCode}</span>
+                    <div class="col-sm-2 col-md-offset-1">
+                        อ้างอิงรายงานหมายเลข
+                    </div>
+                    <div class="col-sm-2">
+                        <input style="font-weight: bolder;font-size: 1.5em;color:red" disabled value="${calibration.calCode}"/>
                     </div>
                 </div>
-                <hr style="background-color: #dd3333" />
+                <hr/>
                 <div class="row">
-                    <div class="col-sm-12 col-md-offset-1">
-                        หน่วยงาน/บริษัท <span style="font-weight: bolder;font-size: 1.5em;">${calibration.associateDep.fullName}</span>
+                    <div class="col-sm-2 col-md-offset-1">
+                        เครื่องวัด/ทดสอบ รหัส 
+                    </div>
+                    <div class="col-sm-4 ">
+                        <input class="important-data-level-2" disabled value="${calibration.associateMeasure.measureCode}">
+                    </div>
+                    <div class="col-sm-4">
+                        <input class="important-data-level-2" disabled value="${calibration.associateMeasure.fullName}">
                     </div>
                 </div>
-                <hr style="background-color: #dd3333" />
+                <hr/>
                 <div class="row">
-                    <div class="col-sm-12 col-md-offset-1">
-                        เครื่องวัด/ทดสอบ รหัส <span class="important-data-level-2">${calibration.associateMeasure.measureCode}</span>
-                        ( <span class="important-data-level-2">${calibration.associateMeasure.fullName}</span> )
-                        สภาพภายนอก <span class="important-data-level-1">${calibration.associateEquipCon.fullName}</span>
+                    <div class="col-sm-2 col-sm-offset-1">
+                        สถานะเครื่อง 
                     </div>
-                </div>
-                <hr style="background-color: #dd3333" />
-                <div class="row">
-                    <div class="col-sm-12 col-md-offset-1">
-                        <span class="important-data-level-2"> มาตรฐานเปรียบเทียบอ้างอิง </span>
+                    <div class="col-sm-2 ">
+                        <input class="important-data-level-1" disabled value="${calibration.associateEquipCon.fullName}">
                     </div>
+                    <c:if test="${calibration.conditionComment !=null&&calibration.conditionComment !='' }">
+                        <div class="col-sm-1 col-sm-offset-1">
+                            เนื่องจาก
+                        </div>
+                        <div class="col-sm-4 ">
+                            <textarea style="width: 100%" class="important-data-level-1" disabled>${calibration.conditionComment}</textarea>
+                        </div>
+                    </c:if>
                 </div>
+                <hr/>
                 <div class="row">
-                    <div class="col-sm-12 col-md-offset-1">
+                    <div class="col-sm-2 col-md-offset-1">
                         สอบเทียบที่  
+                    </div>
+                    <div class="col-sm-4">
                         <c:if test="${calibration.calibrationLocation =='inside'}">
-                            <span class="important-data-level-2">สถานสอบเทียบภายใน</span>
+                            <input class="important-data-level-2" disabled value="สถานสอบเทียบภายใน">
                         </c:if>
                         <c:if test="${calibration.calibrationLocation =='outside'}">
-                            <span class="important-data-level-2">สถานสอบเทียบภายนอก</span>
+                            <input class="important-data-level-2" disabled value="สถานสอบเทียบภายนอก">
                         </c:if>
 
                     </div>
                 </div>
+                <hr/>
                 <div class="row">
-                    <div class="col-sm-12 col-md-offset-1">
-                        แม่แบบ รหัส <span class="important-data-level-1">${calibration.associateModel.modelCode}</span>
-                        ( <span class="important-data-level-1">${calibration.associateModelMeasure.fullName}</span> )
+                    <div class="col-sm-2 col-md-offset-1">
+                        แม่แบบ รหัส 
+                    </div>
+                    <div class="col-sm-4 ">
+                        <input class="important-data-level-1" disabled value="${calibration.associateModel.modelCode}">
+                    </div>
+                    <div class="col-sm-4">
+                        <input class="important-data-level-1" disabled value="${calibration.associateModelMeasure.fullName}">
+                    </div>
+                </div>
+                <hr/>
+                <div class="row">
+                    <div class="col-sm-2 col-md-offset-1">
+                        รายงานหมายเลข
+                    </div>
+                    <div class="col-sm-2 ">
+                        <input class="important-data-level-1" disabled value="${calibration.associateModel.cerNo}">
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-sm-12 col-md-offset-1">
-                        รายงานหมายเลข <span class="important-data-level-1">${calibration.associateModel.cerNo}</span>
-                        ออกโดย <span class="important-data-level-1">${calibration.associateModel.locationBy}</span>
-                        การสอบกลับ <span class="important-data-level-1">${calibration.associateModel.locationReturn}</span>
+                    <div class="col-sm-2 col-md-offset-1">
+                        ออกโดย
                     </div>
-                </div>
-                <br>
-                <hr style="background-color: #dd3333" />
-                <div class="row">
-                    <div class="col-sm-12 col-md-offset-1">
-                        วิธีวัด <span class="important-data-level-1">${calibration.associateProcess.processCode}</span> เรื่อง <span class="important-data-level-1">${calibration.associateProcess.processSubject}</span>
+                    <div class="col-sm-4">
+                        <input class="important-data-level-1" disabled value="${calibration.associateModel.locationBy}">
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-sm-12 col-md-offset-1">
-                        โดย <span class="important-data-level-1">${calibration.associateProcess.processBy}</span>
+                    <div class="col-sm-2 col-sm-offset-1">
+                        การสอบกลับ
+                    </div>
+                    <div class="col-sm-4">
+                        <input class="important-data-level-1" disabled value="${calibration.associateModel.locationReturn}">
+                    </div>
+                </div>
+                <hr/>
+                <div class="row">
+                    <div class="col-sm-2 col-md-offset-1">
+                        วิธีวัด 
+                    </div>
+                    <div class="col-sm-2">
+                        <input class="important-data-level-1" value="${calibration.associateProcess.processCode}" disabled/> 
+                    </div>
+                    <div class="col-sm-1 ">
+                        เรื่อง
+                    </div>
+                    <div class="col-sm-4">
+                        <input class="important-data-level-1" value="${calibration.associateProcess.processSubject}" disabled/>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-2 col-md-offset-1">
+                        วัดโดย
+                    </div>
+                    <div class="col-sm-8">
+                        <textarea style="width: 100%" class="important-data-level-1" disabled>${calibration.associateProcess.processBy}</textarea>
                     </div>
                 </div>
                 <div class="box-body container">

@@ -18,12 +18,13 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import th.co.wacoal.springtemplates.dao.EdcsCalibrationAttachItemDAO;
 import th.co.wacoal.springtemplates.dao.EdcsCalibrationDAO;
 import th.co.wacoal.springtemplates.dao.EdcsMasDepartmentDAO;
 import th.co.wacoal.springtemplates.dao.EdcsMasMeasureDAO;
 import th.co.wacoal.springtemplates.dao.EdcsMasModelDAO;
 import th.co.wacoal.springtemplates.dao.EdcsMasUserDAO;
-import th.co.wacoal.springtemplates.dao.impl.EdcsCalibrationAttachItemDAOImpl;
+import th.co.wacoal.springtemplates.dao.impl.EdcsCalibrationAttachitemDAOImpl;
 import th.co.wacoal.springtemplates.dao.impl.EdcsCalibrationDAOImpI;
 import th.co.wacoal.springtemplates.dao.impl.EdcsMasCalageDAOImpI;
 import th.co.wacoal.springtemplates.dao.impl.EdcsMasCalpointDAOImpl;
@@ -123,7 +124,7 @@ public class IndexController {
         Database db = new Database("sqlServer");
         try {
             EdcsMasCalpointDAOImpl calpointDAO = new EdcsMasCalpointDAOImpl(db);
-            EdcsCalibrationAttachItemDAOImpl itemDAO = new EdcsCalibrationAttachItemDAOImpl(db);
+            EdcsCalibrationAttachItemDAO itemDAO = new EdcsCalibrationAttachitemDAOImpl(db);
             EdcsMasStatusCaldocDAOImpl statusDocDAO = new EdcsMasStatusCaldocDAOImpl(db);
             EdcsMasCalageDAOImpI calAgeDao = new EdcsMasCalageDAOImpI(db);
             EdcsCalibrationDAO calibDAO = new EdcsCalibrationDAOImpI(db);
@@ -183,6 +184,11 @@ public class IndexController {
         return "trackingDoc";
     }
 
+     @RequestMapping("/stickerTableTemplate.htm")
+    public String stickerTableTemplate(Model model, HttpSession session) {
+        return "stickerTableTemplate";
+    }
+    
     @RequestMapping("/deviceReceivce.htm")
     public String deviceReceivce(Model model, HttpSession session) {
         Database db = new Database("sqlServer");
