@@ -31,6 +31,18 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "EdcsMasModel.findAll", query = "SELECT e FROM EdcsMasModel e")})
 public class EdcsMasModel implements Serializable {
 
+    @Size(max = 10)
+    @Column(name = "FLAG_ACTIVE")
+    private String flagActive;
+    @Column(name = "DUE_DATE")
+    @Temporal(TemporalType.DATE)
+    private Date dueDate;
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Column(name = "RESOLUTION")
+    private Double resolution;
+    @Column(name = "UNCERTAINTY")
+    private Double uncertainty;
+
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -195,6 +207,38 @@ public class EdcsMasModel implements Serializable {
     @Override
     public String toString() {
         return "th.co.wacoal.springtemplates.domain.EdcsMasModel[ modelId=" + modelId + " ]";
+    }
+
+    public String getFlagActive() {
+        return flagActive;
+    }
+
+    public void setFlagActive(String flagActive) {
+        this.flagActive = flagActive;
+    }
+
+    public Date getDueDate() {
+        return dueDate;
+    }
+
+    public void setDueDate(Date dueDate) {
+        this.dueDate = dueDate;
+    }
+
+    public Double getResolution() {
+        return resolution;
+    }
+
+    public void setResolution(Double resolution) {
+        this.resolution = resolution;
+    }
+
+    public Double getUncertainty() {
+        return uncertainty;
+    }
+
+    public void setUncertainty(Double uncertainty) {
+        this.uncertainty = uncertainty;
     }
     
 }

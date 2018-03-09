@@ -5,6 +5,7 @@
  */
 package th.co.wacoal.springtemplates.dao.impl;
 
+import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -32,27 +33,14 @@ public class EdcsMasModelDAOImpI implements EdcsMasModelDAO {
         List<Map<String, Object>> rs = db.queryList(sql);
         List<EdcsMasModel> ret = new ArrayList<>();
         for (Map<String, Object> map : rs) {
-            EdcsMasModel p = new EdcsMasModel();
-
-            p.setModelId((int) map.get("MODEL_ID"));
-            p.setMeasureId((int) map.get("MEASURE_ID"));
-            p.setLocationBy((String) map.get("LOCATION_BY"));
-            p.setLocationReturn((String) map.get("LOCATION_RETURN"));
-            p.setcerNo((String) map.get("CER_NO"));
-
-            p.setCreateBy((String) map.get("CREATE_BY"));
-            p.setCreateOn((Date) map.get("CREATE_ON"));
-            p.setChangeBy((String) map.get("CHANGE_BY"));
-            p.setChangeOn((Date) map.get("CHANGE_ON"));
-            p.setFlagDel((String) map.get("FLAG_DEL"));
-            ret.add(p);
+            ret.add(mappingResultSet(map));
         }
         return ret;
     }
 
     @Override
     public int delete(int id, String userId) {
-        String sql = "update EDCS_MAS_MODEL SET FLAG_DEL = 1,CHANGE_ON=(getdate()),CHANGE_BY=? WHERE MODEL_ID = ?";
+        String sql = "update EDCS_MAS_MODEL SET FLAG_DEL = 1,CHANGE_ON=(getdate()),CHANGE_BY=?,FLAG_ACTIVE=0 WHERE MODEL_ID = ?";
         int result = db.update(sql, userId, id);
         return result;
     }
@@ -60,7 +48,7 @@ public class EdcsMasModelDAOImpI implements EdcsMasModelDAO {
     @Override
     public int deleteMutiple(Integer[] ids, String userId) {
         String group = StringUtils.join(ids, ",");
-        String sql = "update EDCS_MAS_MODEL SET FLAG_DEL = 1,CHANGE_ON=(getdate()),CHANGE_BY=? WHERE MODEL_ID IN (" + group + ")";
+        String sql = "update EDCS_MAS_MODEL SET FLAG_DEL = 1,CHANGE_ON=(getdate()),CHANGE_BY=?,FLAG_ACTIVE=0 WHERE MODEL_ID IN (" + group + ")";
         int result = db.update(sql, userId);
         return result;
     }
@@ -96,44 +84,93 @@ public class EdcsMasModelDAOImpI implements EdcsMasModelDAO {
                 + "CHANGE_BY=?,CHANGE_ON=(getdate()),"
                 + "MEASURE_ID =?,"
                 + "LOCATION_BY =?,LOCATION_RETURN =? ,"
-                + "CER_NO =?,MODEL_CODE=?"
+                + "CER_NO =?,MODEL_CODE=?,"
+                + "RESOLUTION=?,UNCERTAINTY=?,"
+                + "DUE_DATE=?"
                 + " where MODEL_ID=?";
+        int rs = 0;
+        try {
+            PreparedStatement pstmt = db.connect.prepareStatement(sql);
 
-        int rs = db.update(sql,
-                model.getChangeBy(),
-                model.getMeasureId(),
-                model.getLocationBy(),
-                model.getLocationReturn(),
-                model.getcerNo(), model.getModelCode(),
-                model.getModelId()
-        );
+            pstmt.setString(1, model.getChangeBy());
+            pstmt.setInt(2, model.getMeasureId());
+            pstmt.setString(3, model.getLocationBy());
+            pstmt.setString(4, model.getLocationReturn());
+            pstmt.setString(5, model.getcerNo());
+            pstmt.setString(6, model.getModelCode());
+            pstmt.setDouble(7, model.getResolution());
+            pstmt.setDouble(8, model.getUncertainty());
+            pstmt.setDate(9, new java.sql.Date(model.getDueDate().getTime()));
+            pstmt.setInt(10, model.getModelId());
+
+            pstmt.executeUpdate();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         return rs;
     }
 
     @Override
     public int add(EdcsMasModel model) {
 
-        // insert
-        String sql = "INSERT INTO EDCS_MAS_MODEL "
-                + "("
-                + " CREATE_BY,CREATE_ON,"
-                + "CHANGE_BY,CHANGE_ON,"
-                + "MEASURE_ID,"
-                + "LOCATION_BY,LOCATION_RETURN,"
-                + "CER_NO,MODEL_CODE,"
-                + "FLAG_DEL)"
-                + " VALUES ("
-                + "?,(getdate()),"
-                + "?,(getdate()),"
-                + "?,?,?,?,?"
-                + ",0)";
-        int res = db.add(sql,
-                model.getCreateBy(), model.getChangeBy(),
-                model.getMeasureId(),
-                model.getLocationBy(), model.getLocationReturn(),
-                model.getcerNo(), model.getModelCode()
-        );
-        return res;
+        db.beginTransaction();
+        int rs = 0;
+        try {
+            String disactivateOld = "UPDATE SET FLAG_ACTIVE=0 WHERE MODEL_CODE=?";
+            PreparedStatement pstmtDO = db.connect.prepareStatement(disactivateOld);
+            pstmtDO.executeUpdate();
+            // insert
+            String sql = "INSERT INTO EDCS_MAS_MODEL "
+                    + "("
+                    + " CREATE_BY,CREATE_ON,"
+                    + "CHANGE_BY,CHANGE_ON,"
+                    + "MEASURE_ID,"
+                    + "LOCATION_BY,LOCATION_RETURN,"
+                    + "CER_NO,MODEL_CODE,"
+                    + "RESOLUTION,UNCERTAINTY,"
+                    + "DUE_DATE,"
+                    + "FLAG_DEL,FLAG_ACTIVE)"
+                    + " VALUES ("
+                    + "?,(getdate()),"
+                    + "?,(getdate()),"
+                    + "?,"
+                    + "?,?,"
+                    + "?,?,"
+                    + "?,?,"
+                    + "?,"
+                    + ",0,1)";
+
+            PreparedStatement pstmt = db.connect.prepareStatement(sql);
+
+            pstmt.setString(1, model.getChangeBy());
+            pstmt.setInt(2, model.getMeasureId());
+            pstmt.setString(3, model.getLocationBy());
+            pstmt.setString(4, model.getLocationReturn());
+            pstmt.setString(5, model.getcerNo());
+            pstmt.setString(6, model.getModelCode());
+            pstmt.setDouble(7, model.getResolution());
+            pstmt.setDouble(8, model.getUncertainty());
+            pstmt.setDate(9, new java.sql.Date(model.getDueDate().getTime()));
+            pstmt.setInt(10, model.getModelId());
+
+            pstmt.executeUpdate();
+            db.commit();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return rs;
+    }
+
+    @Override
+    public void disactivate(int id) {
+        String sql = "UPDATE EDCS_MAS_MODEL SET FLAG_ACTIVE=0 WHERE MODEL_ID=?";
+        db.update(sql, id);
+    }
+
+    @Override
+    public void activate(int id) {
+        String sql = "UPDATE EDCS_MAS_MODEL SET FLAG_ACTIVE=1 WHERE MODEL_ID=?";
+        db.update(sql, id);
     }
 
     @Override
@@ -142,18 +179,7 @@ public class EdcsMasModelDAOImpI implements EdcsMasModelDAO {
         Map<String, Object> map = db.querySingle(sql, id);
         EdcsMasModel p = new EdcsMasModel();
         if (map != null) {
-            p.setModelId((int) map.get("MODEL_ID"));
-            p.setMeasureId((int) map.get("MEASURE_ID"));
-            p.setLocationBy((String) map.get("LOCATION_BY"));
-            p.setLocationReturn((String) map.get("LOCATION_RETURN"));
-            p.setcerNo((String) map.get("CER_NO"));
-
-            p.setCreateBy((String) map.get("CREATE_BY"));
-            p.setCreateOn((Date) map.get("CREATE_ON"));
-            p.setChangeBy((String) map.get("CHANGE_BY"));
-            p.setChangeOn((Date) map.get("CHANGE_ON"));
-            p.setFlagDel((String) map.get("FLAG_DEL"));
-            p.setModelCode((String) map.get("MODEL_CODE"));
+            p = mappingResultSet(map);
         }
         return p;
     }
@@ -164,21 +190,7 @@ public class EdcsMasModelDAOImpI implements EdcsMasModelDAO {
         List<Map<String, Object>> rs = db.queryList(sql, flag);
         List<EdcsMasModel> ret = new ArrayList<>();
         for (Map<String, Object> map : rs) {
-            EdcsMasModel p = new EdcsMasModel();
-
-            p.setModelId((int) map.get("MODEL_ID"));
-            p.setMeasureId((int) map.get("MEASURE_ID"));
-            p.setLocationBy((String) map.get("LOCATION_BY"));
-            p.setLocationReturn((String) map.get("LOCATION_RETURN"));
-            p.setcerNo((String) map.get("CER_NO"));
-            p.setModelCode((String) map.get("MODEL_CODE"));
-            p.setCreateBy((String) map.get("CREATE_BY"));
-            p.setCreateOn((Date) map.get("CREATE_ON"));
-            p.setChangeBy((String) map.get("CHANGE_BY"));
-            p.setChangeOn((Date) map.get("CHANGE_ON"));
-            p.setFlagDel((String) map.get("FLAG_DEL"));
-
-            ret.add(p);
+            ret.add(mappingResultSet(map));
         }
         return ret;
     }
@@ -205,22 +217,30 @@ public class EdcsMasModelDAOImpI implements EdcsMasModelDAO {
         List<Map<String, Object>> rs = db.queryList(sql, flag, id);
         List<EdcsMasModel> ret = new ArrayList<>();
         for (Map<String, Object> map : rs) {
-            EdcsMasModel p = new EdcsMasModel();
-
-            p.setModelId((int) map.get("MODEL_ID"));
-            p.setMeasureId((int) map.get("MEASURE_ID"));
-            p.setLocationBy((String) map.get("LOCATION_BY"));
-            p.setLocationReturn((String) map.get("LOCATION_RETURN"));
-            p.setcerNo((String) map.get("CER_NO"));
-            p.setModelCode((String) map.get("MODEL_CODE"));
-            p.setCreateBy((String) map.get("CREATE_BY"));
-            p.setCreateOn((Date) map.get("CREATE_ON"));
-            p.setChangeBy((String) map.get("CHANGE_BY"));
-            p.setChangeOn((Date) map.get("CHANGE_ON"));
-            p.setFlagDel((String) map.get("FLAG_DEL"));
-
-            ret.add(p);
+            ret.add(mappingResultSet(map));
         }
         return ret;
+    }
+
+    @Override
+    public EdcsMasModel mappingResultSet(Map<String, Object> map) {
+        EdcsMasModel p = new EdcsMasModel();
+        p.setModelId((int) map.get("MODEL_ID"));
+        p.setMeasureId((int) map.get("MEASURE_ID"));
+        p.setLocationBy((String) map.get("LOCATION_BY"));
+        p.setLocationReturn((String) map.get("LOCATION_RETURN"));
+        p.setcerNo((String) map.get("CER_NO"));
+        p.setModelCode((String) map.get("MODEL_CODE"));
+        p.setCreateBy((String) map.get("CREATE_BY"));
+        p.setCreateOn((Date) map.get("CREATE_ON"));
+        p.setChangeBy((String) map.get("CHANGE_BY"));
+        p.setChangeOn((Date) map.get("CHANGE_ON"));
+        p.setFlagDel((String) map.get("FLAG_DEL"));
+
+        p.setFlagActive((String) map.get("FLAG_ACTIVE"));
+        p.setResolution((Double) map.get("RESOLUTION"));
+        p.setUncertainty((Double) map.get("UNCERTAINTY"));
+        p.setDueDate((Date) map.get("DUE_DATE"));
+        return p;
     }
 }

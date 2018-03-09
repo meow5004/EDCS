@@ -42,10 +42,7 @@ import th.co.wacoal.springtemplates.dao.impl.EdcsMasUserDAOImpI;
 import th.co.wacoal.springtemplates.dao.impl.EdcsMasUserTypeDAOImpI;
 import th.co.wacoal.springtemplates.dao.impl.EdcsUserRoleDAOImpI;
 import th.co.wacoal.springtemplates.db.Database;
-import th.co.wacoal.springtemplates.domain.EdcsMasDepartment;
 import th.co.wacoal.springtemplates.domain.EdcsMasUser;
-import th.co.wacoal.springtemplates.domain.EdcsMasUserAuthType;
-import th.co.wacoal.springtemplates.domain.EdcsMasUserType;
 import th.co.wacoal.springtemplates.domain.EdcsUserRole;
 
 /**
@@ -127,7 +124,7 @@ public class EdcsUserRoleController {
             userDAO = new EdcsMasUserDAOImpI(db);
 
             EdcsMasUser user = userDAO.find(empId);
-
+//user.set
             //checkboxes
             mv.addObject("deps", deptDAO.findByFlag(0));
             mv.addObject("auths", authDAO.findAll());
@@ -151,45 +148,22 @@ public class EdcsUserRoleController {
         try {
             EdcsUserRoleDAO userRoleDAO = new EdcsUserRoleDAOImpI(db);
             String userId = (String) session.getAttribute("userId");
-            //remove unchecked 
-            List<EdcsMasDepartment> deps = userEdited.getViewableDepartments();
-            List<EdcsMasDepartment> nullDeps = new ArrayList<>();
-            for (EdcsMasDepartment dep : deps) {
-                if (dep == null || dep.getDepId() == null) {
-                    nullDeps.add(dep);
-                }
-            }
-            deps.removeAll(nullDeps);
-            List<EdcsMasUserAuthType> auths = userEdited.getUserAuthTypes();
-            List<EdcsMasUserAuthType> nullauths = new ArrayList<>();
-            for (EdcsMasUserAuthType auth : auths) {
-                if (auth == null || auth.getAuthTypeId() == null) {
-                    nullauths.add(auth);
-                }
-            }
-            auths.removeAll(nullauths);
-            List<EdcsMasUserType> types = userEdited.getUserTypes();
-            List<EdcsMasUserType> nulltypes = new ArrayList<>();
-            for (EdcsMasUserType type : types) {
-                if (type == null || type.getUserTypeId() == null) {
-                    nulltypes.add(type);
-                }
-            }
-            types.removeAll(nulltypes);
 
             userRoleDAO = new EdcsUserRoleDAOImpI(db);
             List<EdcsUserRole> roles = new ArrayList<>();
-            for (EdcsMasUserType type : types) {
-                for (EdcsMasUserAuthType auth : auths) {
-                    for (EdcsMasDepartment dep : deps) {
-                        EdcsUserRole role = new EdcsUserRole();
-                        role.setUserTypeId(type.getUserTypeId());
-                        role.setEmpId(userEdited.getEmpId());
-                        role.setDepId(dep.getDepId());
-                        role.setAuthTypeId(auth.getAuthTypeId());
-                        role.setChangeBy(userId);
-                        role.setCreateBy(userId);
-                        roles.add(role);
+            for (Integer typeId : userEdited.getUserTypeIds()) {
+                for (Integer authId : userEdited.getUserAuthTypeIds()) {
+                    for (String depId : userEdited.getViewableDepartmentIds()) {
+                        if (typeId != null && depId != null && authId != null) {
+                            EdcsUserRole role = new EdcsUserRole();
+                            role.setUserTypeId(typeId);
+                            role.setEmpId(userEdited.getEmpId());
+                            role.setDepId(depId);
+                            role.setAuthTypeId(authId);
+                            role.setChangeBy(userId);
+                            role.setCreateBy(userId);
+                            roles.add(role);
+                        }
                     }
                 }
             }

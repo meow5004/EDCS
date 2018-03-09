@@ -13,14 +13,14 @@
                 </div><!-- /.box-header -->
                 <div class="box-body">
                     <div class="form-group col-lg-4 col-sm-12">
-                        <label  class="col-sm-2 control-label" style="font-weight: bold;">วันที่</label>
-                        <div class="col-sm-10">
+                        <label  class="col-sm-4 control-label" style="font-weight: bold;">วันที่ส่งเอกสาร</label>
+                        <div class="col-sm-8">
                             <input type="text" class="form-control" id="startDateFilter" placeholder="Start...">
                         </div>
                     </div>
                     <div class="form-group col-lg-4 col-sm-12">
                         <label for="inputEmail3" class="col-sm-2 control-label" style="font-weight: bold;">ถึง</label>
-                        <div class="col-sm-10">
+                        <div class="col-sm-8">
                             <input type="text" class="form-control" id="endDateFilter" placeholder="End...">
                         </div>
                     </div>
@@ -37,7 +37,7 @@
                             </select>
                         </div>
                     </div>
-                
+
                 </div>
                 <div class="box-body container">
                     <div class="row">
@@ -93,7 +93,7 @@
                             var date = formatDateFromJavaDateJSONEncoded(data);
                             return date;
                         } else {
-                            return "-";
+                            return  "&#8212;";
                         }
                     }, "target": 3, "className": "dt-body-center"},
                 {"data": "requestApproverStatus", "target": 4, render:
@@ -222,7 +222,7 @@
                             return data;
                         }
                         if (data == 1) {
-                            var date = formatDateFromJavaDateJSONEncoded(rowData.returnStatusOn);
+                            var date = formatDateFromJavaDateJSONEncoded(row.returnStatusOn);
                             var title = " ส่งอุปกรณ์คืนวันที่ " + date;
                             return "<img src='../images/icons/BallIconCheck.png' alt='' style='width: 40px; height: 40px;' />";
                         } else {
@@ -241,33 +241,25 @@
                             var date = formatDateFromJavaDateJSONEncoded(data);
                             return date;
                         } else {
-                            return "-";
+                            return  "&#8212;";
                         }
                     }},
                 {"data": "dueDate", "target": 10, render: function (data, type, row, meta) {
                         if (data != null) {
                             var date = formatDateFromJavaDateJSONEncoded(data);
-                            var end = moment(date, "DD/MM/YY");
+                            var end = moment(date, "DD/MM/YYYY");
                             return date + "<br/> (" + end.fromNow() + ")";
                         } else {
-                            return "-";
-                        }
-                    },
-                    "createdCell": function (td, cellData, rowData, row, col) {
-                        if (cellData != null) {
-                            var date = formatDateFromJavaDateJSONEncoded(cellData);
-                            var end = moment(date, "DD/MM/YY");
-                            if (end.isBefore(moment().add('days', 30))) {
-                                $(td).css("color", "red");
-                            }
-                            if (end.isBefore()) {
-                                $(td).css("font-weight", "bolder");
-                            }
+                            return  "&#8212;";
                         }
                     }}, {"target": 11, data: function (data, type, row, meta) {
-                        var image = "<i class='fa fa-file fa-3x'></i>";
-                        var link = '<a href="../ajaxHelper/previewReportFromInputDataModel.htm?calId=' + data.calId + '" target="_blank">' + image + '</a>';
-                        return link;
+                        if (data.calibrationAttachStatusOn != null) {
+                            var image = "<i class='fa fa-file fa-3x'></i>";
+                            var link = '<a href="../ajaxHelper/previewReportFromInputDataModel.htm?calId=' + data.calId + '" target="_blank">' + image + '</a>';
+                            return link;
+                        } else {
+                            return "&#8212;";
+                        }
                     }}, {"target": 12, data: function (data, type, row, meta) {
                         var reqComment = data.requestComment;
                         var condComment = "";
@@ -279,7 +271,7 @@
                         }
                         var statCalDoc = "";
                         if (data.associateStatusCaldoc != null && data.associateStatusCaldoc.statusCaldocId != 0) {
-                          
+
                             statCalDoc = data.associateStatusCaldoc.statusCaldocName;
                             if (data.comment != null && data.comment.length > 0) {
                                 statCalDoc = statCalDoc + " เนื่องจาก " + data.comment;
@@ -302,22 +294,37 @@
                             message += "ผลสอบ : " + statCalDoc;
                         }
                         var bootboxFunction = "bootbox.alert({size:\"small\",title:\"หมายเหตุ\",message:$(this).data(\"comment\")})";
-                        var requestDataComment = 
-                                 "<button class=\"btn btn-success\" data-comment='" + message + "' onclick='" + bootboxFunction + "'>"
+                        var requestDataComment =
+                                "<button class=\"btn btn-success\" data-comment='" + message + "' onclick='" + bootboxFunction + "'>"
                                 + "<i class=\"fa fa-comment\">"
                                 + "</button>";
 
-                        var showData="";
+                        var showData = "";
                         if (message != null && message.length > 0) {
                             showData += requestDataComment;
                         }
 
-                        return showData;
+                        if (showData.trim().length > 0) {
+                            return showData;
+                        } else {
+                            return  "&#8212;";
+                        }
+
                     }}
-            ],
-            "createdRow": function (row, data, index) {
+            ], "createdRow": function (row, data, index) {
+                var dataDate = data.dueDate;
                 if (data.calId < 1) {
-                    $(row).addClass('warning');
+                    $(row).addClass('newData');
+                }
+                if (dataDate != null) {
+                    var date = formatDateFromJavaDateJSONEncoded(data.dueDate);
+                    var time = moment(date, "DD/MM/YYYY");
+                    var dueDay = time.diff(moment(), 'days');
+                    if (dueDay < 30 && dueDay > 0) {
+                        $(row).addClass('warning');
+                    } else if (dueDay <= 0) {
+                        $(row).addClass('danger-alert');
+                    }
                 }
             },
             "ajax": {
@@ -333,7 +340,7 @@
             changeYear: true,
             changeMonth: true});
         // Event listener to the two range filtering inputs to redraw on input
-        $('#startDateFilter, #endDateFilte , #statusFilter').change(function () {
+        $('#startDateFilter, #endDateFilter , #statusFilter').change(function () {
             availableTable.draw();
         });
     });

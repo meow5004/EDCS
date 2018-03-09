@@ -57,16 +57,16 @@ public class EdcsCalibrationAttachitemDAOImpl implements EdcsCalibrationAttachIt
 
         String sql = "update EDCS_CALIBRATION_ATTACH_ITEM  "
                 + "SET "
-                + "CALPOINT_MIN =?,CALPOINT_MAX,"
-                + "CALPOINT_VALLUE =? "
+                + "CALPOINT_MIN =?,CALPOINT_MAX=?,"
+                + "CALPOINT_VALUE =? "
                 + " where CAL_ATTACH_HEAD_ID=? AND"
                 + " CAL_ATTACH_LINE=? AND"
                 + " CAL_TIME=?";
 
         int res = db.update(sql,
                 attachItem.getCalpointMin(),
-                attachItem.getCalpointMin(),
                 attachItem.getCalpointMax(),
+                attachItem.getCalpointValue(),
                 attachItem.getEdcsCalibrationAttachItemPK().getCalAttachHeadId(),
                 attachItem.getEdcsCalibrationAttachItemPK().getCalAttachLine(),
                 attachItem.getEdcsCalibrationAttachItemPK().getCalTime()

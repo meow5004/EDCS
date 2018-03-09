@@ -25,10 +25,10 @@
 
                 <div id="ajaxCRUDfield">
                 </div>
-                <table id="availableModelTable" class="dataTable hover cell-border nowrap">
+                <table id="availableModelTable" class="dataTable hover cell-border nowrap compact">
                     <thead>
                         <tr>
-                            <th colspan="10" style="text-align: center"><spring:message code="model.table.avaliable" text="message not found"/></th>
+                            <th colspan="14" style="text-align: center"><spring:message code="model.table.avaliable" text="message not found"/></th>
                         </tr>
                         <tr class="alt" >
                             <th><spring:message code="model.modelId" text="message not found"/></th>
@@ -36,21 +36,23 @@
                             <th><spring:message code="model.measureId" text="message not found"/></th>
                             <th><spring:message code="model.measureCode" text="message not found"/></th>
                             <th><spring:message code="model.measureName" text="message not found"/></th>
+                            <th><spring:message code="model.resolution" text="message not found"/></th>
+                            <th><spring:message code="model.uncertainty" text="message not found"/></th>
                             <th><spring:message code="model.cerNo" text="message not found"/></th>
                             <th><spring:message code="model.locationBy" text="message not found"/></th>
                             <th><spring:message code="model.locationReturn" text="message not found"/></th>
-
-
+                            <th><spring:message code="model.duedate" text="message not found"/></th>
+                            <th><spring:message code="model.activate" text="message not found"/></th>
                             <th></th>
                             <th><button class="deleteMultiple btn btn-danger"><spring:message code="model.delete" text="message not found"/><i class="fa fa-trash-o" aria-hidden="true"></i></button></th>
                         </tr> 
                     </thead>
                 </table>
                 <br/>
-                <table id="unavailableModelGroup" class="dataTable hover cell-border ">
+                <table id="unavailableModelGroup" class="dataTable hover cell-border compact">
                     <thead>
                         <tr>
-                            <th colspan="10" style="text-align: center"><spring:message code="model.table.unavaliable" text="message not found"/></th>
+                            <th colspan="13" style="text-align: center"><spring:message code="model.table.unavaliable" text="message not found"/></th>
                         </tr>
                         <tr class="alt" >
                             <th><spring:message code="model.modelId" text="message not found"/></th>
@@ -58,10 +60,12 @@
                             <th><spring:message code="model.measureId" text="message not found"/></th>
                             <th><spring:message code="model.measureCode" text="message not found"/></th>
                             <th><spring:message code="model.measureName" text="message not found"/></th>
+                            <th><spring:message code="model.resolution" text="message not found"/></th>
+                            <th><spring:message code="model.uncertainty" text="message not found"/></th>
                             <th><spring:message code="model.cerNo" text="message not found"/></th>
                             <th><spring:message code="model.locationBy" text="message not found"/></th>
                             <th><spring:message code="model.locationReturn" text="message not found"/></th>
-
+                            <th><spring:message code="model.duedate" text="message not found"/></th>
 
                             <th><button class="reuseMultiple btn btn-success"><spring:message code="model.reuse" text="message not found"/><i class="fa fa-recycle" aria-hidden="true"></i></button></th>
                             <th><button class="realDeleteMultiple btn btn-danger"><spring:message code="model.realDelete" text="message not found"/><i class="fa fa-remove" aria-hidden="true"></i></button></th>
@@ -83,6 +87,8 @@
 <script>
 
     $(document).ready(function () {
+
+
         availableTable = $('#availableModelTable').DataTable({
             responsive: {
                 details: {
@@ -95,16 +101,38 @@
                 {"data": "measureId", "target": 2, "visible": false},
                 {"data": "measureCode", "target": 3},
                 {"data": "measureName", "target": 4},
-                {"data": "cerNo", "target": 5},
-                {"data": "locationBy", "target": 6},
-                {"data": "locationReturn", "target": 7},
-                {"data": "actionLink", "target": 8, "searchable": false, "orderable": false},
-                {"data": "deleteCheck", "target": 9, "className": "dt-center", "searchable": false, "orderable": false}
+                {"data": "resolution", "target": 5},
+                {"data": "uncertainty", "target": 6},
+                {"data": "cerNo", "target": 7},
+                {"data": "locationBy", "target": 8},
+                {"data": "locationReturn", "target": 9},
+                {"data": "duedate", "target": 10},
+                {"data": "activeCheck", "target": 11, "searchable": false, "orderable": false},
+                {"data": "actionLink", "target": 12, "searchable": false, "orderable": false},
+                {"data": "deleteCheck", "target": 13, "className": "dt-center", "searchable": false, "orderable": false}
             ],
             "ajax": "./getAvailableModel.htm",
             "dom": '<lftip>',
             "order": [[0, 'asc']],
-            "displayLength": 10});
+            "displayLength": 10,
+            fnDrawCallback: function () {
+                $("input[name='activate']").on("change", function () {
+                    if (this.checked) {
+                        $.ajax({
+                            type: "POST",
+                            url: "activate.htm",
+                            data: {"modelId": $(this).val()} // serializes the form's elements.
+                        });
+                    } else {
+                        $.ajax({
+                            type: "POST",
+                            url: "disactivate.htm",
+                            data: {"modelId": $(this).val()} // serializes the form's elements.
+                        });
+                    }
+                });
+            }
+        });
         unAvailableTable = $('#unavailableModelGroup').DataTable({
             responsive: {
                 details: {
@@ -117,16 +145,27 @@
                 {"data": "measureId", "target": 2, "visible": false},
                 {"data": "measureCode", "target": 3},
                 {"data": "measureName", "target": 4},
-                {"data": "cerNo", "target": 5},
-                {"data": "locationBy", "target": 6},
-                {"data": "locationReturn", "target": 7},
-                {"data": "reuseCheck", "target": 8, "className": "dt-center", "searchable": false, "orderable": false},
-                {"data": "realDeleteCheck", "target": 9, "className": "dt-center", "searchable": false, "orderable": false}
+                {"data": "resolution", "target": 5},
+                {"data": "uncertainty", "target": 6},
+                {"data": "cerNo", "target": 7},
+                {"data": "locationBy", "target": 8},
+                {"data": "locationReturn", "target": 9},
+                {"data": "duedate", "target": 10},
+                {"data": "reuseCheck", "target": 11, "className": "dt-center", "searchable": false, "orderable": false},
+                {"data": "realDeleteCheck", "target": 12, "className": "dt-center", "searchable": false, "orderable": false}
             ],
             "ajax": "./getUnavailableModel.htm",
             "dom": '<lftip>',
             "order": [[0, 'asc']],
-            "displayLength": 10});
+            "displayLength": 10,
+            fnDrawCallback: function () {
+                if ($(this).find('.dataTables_empty').length > 0) {
+                    $(this).closest(".dataTables_wrapper").hide();
+                } else {
+                    $(this).closest(".dataTables_wrapper").show();
+                }
+            }
+        });
         $(document).on("click", ".addData,.editData", showFormByClick);
         $(document).on("submit", "#addForm,#editForm", sendDataPOSTByAction);
         $(document).on("click", ".deleteMultiple", deleteMultiple);
@@ -137,15 +176,25 @@
     });
     function showFormByClick() {
         $("#ajaxCRUDfield").load($(this).attr("value"), function () {
+            $("#dueDate").datepicker({
+                dateFormat: 'dd/mm/yy',
+                changeYear: true,
+                changeMonth: true});
         });
         $(window).scrollTop(0);
+        $("input").first().focus();
         return false;
     }
 
     function showFrom(link) {
         $("#ajaxCRUDfield").load(link, function () {
+            $("#dueDate").datepicker({
+                dateFormat: 'dd/mm/yy',
+                changeYear: true,
+                changeMonth: true});
         });
         $(window).scrollTop(0);
+        $("input").first().focus();
         return false;
     }
 
@@ -280,7 +329,7 @@
             }
         }
         if (valid === 1) {
-            console.log(valid);
+            //console.log(valid);
             var form = $(this); //wrap this in jQuery
             var url = form.prop('action'); // the script where you handle the form input.
             $.ajax({

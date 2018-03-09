@@ -56,6 +56,43 @@ public class EdcsMasModelController {
         return new ModelAndView("master/model/index");
     }
 
+    //activate/disactivate
+    @RequestMapping(value = "/activate")
+    public void activate(@RequestParam("modelId") int id, Model model, HttpSession session, HttpServletResponse response) throws IOException {
+        PrintWriter out = response.getWriter();
+        String responseMessage = "";
+        Database db = new Database("sqlServer");
+        EdcsMasModelDAO modelDAO = new EdcsMasModelDAOImpI(db);
+        try {
+            modelDAO.activate(id);
+            responseMessage = "success";
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+            responseMessage = ex.getMessage();
+        } finally {
+            db.close();
+            out.print(responseMessage);
+        }
+    }
+
+    @RequestMapping(value = "/disactivate")
+    public void disactivate(@RequestParam("modelId") int id, Model model, HttpSession session, HttpServletResponse response) throws IOException {
+        PrintWriter out = response.getWriter();
+        String responseMessage = "";
+        Database db = new Database("sqlServer");
+        EdcsMasModelDAO modelDAO = new EdcsMasModelDAOImpI(db);
+        try {
+            modelDAO.disactivate(id);
+            responseMessage = "success";
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+            responseMessage = ex.getMessage();
+        } finally {
+            db.close();
+            out.print(responseMessage);
+        }
+    }
+
     //add Data
     @RequestMapping(value = "/add", method = RequestMethod.GET)
     public ModelAndView add(Model model, HttpSession session) {
@@ -343,23 +380,32 @@ public class EdcsMasModelController {
                 p.put("cerNo", row.getcerNo());
                 p.put("locationBy", row.getLocationBy());
                 p.put("locationReturn", row.getLocationReturn());
-
+                p.put("resolution", row.getResolution());
+                p.put("uncertainty", row.getUncertainty());
+                p.put("duedate", dfnt.format(row.getDueDate()));
                 p.put("createBy", row.getCreateBy());
                 p.put("createOn", dfnt.format(row.getCreateOn()));
                 p.put("changeBy", row.getChangeBy());
                 p.put("changeOn", df.format(row.getChangeOn()));
 
                 String actionLink = "<button class='editData btn btn-primary btn-sm'  value='./edit.htm?id=" + row.getModelId() + "'></i>" + edit + "</button> ";
-                //+ "<button class='deleteData' value='./delete.htm?id=" + row.getModelId() + "'>"+delete+"</button>";
                 p.put("actionLink", actionLink);
                 String deleteCheckbox = " <input type=\"checkbox\" name=\"deletedModel\" value=\"" + row.getModelId() + "\">";
-
                 p.put("deleteCheck", deleteCheckbox);
+                String activeFlag = "";
+                if (row.getFlagActive().equals("1")) {
+                    activeFlag = "<input type=\"checkbox\" name=\"activate\" checked value=\"" + row.getModelId() + "\">";
+                } else if (row.getFlagActive().equals("0")) {
+                    activeFlag = "<input type=\"checkbox\" name=\"activate\" value=\"" + row.getModelId() + "\">";
+                }
+                p.put("active", row.getFlagActive());
+                p.put("activeCheck", activeFlag);
                 modelMap.add(p);
             }
             JSONArray jsonString = JSONArray.fromObject(modelMap);
             responseMessage = "{" + "\"size\":\"" + Entitymodel.size() + "\",\"data\":" + jsonString + "}";
         } catch (Exception ex) {
+            ex.getCause().printStackTrace();
             System.out.println(ex.getMessage());
             responseMessage = ex.getMessage();
         } finally {
@@ -396,12 +442,15 @@ public class EdcsMasModelController {
                 p.put("cerNo", row.getcerNo());
                 p.put("locationBy", row.getLocationBy());
                 p.put("locationReturn", row.getLocationReturn());
+                p.put("resolution", row.getResolution());
+                p.put("uncertainty", row.getUncertainty());
                 p.put("measureCode", thisMeasure.getMeasureCode());
                 p.put("createBy", row.getCreateBy());
                 p.put("createOn", dfnt.format(row.getCreateOn()));
                 p.put("changeBy", row.getChangeBy());
                 p.put("changeOn", df.format(row.getChangeOn()));
-
+                p.put("duedate", dfnt.format(row.getDueDate()));
+                p.put("active", row.getFlagActive());
 //               String actionLink = "<button class='reuseData' value='./reuse.htm?id=" + row.getModelId() + "'>"+reuse+"</button> ";
 //            p.put("actionLink", actionLink);
                 String reuseCheckbox = "<font color='red'>เครื่องมือวัดขอต้นแบบนี้ถูกลบถูกลบ <br/>กรุณากู้คืนเครื่องมืดวัดที่เกี่ยวข้องก่อน</font>";

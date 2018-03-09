@@ -24,10 +24,10 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-2 col-md-offset-1">
-                        อ้างอิงรายงานหมายเลข
+                        งานหมายเลข
                     </div>
                     <div class="col-sm-2">
-                        <input style="font-weight: bolder;font-size: 1.5em;color:red" disabled value="${calibration.calCode}"/>
+                        <input disabled value="${calibration.calCode}"/>
                     </div>
                 </div>
                 <br>
@@ -36,10 +36,10 @@
                         เครื่องวัด/ทดสอบ รหัส 
                     </div>
                     <div class="col-sm-4 ">
-                        <input class="important-data-level-2" disabled value="${calibration.associateMeasure.measureCode}">
+                        <input class="" disabled value="${calibration.associateMeasure.measureCode}">
                     </div>
                     <div class="col-sm-4">
-                        <input class="important-data-level-2" disabled value="${calibration.associateMeasure.fullName}">
+                        <input class="" disabled value="${calibration.associateMeasure.fullName}">
                     </div>
                 </div>
                 <br/>
@@ -48,14 +48,14 @@
                         สถานะเครื่อง 
                     </div>
                     <div class="col-sm-2 ">
-                        <input class="important-data-level-1" disabled value="${calibration.associateEquipCon.fullName}">
+                        <input class="" disabled value="${calibration.associateEquipCon.fullName}">
                     </div>
                     <c:if test="${calibration.conditionComment !=null&&calibration.conditionComment !='' }">
                         <div class="col-sm-1 col-sm-offset-1">
                             เนื่องจาก
                         </div>
                         <div class="col-sm-4 ">
-                            <textarea style="width: 100%" class="important-data-level-1" disabled>${calibration.conditionComment}</textarea>
+                            <textarea style="width: 100%" class="" disabled>${calibration.conditionComment}</textarea>
                         </div>
                     </c:if>
                 </div>
@@ -66,10 +66,10 @@
                     </div>
                     <div class="col-sm-4">
                         <c:if test="${calibration.calibrationLocation =='inside'}">
-                            <input class="important-data-level-2" disabled value="สถานสอบเทียบภายใน">
+                            <input class="" disabled value="สถานสอบเทียบภายใน">
                         </c:if>
                         <c:if test="${calibration.calibrationLocation =='outside'}">
-                            <input class="important-data-level-2" disabled value="สถานสอบเทียบภายนอก">
+                            <input class="" disabled value="สถานสอบเทียบภายนอก">
                         </c:if>
 
                     </div>
@@ -80,10 +80,10 @@
                         แม่แบบ รหัส 
                     </div>
                     <div class="col-sm-4 ">
-                        <input class="important-data-level-1" disabled value="${calibration.associateModel.modelCode}">
+                        <input class="" disabled value="${calibration.associateModel.modelCode}">
                     </div>
                     <div class="col-sm-4">
-                        <input class="important-data-level-1" disabled value="${calibration.associateModelMeasure.fullName}">
+                        <input class="" disabled value="${calibration.associateModelMeasure.fullName}">
                     </div>
                 </div>
                 <br>
@@ -92,7 +92,7 @@
                         รายงานหมายเลข
                     </div>
                     <div class="col-sm-2 ">
-                        <input class="important-data-level-1" disabled value="${calibration.associateModel.cerNo}">
+                        <input class="" disabled value="${calibration.associateModel.cerNo}">
                     </div>
                 </div>
                 <div class="row">
@@ -100,7 +100,7 @@
                         ออกโดย
                     </div>
                     <div class="col-sm-4">
-                        <input class="important-data-level-1" disabled value="${calibration.associateModel.locationBy}">
+                        <input class="" disabled value="${calibration.associateModel.locationBy}">
                     </div>
                 </div>
                 <div class="row">
@@ -108,7 +108,7 @@
                         การสอบกลับ
                     </div>
                     <div class="col-sm-4">
-                        <input class="important-data-level-1" disabled value="${calibration.associateModel.locationReturn}">
+                        <input class="" disabled value="${calibration.associateModel.locationReturn}">
                     </div>
                 </div>
                 <br>
@@ -117,13 +117,13 @@
                         วิธีวัด 
                     </div>
                     <div class="col-sm-2">
-                        <input class="important-data-level-1" value="${calibration.associateProcess.processCode}" disabled/> 
+                        <input class="" value="${calibration.associateProcess.processCode}" disabled/> 
                     </div>
-                    <div class="col-sm-1 ">
+                    <div class="col-sm-1 col-md-offset-1">
                         เรื่อง
                     </div>
                     <div class="col-sm-4">
-                        <input class="important-data-level-1" value="${calibration.associateProcess.processSubject}" disabled/>
+                        <input class="" value="${calibration.associateProcess.processSubject}" disabled/>
                     </div>
                 </div>
                 <div class="row">
@@ -131,7 +131,7 @@
                         วัดโดย
                     </div>
                     <div class="col-sm-8">
-                        <textarea style="width: 100%" class="important-data-level-1" disabled>${calibration.associateProcess.processBy}</textarea>
+                        <textarea style="width: 100%" class="" disabled>${calibration.associateProcess.processBy}</textarea>
                     </div>
                 </div>
                 <div class="box-body container">
@@ -153,6 +153,7 @@
                                     <div class="container-fluid">
                                         <div class="row">
                                             <form:hidden path="edcsCalibrationAttachHeadList[${theBigCount.index}].abType" required="required"/>
+                                            <form:hidden path="edcsCalibrationAttachHeadList[${theBigCount.index}].calDate" />
                                             <form:hidden path="edcsCalibrationAttachHeadList[${theBigCount.index}].calAttachHeadId" required="required"/>
                                             <div class="col-md-2 col-md-offset-5 no-padding important-data-level-1">เอกสารแนบ หน้า ${calibration.edcsCalibrationAttachHeadList[theBigCount.index].abType} (หน่วย : ${calibration.associateUnit.unitShortEn})</div>
                                         </div>
@@ -163,15 +164,14 @@
                                             <div class="col-md-2 no-padding col-md-offset-1">ความชื้นสัมพันธ์</div><div class="col-md-1 no-padding"><form:input path="edcsCalibrationAttachHeadList[${theBigCount.index}].humidity"  class="form-control" required="required"  type="number" step="any"/> </div><div class="col-md-1">% RH</div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-md-1 col-md-offset-2 no-padding">วันที่สอบเทียบ</div><div class="col-md-2 no-padding"><form:input path="edcsCalibrationAttachHeadList[${theBigCount.index}].calDate"  readonly="true" class="form-control" required="required"/></div> 
-                                            <div class="col-md-2 col-md-offset-1 no-padding">สภาวะการสอบเทียบ</div><div class="col-md-1 no-padding"><form:input path="edcsCalibrationAttachHeadList[${theBigCount.index}].calState"  class="form-control" required="required" /> </div>
+                                            <div class="col-md-2 col-md-offset-1 no-padding">สภาวะการสอบเทียบ</div><div class="col-md-1 no-padding"><form:input path="edcsCalibrationAttachHeadList[${theBigCount.index}].calState"  class="form-control" /> </div>
                                         </div>
 
                                         <div class="row">
                                             <div class="col-md-1 col-md-offset-2 no-padding">พิสัยใช้งาน</div><div class="col-md-2 no-padding"><form:input path="edcsCalibrationAttachHeadList[${theBigCount.index}].activeRange"  readonly="true" class="form-control" required="required"/> </div>
                                             <div class="col-md-2 no-padding col-md-offset-1">
                                                 พิกัด</div><div class="col-md-1 no-padding">
-                                                <form:input path="edcsCalibrationAttachHeadList[${theBigCount.index}].coordinate"  class="form-control" required="required"  type="number"/> 
+                                                <form:input path="edcsCalibrationAttachHeadList[${theBigCount.index}].coordinate"  class="form-control" required="required"  type="text"/> 
                                             </div>
                                         </div>
                                         <br/>
@@ -361,16 +361,36 @@
                                 </div>
                                 <br/>
                                 <div class="row">
+                                    <div class="col-sm-2">วันสอบเทียบ</div>
+                                    <div class="col-sm-2">
+                                        <form:input path="calibratorOn"   class="form-control" required="required"/>
+                                    </div>
+                                </div>
+                                <br/>
+                                <div class="row">
                                     <div class="col-sm-2">อายุผลสอบเทียบ</div>
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-1">
                                         <select name="calAgeId">
                                             <c:forEach var="calage" items="${calAges}" >
-                                                <option value="${calage.calAgeId}">
-                                                    <fmt:formatNumber value="${calage.calAge}"
-                                                                      maxFractionDigits="0" />
-                                                </option>
+                                                <c:choose>
+                                                    <c:when test="${calage.calAgeId == calibration.calAgeId}">
+                                                        <option value="${calage.calAgeId}" selected>
+                                                            <fmt:formatNumber value="${calage.calAge}"
+                                                                              maxFractionDigits="0" />
+                                                        </option>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <option value="${calage.calAgeId}">
+                                                            <fmt:formatNumber value="${calage.calAge}"
+                                                                              maxFractionDigits="0" />
+                                                        </option>
+                                                    </c:otherwise>
+                                                </c:choose>
                                             </c:forEach>
                                         </select>
+                                    </div>
+                                    <div class="col-sm-4 no-padding">
+                                        <span id="calculaTedDueDate"></span>
                                     </div>
                                 </div>
                             </div>
@@ -407,18 +427,23 @@
             }
         });
         //end
-        //        $('input[id^="edcsCalibrationAttachHeadList"][id$="calDate"],input[id*="dueDate"]').datepicker({
-        //            dateFormat: 'dd/mm/yy',
-        //            changeYear: true,
-        //            changeMonth: true});
-
+        $('input[id="calibratorOn"]').datepicker({
+            dateFormat: 'dd/mm/yy',
+            changeYear: true,
+            changeMonth: true});
+        $('select[name="calAgeId"],input[id="calibratorOn"]').on("change", function () {
+            var date = $('input[id="calibratorOn"]').val();
+            var year = $("select[name='calAgeId']").val();
+            if (date != null && year != null) {
+                var momentDueDate = moment(date, "DD/MM/YYYY").add('years', year);
+                $("#calculaTedDueDate").text(momentDueDate.format('MM/DD/YYYY') + " ( หมดอายุในอีก " + momentDueDate.fromNow() + " )");
+            }
+        });
         //adjust result table colspan
         $(".summaryTable .spanDependOnInputTable").attr("colspan", $("table.inputTable ").length);
         $(".summaryTable .rowSpanDependOnInputTable").attr("rowspan", $("table.inputTable ").length);
-
         $('.selectpicker').selectpicker();
         $('.selectpicker').selectpicker('refresh');
-
         //create median column when input
         $('input[class*="inputCell"]').on("change", function () {
             var classInformation = $(this).attr("class");
@@ -441,8 +466,6 @@
                 var medianCell = $("td[class*='" + rowPointer + "-medianCell']");
                 var errorCell = $("td[class*='" + rowPointer + "-errorCell']");
                 var stdCell = $("td[class*='" + rowPointer + "-stdCell']");
-
-
                 var designateValueHiddenInput = $("input[class*='" + rowPointer + "-DesignateValue']");
                 //decimal to 2 remove unneeded 0
                 var median = parseFloat(sumOfCalValue / count);
@@ -452,7 +475,6 @@
                 var error = desinagteValue - median;
                 $(errorCell).text(error.toFixed(2).replace(/\.?0*$/g, ''));
                 var acceptance = parseFloat($("#calError").val());
-
                 if (Math.abs(error) > acceptance) {
                     $(errorCell).addClass("alert");
                 } else {
@@ -466,7 +488,6 @@
                 var variance = sumOfDataMinusMeanPowerOfTwo / count;
                 var std = Math.sqrt(variance);
                 $(stdCell).text(std.toFixed(2).replace(/\.?0*$/g, ''));
-
                 //calculate uncertainly
                 uncertainlyCalculate(row);
             }
@@ -512,17 +533,10 @@
                 }
             });
         });
-
-
-
         $(document).on('keydown', "input[class*='inputCell']", ChangeCurrentCell);
         $(document).on('keyup change', "input[class*='inputCell']", enforceFloat);
         $("input[class*='inputCell']").trigger("change");
     });
-
-
-
-
     function uncertainlyCalculate(rowTocalculate/*1-10*/) {
         //get value in row
         var sumOfCalValue = 0;

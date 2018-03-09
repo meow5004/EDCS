@@ -99,9 +99,6 @@
             "order": [[0, 'asc']],
             "displayLength": 10
         });
-
-
-
         unAvailableTable = $('#unavailableDepartmentTable').DataTable({
             responsive: {
                 details: {
@@ -124,23 +121,23 @@
             "ajax": "./getUnavailableDepartment.htm",
             "dom": '<lftip>',
             "order": [[0, 'asc']],
-            "displayLength": 10
+            "displayLength": 10,
+            fnDrawCallback: function () {
+                if ($(this).find('.dataTables_empty').length > 0) {
+                    $(this).closest(".dataTables_wrapper").hide();
+                } else {
+                    $(this).closest(".dataTables_wrapper").show();
+                }
+            }
         });
-
-
-
         $(document).on("click", ".addData,.editData,.deleteData,.reuseData", showFormByClick);
         $(document).on("submit", "#addForm,#editForm,#deleteForm,#reuseForm", sendDataPOSTByAction);
-
         $(document).on("click", ".deleteMultiple", deleteMultiple);
         $(document).on("click", ".reuseMultiple", reuseMultiple);
         $(document).on("click", ".realDeleteMultiple", realDeleteMultiple);
         //start by show add form
         showFrom("add.htm");
     });
-
-
-
     function showFormByClick() {
         $("#ajaxCRUDfield").load($(this).attr("value"), function () {
             var $inputs = $('input[type=text][name=depNameEn],input[type=text][name=depNameTh]');
@@ -148,10 +145,10 @@
                 // Set the required property of the other input to false if this input is not empty.
                 $inputs.not(this).prop('required', !$(this).val().length);
             });
-
             $inputs.trigger("input");
         });
         $(window).scrollTop(0);
+        $("input").first().focus();
         return false;
     }
 
@@ -164,6 +161,7 @@
             });
         });
         $(window).scrollTop(0);
+        $("input").first().focus();
         return false;
     }
 
@@ -282,6 +280,7 @@
         var valid;
         // if add or edit form check valid
         //delete and reuse form dont need validation
+
         if ($("#addForm").length > 0 || $("#editForm").length > 0) {
             valid = validateInput();
         } else {
@@ -305,13 +304,16 @@
                 data: $(this).serialize(), // serializes the form's elements.
                 success: function (result)
                 {
-                    bootbox.alert({
-                        backdrop: true,
-                        className: "successFont",
-                        message: result,
-                        callback: function () { /* your callback code */
-                        }
-                    });
+
+                    if (result != null) {
+                        bootbox.alert({
+                            backdrop: true,
+                            className: "successFont",
+                            message: result,
+                            callback: function () { /* your callback code */
+                            }
+                        });
+                    }
                     refreshDataAndJumpTo(id, 1);
                     highlightDatum(id, 1, availableTable);
                 }
@@ -322,10 +324,8 @@
 
     function validateInput() {
         var id = $("#depId").val();
-
         //edited case
         var oldValueId = $("#oldDepId").val();
-
         valid = 1;
         if (id.trim().length <= 0) {
             bootbox.alert({

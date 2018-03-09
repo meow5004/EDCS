@@ -7,14 +7,21 @@ package th.co.wacoal.springtemplates.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import static th.co.wacoal.springtemplates.controller.HelperFunction.calibrationFilterByDepartments;
@@ -42,6 +49,18 @@ import th.co.wacoal.springtemplates.domain.EdcsMasUser;
 @Controller
 @RequestMapping("/ajaxHelper")
 public class mainAjaxUtilController {
+
+    DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss", Locale.US);
+    DateFormat dfnt = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
+
+    @InitBinder
+    public void dataBinding(WebDataBinder binder) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
+        dateFormat.setLenient(false);
+        //for attachHeader
+        binder.registerCustomEditor(java.sql.Date.class, new CustomDateEditor(dateFormat, true));
+        binder.registerCustomEditor(java.util.Date.class, new CustomDateEditor(dateFormat, true));
+    }
 
     @RequestMapping("/getNearDueAndNewCalibration.htm")
     public void getNearDueAndNewCalibration(@RequestParam("dayDue") int dayDue, @RequestParam(value = "depId", required = false) String depId, Model model, HttpSession session, HttpServletResponse response) throws IOException {
@@ -237,6 +256,29 @@ public class mainAjaxUtilController {
 
             EdcsCalibrationDAO calibDAO = new EdcsCalibrationDAOImpI(db);
             List<EdcsCalibration> approveDevice = calibDAO.listStickeredDevicesCalibration();
+            // Do somethin
+            EdcsMasUser user = (EdcsMasUser) session.getAttribute("user");
+            approveDevice = HelperFunction.calibrationFilterPerUserViewableDepartments(user, approveDevice);
+            JSONArray jsonString = JSONArray.fromObject(approveDevice);
+            //Go to view
+            responResult = "{" + "\"size\":\"" + approveDevice.size() + "\",\"data\":" + jsonString + "}";
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        } finally {
+            db.close();
+            out.print(responResult);
+        }
+    }
+
+    @RequestMapping("/listOldCalibStickerPrintedBetween.htm")
+    public void listOldCalibStickerPrintedBetween(@RequestParam(value = "start", required = false) Date start, @RequestParam(value = "end", required = false) Date end, Model model, HttpSession session, HttpServletResponse response) throws IOException {
+        PrintWriter out = response.getWriter();
+        Database db = new Database("sqlServer");
+        String responResult = null;
+        try {
+
+            EdcsCalibrationDAO calibDAO = new EdcsCalibrationDAOImpI(db);
+            List<EdcsCalibration> approveDevice = calibDAO.listOldCalibStickerPrintedBetween(start, end);
             // Do somethin
             EdcsMasUser user = (EdcsMasUser) session.getAttribute("user");
             approveDevice = HelperFunction.calibrationFilterPerUserViewableDepartments(user, approveDevice);

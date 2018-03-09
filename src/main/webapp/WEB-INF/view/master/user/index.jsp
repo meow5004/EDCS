@@ -90,14 +90,14 @@
     function showFormByClick() {
         $("#ajaxCRUDfield").load($(this).attr("value"), function () {
         });
-        $(window).scrollTop(0);
+        $(window).scrollTop(0);$("input").first().focus();
         return false;
     }
 
     function showFrom(link) {
         $("#ajaxCRUDfield").load(link, function () {
         });
-        $(window).scrollTop(0);
+        $(window).scrollTop(0);$("input").first().focus();
         return false;
     }
 
@@ -107,7 +107,7 @@
         $("input[type='checkbox'][name='deletedUserId']:checked").each(function (i) {
             idArray[i] = parseInt($(this).val());
         });
-        console.log(idArray);
+        //console.log(idArray);
         size = idArray.length;
         if (size > 0) {
             bootbox.confirm({
@@ -146,7 +146,7 @@
         var valid;
         // if add or edit form check valid
         //delete edit  form dont need validation+
-        console.log($("#addForm").length > 0);
+        //console.log($("#addForm").length > 0);
         if ($("#addForm").length > 0) {
             //check only new user
             valid = validateInput();
@@ -162,7 +162,7 @@
             }
         }
         if (valid === 1) {
-            console.log(valid);
+            //console.log(valid);
             var form = $(this); //wrap this in jQuery
             var url = form.prop('action'); // the script where you handle the form input.
             $.ajax({

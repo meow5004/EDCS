@@ -357,7 +357,7 @@
                 disapprovedTable.$("input[type='checkbox'][name='calId[]']:checked", {"filter": "applied"}).each(function (i) {
                     checkedValues[i] = $(this).val();
                 });
-                console.log(checkedValues);
+                //console.log(checkedValues);
                 $.ajax({
                     type: "POST",
                     async: false,

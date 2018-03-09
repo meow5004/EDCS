@@ -67,6 +67,7 @@
         </div>
 
     </div>
+    <c:if test="${fn:contains( user.userTypeIds,1)}">
     <div class="row">
         <div class="box box-primary">
             <div class="box-header">
@@ -112,16 +113,16 @@
                     <i class="fa fa-user-plus" style="font-size: 90px;"></i><b style="font-size: 14px;">จัดการข้อมูล<br>ผู้ใช้งาน</b>
                 </a>
                 <a href="../userAuthType/index.htm" class="btn btn-app btn-primary" style="width: 160px; height: 150px;">
-                    <i class="fa fa-user-plus" style="font-size: 90px;"></i><b style="font-size: 14px;">จัดการข้อมูล<br>สิทธิ์การใช้งาน</b>
+                    <i class="fa fa-low-vision" style="font-size: 90px;"></i><b style="font-size: 14px;">จัดการข้อมูล<br>สิทธิ์การใช้งาน</b>
                 </a>
                 <a href="../userType/index.htm" class="btn btn-app btn-primary" style="width: 160px; height: 150px;">
-                    <i class="fa fa-user-plus" style="font-size: 90px;"></i><b style="font-size: 14px;">จัดการข้อมูล<br>ประเภทการใช้งาน</b>
+                    <i class="fa fa-universal-access" style="font-size: 90px;"></i><b style="font-size: 14px;">จัดการข้อมูล<br>ประเภทผู้ใช้งาน</b>
                 </a>
                 <a href="../process/index.htm" class="btn btn-app btn-primary" style="width: 160px; height: 150px;">
                     <i class="fa fa-book" style="font-size: 90px;"></i><b style="font-size: 14px;">วิธีทดสอบ</b>
                 </a>
                 <a href="../model/index.htm" class="btn btn-app btn-primary" style="width: 160px; height: 150px;">
-                    <i class="fa fa-key" style="font-size: 90px;"></i><b style="font-size: 14px;">จัดการแม่แบบ</b>
+                    <i class="fa fa-globe" style="font-size: 90px;"></i><b style="font-size: 14px;">จัดการแม่แบบ</b>
                 </a>
                 <a href="../calage/index.htm" class="btn btn-app btn-primary" style="width: 160px; height: 150px;">
                     <i class="fa fa-clock-o" style="font-size: 90px;"></i><b style="font-size: 14px;">จัดการช่วงเวลาสอบเทียบ</b>
@@ -130,6 +131,7 @@
         </div>
 
     </div>
+    </c:if>
 </div>
 <jsp:include page="include/include_footer.jsp" flush="true"></jsp:include>
 

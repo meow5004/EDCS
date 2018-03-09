@@ -95,11 +95,13 @@ public class EdcsMasDepartmentController {
 
                 departmentDAO.add(department);
                 responseMessage = "add DEPARTMENT " + department.getDepNameTh() + "(" + department.getDepNameEn() + ") " + "in to BRANCH " + branch.getFullName();
+            } else {
+                responseMessage = "<span style='color:red'>repeated ID please enter different ID<span>";
             }
 
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
-             responseMessage = ex.getMessage();
+            responseMessage = ex.getMessage();
         } finally {
 
             db.close();
@@ -153,7 +155,7 @@ public class EdcsMasDepartmentController {
 
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
-             responseMessage = ex.getMessage();
+            responseMessage = ex.getMessage();
         } finally {
             db.close();
             out.print(responseMessage);
@@ -191,7 +193,7 @@ public class EdcsMasDepartmentController {
 
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
-             responseMessage = ex.getMessage();
+            responseMessage = ex.getMessage();
         } finally {
             db.close();
             out.print(responseMessage);
@@ -212,7 +214,7 @@ public class EdcsMasDepartmentController {
 
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
-             responseMessage = ex.getMessage();
+            responseMessage = ex.getMessage();
         } finally {
             db.close();
             out.printf(responseMessage);
@@ -232,7 +234,7 @@ public class EdcsMasDepartmentController {
 
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
-             responseMessage = ex.getMessage();
+            responseMessage = ex.getMessage();
         } finally {
             db.close();
             out.print(responseMessage);
@@ -270,7 +272,7 @@ public class EdcsMasDepartmentController {
 
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
-             responseMessage = ex.getMessage();
+            responseMessage = ex.getMessage();
         } finally {
             out.close();
             out.print(responseMessage);
@@ -319,7 +321,7 @@ public class EdcsMasDepartmentController {
             }
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
-             responseMessage = ex.getMessage();
+            responseMessage = ex.getMessage();
         } finally {
             db.close();
             out.write(responseMessage);
@@ -437,7 +439,7 @@ public class EdcsMasDepartmentController {
             out.print("{" + "\"size\":\"" + departments.size() + "\",\"data\":" + jsonString + "}");
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
-             responseMessage = ex.getMessage();
+            responseMessage = ex.getMessage();
         } finally {
             db.close();
             out.write(responseMessage);
@@ -486,7 +488,7 @@ public class EdcsMasDepartmentController {
             out.print("{" + "\"size\":\"" + departments.size() + "\",\"data\":" + jsonString + "}");
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
-             responseMessage = ex.getMessage();
+            responseMessage = ex.getMessage();
         } finally {
             db.close();
             out.write(responseMessage);

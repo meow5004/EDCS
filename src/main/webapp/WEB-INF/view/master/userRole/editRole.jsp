@@ -43,7 +43,7 @@
                         <spring:message code="userRole.selectAll" text="message not found"/>:
                     </div>
                     <div class="col-md-6">
-                        <input type="checkbox" id="selectAll_depId">
+                        <input type="checkbox" id="selectAll_viewableDepartmentIds">
                     </div>
                 </div>
                 <c:forEach items="${deps}" var="dep" varStatus="status">
@@ -52,7 +52,7 @@
                             ${dep.depNameTh}:
                         </div>
                         <div class="col-md-6">
-                            <form:checkbox  path="viewableDepartments[${status.index}].depId" value="${dep.depId}"/>
+                            <form:checkbox  path="viewableDepartmentIds" value="${dep.depId}"/>
                         </div>
                     </div>
                 </c:forEach>
@@ -67,7 +67,7 @@
                         <spring:message code="userRole.selectAll" text="message not found"/>:
                     </div>
                     <div class="col-md-6">
-                        <input type="checkbox" id="selectAll_authTypeId">
+                        <input type="checkbox" id="selectAll_userAuthTypeIds">
                     </div>
                 </div>
                 <c:forEach items="${auths}" var="auth" varStatus="status">
@@ -76,7 +76,7 @@
                             ${auth.authTypeNameTh}:
                         </div>
                         <div class="col-md-6">
-                            <form:checkbox  path="userAuthTypes[${status.index}].authTypeId" value="${auth.authTypeId}"/>
+                            <form:checkbox  path="userAuthTypeIds" value="${auth.authTypeId}"/>
                         </div>
                     </div>
                 </c:forEach>
@@ -91,7 +91,7 @@
                         <spring:message code="userRole.selectAll" text="message not found"/>:
                     </div>
                     <div class="col-md-6">
-                        <input type="checkbox" id="selectAll_userTypeId">
+                        <input type="checkbox" id="selectAll_userTypeIds">
                     </div>
                 </div>
                 <c:forEach items="${types}" var="type" varStatus="status">
@@ -100,7 +100,7 @@
                             ${type.userTypeNameTh}:
                         </div>
                         <div class="col-md-6">
-                            <form:checkbox  path="userTypes[${status.index}].userTypeId" value="${type.userTypeId}" />
+                            <form:checkbox  path="userTypeIds" value="${type.userTypeId}" />
                         </div>
                     </div>
                 </c:forEach>

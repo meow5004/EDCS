@@ -22,4 +22,6 @@ public interface stickerReserveDAO {
 
     public void addStickersToReserve(List<StickerReserve> stickers);
 
+    public void deleteSticker(Integer id);
+
 }

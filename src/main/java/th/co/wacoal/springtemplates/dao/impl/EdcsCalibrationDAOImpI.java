@@ -6,11 +6,14 @@
 package th.co.wacoal.springtemplates.dao.impl;
 
 import java.sql.PreparedStatement;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import th.co.wacoal.springtemplates.dao.EdcsCalibrationAttachHeadDAO;
 import th.co.wacoal.springtemplates.dao.EdcsCalibrationDAO;
@@ -44,7 +47,7 @@ import th.co.wacoal.springtemplates.domain.calibrationRequestModel;
 public class EdcsCalibrationDAOImpI implements EdcsCalibrationDAO {
 
     private Database db;
-
+    DateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.US);//sql datetime format
     EdcsMasMeasureDAO masDao = null;
     EdcsMasCalageDAO calageDAO = null;
     EdcsMasStatusCaldocDAO statusCalDocDAO = null;
@@ -221,15 +224,19 @@ public class EdcsCalibrationDAOImpI implements EdcsCalibrationDAO {
         if (map != null) {
             calageYear = (double) map.get("CAL_AGE");
         }
+        Calendar dueDate = Calendar.getInstance();
+        dueDate.setTime(calib.getCalibratorOn());
+        dueDate.add(Calendar.YEAR, calageYear.intValue());
+
         //find old calib
         String sql = "UPDATE EDCS_CALIBRATION SET STATUS_CALDOC_ID=?,"
                 + "COMMENT=?,"
                 + "CALIBRATION_ATTACH_STATUS=1,"
                 + "CALIBRATION_ATTACH_STATUS_BY=?,"
                 + "CALIBRATION_ATTACH_STATUS_ON=(getdate()),"
-                + "CALIBRATOR_ON=(getdate()),"
+                + "CALIBRATOR_ON=?,"
                 + "CAL_AGE_ID=?,"
-                + "DUE_DATE=DATEADD(year," + calageYear.intValue() + ",getdate()) "
+                + "DUE_DATE=? "
                 + "WHERE CAL_ID=?";
         try {
             PreparedStatement pstmt = db.connect.prepareStatement(sql);
@@ -237,8 +244,10 @@ public class EdcsCalibrationDAOImpI implements EdcsCalibrationDAO {
             pstmt.setInt(1, calib.getStatusCaldocId());
             pstmt.setString(2, calib.getComment());
             pstmt.setString(3, calib.getCalibrationAttachStatusBy());
-            pstmt.setInt(4, calib.getCalAgeId());
-            pstmt.setInt(5, calib.getCalId());
+            pstmt.setDate(4, new java.sql.Date(calib.getCalibratorOn().getTime()));
+            pstmt.setInt(5, calib.getCalAgeId());
+            pstmt.setDate(6, new java.sql.Date(dueDate.getTimeInMillis()));
+            pstmt.setInt(7, calib.getCalId());
             pstmt.executeUpdate();
 
         } catch (Exception e) {
@@ -296,7 +305,7 @@ public class EdcsCalibrationDAOImpI implements EdcsCalibrationDAO {
     @Override
     public void printedStickerCheck(int calId, String userId) {
         String stickerStatusBy = userId;
-        String sql = "UPDATE EDCS_CALIBRATION SET STICKER_STATUS=1,STICKER_STATUS_BY=?,STICKER_STATUS_ON=(getdate()) WHERE CAL_ID=?";
+        String sql = "UPDATE EDCS_CALIBRATION SET STICKER_PRINT=STICKER_PRINT+1,STICKER_STATUS=1,STICKER_STATUS_BY=?,STICKER_STATUS_ON=(getdate()) WHERE CAL_ID=?";
         int result = db.update(sql, stickerStatusBy, calId);
     }
 
@@ -309,7 +318,7 @@ public class EdcsCalibrationDAOImpI implements EdcsCalibrationDAO {
 
     @Override
     public void returnedDeviceCheck(calibrationDeviceCheckModel checkedModel) {
-        String sql = "UPDATE EDCS_CALIBRATION SET ,EQUIP_CON_ID=?,CONDITION_COMMENT=?,RETURN_STATUS_BY=?,RETURN_STATUS_ON=(getdate()),RETURN_STATUS=1 WHERE CAL_ID=?";
+        String sql = "UPDATE EDCS_CALIBRATION SET EQUIP_CON_ID=?,CONDITION_COMMENT=?,RETURN_STATUS_BY=?,RETURN_STATUS_ON=(getdate()),RETURN_STATUS=1 WHERE CAL_ID=?";
         int result = db.update(sql, checkedModel.getEquipConId(), checkedModel.getConditionComment(), checkedModel.getInspector(), checkedModel.getCalId());
     }
 
@@ -405,7 +414,7 @@ public class EdcsCalibrationDAOImpI implements EdcsCalibrationDAO {
         //get measure Mapping data
         Map<Integer, EdcsMasMeasure> measureList = masDao.findByFlagListMappingById(0);
 
-        String sql = "select * from EDCS_CALIBRATION WHERE DUE_DATE IS NULL  AND REQUEST_APPROVER_BY=? AND REQUEST_APPROVER_STATUS =0 AND REQUEST_STATUS = 1";
+        String sql = "select * from EDCS_CALIBRATION WHERE DUE_DATE IS NULL  AND REQUEST_APPROVER_BY=? AND REQUEST_APPROVER_STATUS =0 AND REQUEST_STATUS = 1 AND FLAG_ACTIVE=1";
         List<Map<String, Object>> rs = db.queryList(sql, approverId);
         List<EdcsCalibration> ret = new ArrayList<>();
         for (Map<String, Object> map : rs) {
@@ -424,7 +433,7 @@ public class EdcsCalibrationDAOImpI implements EdcsCalibrationDAO {
         //get measure Mapping data
         Map<Integer, EdcsMasMeasure> measureList = masDao.findByFlagListMappingById(0);
 
-        String sql = "select * from EDCS_CALIBRATION WHERE DUE_DATE IS NULL  AND RECEIVE_STATUS IS NULL AND REQUEST_APPROVER_STATUS = 1";
+        String sql = "select * from EDCS_CALIBRATION WHERE DUE_DATE IS NULL  AND RECEIVE_STATUS IS NULL AND REQUEST_APPROVER_STATUS = 1 AND FLAG_ACTIVE=1";
         List<Map<String, Object>> rs = db.queryList(sql);
         List<EdcsCalibration> ret = new ArrayList<>();
         for (Map<String, Object> map : rs) {
@@ -444,7 +453,7 @@ public class EdcsCalibrationDAOImpI implements EdcsCalibrationDAO {
         //get measure Mapping data
         Map<Integer, EdcsMasMeasure> measureList = masDao.findByFlagListMappingById(0);
 
-        String sql = "select * from EDCS_CALIBRATION WHERE RECEIVE_STATUS =1  AND APPROVE_STATUS IS NULL";
+        String sql = "select * from EDCS_CALIBRATION WHERE RECEIVE_STATUS =1 AND FLAG_ACTIVE=1  AND APPROVE_STATUS IS NULL";
         List<Map<String, Object>> rs = db.queryList(sql);
         List<EdcsCalibration> ret = new ArrayList<>();
         for (Map<String, Object> map : rs) {
@@ -463,7 +472,7 @@ public class EdcsCalibrationDAOImpI implements EdcsCalibrationDAO {
         //get measure Mapping data
         Map<Integer, EdcsMasMeasure> measureList = masDao.findByFlagListMappingById(0);
 
-        String sql = "select * from EDCS_CALIBRATION WHERE  APPROVE_STATUS =4";
+        String sql = "select * from EDCS_CALIBRATION WHERE  APPROVE_STATUS =4 AND FLAG_ACTIVE=1";
         List<Map<String, Object>> rs = db.queryList(sql);
         List<EdcsCalibration> ret = new ArrayList<>();
         for (Map<String, Object> map : rs) {
@@ -482,7 +491,7 @@ public class EdcsCalibrationDAOImpI implements EdcsCalibrationDAO {
         //get measure Mapping data
         Map<Integer, EdcsMasMeasure> measureList = masDao.findByFlagListMappingById(0);
 
-        String sql = "select * from EDCS_CALIBRATION WHERE APPROVE_STATUS =0 AND APPROVE_STATUS_BY=?";
+        String sql = "select * from EDCS_CALIBRATION WHERE APPROVE_STATUS =0 AND FLAG_ACTIVE=1 AND APPROVE_STATUS_BY=?";
         List<Map<String, Object>> rs = db.queryList(sql, approverId);
         List<EdcsCalibration> ret = new ArrayList<>();
         for (Map<String, Object> map : rs) {
@@ -501,7 +510,7 @@ public class EdcsCalibrationDAOImpI implements EdcsCalibrationDAO {
         //get measure Mapping data
         Map<Integer, EdcsMasMeasure> measureList = masDao.findByFlagListMappingById(0);
 
-        String sql = "select * from EDCS_CALIBRATION WHERE APPROVE_STATUS =1 AND ( STICKER_STATUS=0 OR STICKER_STATUS IS NULL )";
+        String sql = "select * from EDCS_CALIBRATION WHERE APPROVE_STATUS =1 AND FLAG_ACTIVE=1 AND ( STICKER_STATUS=0 OR STICKER_STATUS IS NULL ) AND  CAL_ID NOT IN (SELECT CAL_ID FROM STICKER_RESERVE) ";
         List<Map<String, Object>> rs = db.queryList(sql);
         List<EdcsCalibration> ret = new ArrayList<>();
         for (Map<String, Object> map : rs) {
@@ -520,7 +529,7 @@ public class EdcsCalibrationDAOImpI implements EdcsCalibrationDAO {
         //get measure Mapping data
         Map<Integer, EdcsMasMeasure> measureList = masDao.findByFlagListMappingById(0);
 
-        String sql = "select * from EDCS_CALIBRATION WHERE STICKER_STATUS=1 AND ( RETURN_STATUS=0 OR RETURN_STATUS IS NULL )";
+        String sql = "select * from EDCS_CALIBRATION WHERE STICKER_STATUS=1 AND FLAG_ACTIVE=1 AND ( RETURN_STATUS=0 OR RETURN_STATUS IS NULL )";
         List<Map<String, Object>> rs = db.queryList(sql);
         List<EdcsCalibration> ret = new ArrayList<>();
         for (Map<String, Object> map : rs) {
@@ -533,18 +542,43 @@ public class EdcsCalibrationDAOImpI implements EdcsCalibrationDAO {
     }
 
     @Override
-    public List<EdcsCalibration> getCalibrationListInSystem() {
+    public List<EdcsCalibration> listOldCalibStickerPrintedBetween(Date start, Date end) {
         Database db = new Database("sqlServer");
         EdcsMasMeasureDAO masDao = new EdcsMasMeasureDAOImpI(db);
-        //get measure Mapping data
-        Map<Integer, EdcsMasMeasure> measureList = masDao.findByFlagListMappingById(0);
-
-        String sql = "select * from EDCS_CALIBRATION WHERE REQUEST_STATUS = 1";
+        String dateSql = "";
+        if (start != null || end != null) {
+            dateSql += " AND ";
+            if (start != null) {
+                dateSql += " CALIBRATOR_ON >= ";
+                dateSql += "'" + df.format(start) + "'";
+            }
+            if (end != null) {
+                if (start != null) {
+                    dateSql += " AND ";
+                }
+                dateSql += " CALIBRATOR_ON <= ";
+                dateSql += "'" + df.format(end) + "'";
+            }
+        }
+        String sql = "select * from EDCS_CALIBRATION WHERE STICKER_STATUS=1 AND STICKER_PRINT > 0 AND FLAG_ACTIVE=1 AND  CAL_ID NOT IN (SELECT CAL_ID FROM STICKER_RESERVE) " + dateSql;
         List<Map<String, Object>> rs = db.queryList(sql);
         List<EdcsCalibration> ret = new ArrayList<>();
         for (Map<String, Object> map : rs) {
             EdcsCalibration temp = mappingResultSetToCalibration(map);
-            temp.setAssociateMeasure(measureList.get(temp.getMeasureId()));
+            ret.add(temp);
+        }
+
+        return ret;
+    }
+
+    @Override
+    public List<EdcsCalibration> getCalibrationListInSystem() {
+        Database db = new Database("sqlServer");
+        String sql = "select * from EDCS_CALIBRATION WHERE REQUEST_STATUS = 1 AND FLAG_ACTIVE=1";
+        List<Map<String, Object>> rs = db.queryList(sql);
+        List<EdcsCalibration> ret = new ArrayList<>();
+        for (Map<String, Object> map : rs) {
+            EdcsCalibration temp = mappingResultSetToCalibration(map);
             ret.add(temp);
         }
 

@@ -93,7 +93,7 @@
 
             $inputs.trigger("input");
         });
-        $(window).scrollTop(0);
+        $(window).scrollTop(0);$("input").first().focus();
         return false;
     }
 
@@ -107,7 +107,7 @@
 
             $inputs.trigger("input");
         });
-        $(window).scrollTop(0);
+        $(window).scrollTop(0);$("input").first().focus();
         return false;
     }
 
@@ -117,7 +117,7 @@
         $("input[type='checkbox'][name='deletedUserAuthTypeId']:checked").each(function (i) {
             idArray[i] = parseInt($(this).val());
         });
-        console.log(idArray);
+        //console.log(idArray);
         size = idArray.length;
         if (size > 0) {
             bootbox.confirm({
@@ -170,7 +170,7 @@
             }
         }
         if (valid === 1) {
-            console.log(valid);
+            //console.log(valid);
             var form = $(this); //wrap this in jQuery
             var url = form.prop('action'); // the script where you handle the form input.
             $.ajax({

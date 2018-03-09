@@ -43,8 +43,7 @@ public class StickerReserve implements Serializable {
     @Size(min = 1, max = 50)
     @Column(name = "EMP_ID")
     private String empId;
-    @Column(name = "PRINT_ORDER")
-    private Integer printOrder;
+
 
     private EdcsMasUser associateUser;
     private EdcsCalibration associateCalibration;
@@ -86,13 +85,6 @@ public class StickerReserve implements Serializable {
         this.empId = empId;
     }
 
-    public Integer getPrintOrder() {
-        return printOrder;
-    }
-
-    public void setPrintOrder(Integer printOrder) {
-        this.printOrder = printOrder;
-    }
 
     @Override
     public int hashCode() {
@@ -133,6 +125,10 @@ public class StickerReserve implements Serializable {
     @Override
     public String toString() {
         return "th.co.wacoal.springtemplates.domain.StickerReserve[ stickerId=" + stickerId + " ]";
+    }
+
+    public void setCalId(String calId) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

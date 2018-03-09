@@ -36,6 +36,8 @@ import th.co.wacoal.springtemplates.dao.impl.EdcsMasModelDAOImpI;
 import th.co.wacoal.springtemplates.dao.impl.EdcsMasProcessDAOImpI;
 import th.co.wacoal.springtemplates.dao.impl.EdcsMasStatusCaldocDAOImpl;
 import th.co.wacoal.springtemplates.dao.impl.EdcsMasUserDAOImpI;
+import th.co.wacoal.springtemplates.dao.impl.stickerReserveDAOImpI;
+import th.co.wacoal.springtemplates.dao.stickerReserveDAO;
 import th.co.wacoal.springtemplates.db.Database;
 import th.co.wacoal.springtemplates.domain.EdcsCalibration;
 import th.co.wacoal.springtemplates.domain.EdcsCalibrationAttachHead;
@@ -161,6 +163,9 @@ public class IndexController {
                 calibration.setEdcsCalibrationAttachHeadList(calibrationAttachmentHeadSet);
             }
             calibration.setCalibrationAttachStatusOn(new Date());
+            if (calibration.getCalibratorOn() == null) {
+                calibration.setCalibratorOn(new Date());
+            }
 
             model.addAttribute("calibration", calibration);
             model.addAttribute("calDocConditions", statDoc);
@@ -184,11 +189,38 @@ public class IndexController {
         return "trackingDoc";
     }
 
-     @RequestMapping("/stickerTableTemplate.htm")
+    @RequestMapping("/stickerTableTemplate.htm")
     public String stickerTableTemplate(Model model, HttpSession session) {
-        return "stickerTableTemplate";
+        Database db = new Database("sqlServer");
+        EdcsMasUser user = (EdcsMasUser) session.getAttribute("user");
+        try {
+            stickerReserveDAO stickerDAO = new stickerReserveDAOImpI(db);
+            model.addAttribute("stickers", stickerDAO.findStickersByUserId(user.getEmpId()));
+
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        } finally {
+            db.close();
+            return "stickerTableTemplate";
+        }
+
     }
-    
+
+    @RequestMapping("/annualPlan.htm")
+    public String annualPlan(Model model, HttpSession session) {
+        Database db = new Database("sqlServer");
+        EdcsMasUser user = (EdcsMasUser) session.getAttribute("user");
+        try {
+
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        } finally {
+            db.close();
+            return "annualPlanTemplate";
+        }
+
+    }
+
     @RequestMapping("/deviceReceivce.htm")
     public String deviceReceivce(Model model, HttpSession session) {
         Database db = new Database("sqlServer");

@@ -33,7 +33,7 @@ public class stickerReserveDAOImpI implements stickerReserveDAO {
 
     @Override
     public List<StickerReserve> findStickersByUserId(String userId) {
-        String sql = "select * from STICKER_RESERVE WHERE EMP_ID=? ORDER_BY PRINT_ORDER";
+        String sql = "select * from STICKER_RESERVE WHERE EMP_ID=? ORDER BY STICKER_ID";
         List<Map<String, Object>> rs = db.queryList(sql, userId);
         List<StickerReserve> ret = new ArrayList<>();
         for (Map<String, Object> map : rs) {
@@ -51,9 +51,19 @@ public class stickerReserveDAOImpI implements stickerReserveDAO {
     }
 
     @Override
+    public void deleteSticker(Integer id) {
+        String sql = "delete from STICKER_RESERVE WHERE STICKER_ID=?";
+        db.update(sql, id);
+    }
+
+    @Override
     public void addStickerToReserve(StickerReserve sticker) {
-        String sql = "insert into STICKER_RESERVE (EMP_ID,CAL_ID,PRINT_ORDER) VALUES(?,?,?)";
-        db.add(sql, sticker.getEmpId(), sticker.getCalId(), sticker.getPrintOrder());
+        String sql = "IF NOT EXISTS(SELECT * FROM STICKER_RESERVE WHERE CAL_ID = ? AND EMP_ID = ?) "
+                + "BEGIN "
+                + "INSERT INTO STICKER_RESERVE(CAL_ID, EMP_ID) "
+                + "VALUES(?,?) "
+                + "END";
+        db.add(sql, sticker.getCalId(), sticker.getEmpId(), sticker.getCalId(), sticker.getEmpId());
     }
 
     @Override
@@ -66,12 +76,10 @@ public class stickerReserveDAOImpI implements stickerReserveDAO {
     private StickerReserve mappingResultSet(Map<String, Object> map) {
         String userId = (String) map.get("EMP_ID");
         Integer calId = (Integer) map.get("CAL_ID");
-        Integer order = (Integer) map.get("PRINT_ORDER");
         Integer id = (Integer) map.get("STICKER_ID");
 
         StickerReserve sticker = new StickerReserve();
         sticker.setStickerId(id);
-        sticker.setPrintOrder(order);
         sticker.setEmpId(userId);
         sticker.setCalId(calId);
 

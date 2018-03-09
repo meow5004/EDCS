@@ -124,7 +124,15 @@
             "ajax": "./getUnavailableCalage.htm",
             "dom": '<lftip>',
             "order": [[0, 'asc']],
-            "displayLength": 10});
+            "displayLength": 10,
+            fnDrawCallback: function () {
+                if ($(this).find('.dataTables_empty').length > 0) {
+                    $(this).closest(".dataTables_wrapper").hide();
+                } else {
+                    $(this).closest(".dataTables_wrapper").show();
+                }
+            }
+        });
 
         $(document).on("click", ".addData,.editData", showFormByClick);
         $(document).on("submit", "#addForm,#editForm", sendDataPOSTByAction);
@@ -139,14 +147,14 @@
     function showFormByClick() {
         $("#ajaxCRUDfield").load($(this).attr("value"), function () {
         });
-        $(window).scrollTop(0);
+        $(window).scrollTop(0);$("input").first().focus();
         return false;
     }
 
     function showFrom(link) {
         $("#ajaxCRUDfield").load(link, function () {
         });
-        $(window).scrollTop(0);
+        $(window).scrollTop(0);$("input").first().focus();
         return false;
     }
 
@@ -156,7 +164,7 @@
         $("input[type='checkbox'][name='deletedCalageId']:checked").each(function (i) {
             idArray[i] = parseInt($(this).val());
         });
-        console.log(idArray);
+        //console.log(idArray);
         size = idArray.length;
         if (size > 0) {
             bootbox.confirm({
@@ -282,7 +290,7 @@
             }
         }
         if (valid === 1) {
-            console.log(valid);
+            //console.log(valid);
             var form = $(this); //wrap this in jQuery
             var url = form.prop('action'); // the script where you handle the form input.
             $.ajax({

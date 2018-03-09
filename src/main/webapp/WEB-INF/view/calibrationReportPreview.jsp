@@ -25,10 +25,10 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-2 col-md-offset-1">
-                        อ้างอิงรายงานหมายเลข
+                        รายงานหมายเลข
                     </div>
                     <div class="col-sm-2">
-                        <input style="font-weight: bolder;font-size: 1.5em;color:red" disabled value="${calibration.calCode}"/>
+                        <input disabled value="${calibration.calCode}"/>
                     </div>
                 </div>
                 <hr/>
@@ -37,10 +37,10 @@
                         เครื่องวัด/ทดสอบ รหัส 
                     </div>
                     <div class="col-sm-4 ">
-                        <input class="important-data-level-2" disabled value="${calibration.associateMeasure.measureCode}">
+                        <input class="" disabled value="${calibration.associateMeasure.measureCode}">
                     </div>
                     <div class="col-sm-4">
-                        <input class="important-data-level-2" disabled value="${calibration.associateMeasure.fullName}">
+                        <input class="" disabled value="${calibration.associateMeasure.fullName}">
                     </div>
                 </div>
                 <hr/>
@@ -49,14 +49,14 @@
                         สถานะเครื่อง 
                     </div>
                     <div class="col-sm-2 ">
-                        <input class="important-data-level-1" disabled value="${calibration.associateEquipCon.fullName}">
+                        <input class="" disabled value="${calibration.associateEquipCon.fullName}">
                     </div>
                     <c:if test="${calibration.conditionComment !=null&&calibration.conditionComment !='' }">
                         <div class="col-sm-1 col-sm-offset-1">
                             เนื่องจาก
                         </div>
                         <div class="col-sm-4 ">
-                            <textarea style="width: 100%" class="important-data-level-1" disabled>${calibration.conditionComment}</textarea>
+                            <textarea style="width: 100%" class="" disabled>${calibration.conditionComment}</textarea>
                         </div>
                     </c:if>
                 </div>
@@ -67,10 +67,10 @@
                     </div>
                     <div class="col-sm-4">
                         <c:if test="${calibration.calibrationLocation =='inside'}">
-                            <input class="important-data-level-2" disabled value="สถานสอบเทียบภายใน">
+                            <input class="" disabled value="สถานสอบเทียบภายใน">
                         </c:if>
                         <c:if test="${calibration.calibrationLocation =='outside'}">
-                            <input class="important-data-level-2" disabled value="สถานสอบเทียบภายนอก">
+                            <input class="" disabled value="สถานสอบเทียบภายนอก">
                         </c:if>
 
                     </div>
@@ -81,10 +81,10 @@
                         แม่แบบ รหัส 
                     </div>
                     <div class="col-sm-4 ">
-                        <input class="important-data-level-1" disabled value="${calibration.associateModel.modelCode}">
+                        <input class="" disabled value="${calibration.associateModel.modelCode}">
                     </div>
                     <div class="col-sm-4">
-                        <input class="important-data-level-1" disabled value="${calibration.associateModelMeasure.fullName}">
+                        <input class="" disabled value="${calibration.associateModelMeasure.fullName}">
                     </div>
                 </div>
                 <hr/>
@@ -93,7 +93,7 @@
                         รายงานหมายเลข
                     </div>
                     <div class="col-sm-2 ">
-                        <input class="important-data-level-1" disabled value="${calibration.associateModel.cerNo}">
+                        <input class="" disabled value="${calibration.associateModel.cerNo}">
                     </div>
                 </div>
                 <div class="row">
@@ -101,7 +101,7 @@
                         ออกโดย
                     </div>
                     <div class="col-sm-4">
-                        <input class="important-data-level-1" disabled value="${calibration.associateModel.locationBy}">
+                        <input class="" disabled value="${calibration.associateModel.locationBy}">
                     </div>
                 </div>
                 <div class="row">
@@ -109,7 +109,7 @@
                         การสอบกลับ
                     </div>
                     <div class="col-sm-4">
-                        <input class="important-data-level-1" disabled value="${calibration.associateModel.locationReturn}">
+                        <input class="" disabled value="${calibration.associateModel.locationReturn}">
                     </div>
                 </div>
                 <hr/>
@@ -118,13 +118,13 @@
                         วิธีวัด 
                     </div>
                     <div class="col-sm-2">
-                        <input class="important-data-level-1" value="${calibration.associateProcess.processCode}" disabled/> 
+                        <input class="" value="${calibration.associateProcess.processCode}" disabled/> 
                     </div>
-                    <div class="col-sm-1 ">
+                    <div class="col-sm-1 col-md-offset-1">
                         เรื่อง
                     </div>
                     <div class="col-sm-4">
-                        <input class="important-data-level-1" value="${calibration.associateProcess.processSubject}" disabled/>
+                        <input class="" value="${calibration.associateProcess.processSubject}" disabled/>
                     </div>
                 </div>
                 <div class="row">
@@ -132,7 +132,7 @@
                         วัดโดย
                     </div>
                     <div class="col-sm-8">
-                        <textarea style="width: 100%" class="important-data-level-1" disabled>${calibration.associateProcess.processBy}</textarea>
+                        <textarea style="width: 100%" class="" disabled>${calibration.associateProcess.processBy}</textarea>
                     </div>
                 </div>
                 <div class="box-body container">
@@ -238,7 +238,7 @@
 
                                     <div class="col-sm-3">
                                         ค่าความผิดพลาดที่ยอมรับได้</div>
-                                    <div class="col-sm-1 important-data-level-1">
+                                    <div class="col-sm-1 ">
                                         &PlusMinus;${calibration.calError}
                                         <form:hidden path="calError" />
                                     </div>
@@ -248,7 +248,7 @@
                                 </div>
                                 <div class="col-sm-6">
                                     <div class="col-sm-2">ผลสรุป</div>
-                                    <span class="important-data-level-1">
+                                    <span class="">
                                         ${calibration.associateStatusCaldoc.statusCaldocName}  
                                         <c:if test="${calibration.comment!=null&&calibration.comment.trim() !=''}">
                                             ( ${calibration.comment} )
@@ -256,19 +256,19 @@
                                     </span>
                                 </div>
                                 <div class="col-sm-6">
-                                    <div style="width:100%; float: left;" >ปีที่ใช้งานผลสอบเทียบ <span class="important-data-level-1"><fmt:formatNumber maxFractionDigits="0" value="${calibration.associateCalage.calAge}"></fmt:formatNumber></span> ปี</div>
+                                    <div style="width:100%; float: left;" >ปีที่ใช้งานผลสอบเทียบ <span class=""><fmt:formatNumber maxFractionDigits="0" value="${calibration.associateCalage.calAge}"></fmt:formatNumber></span> ปี</div>
                                     </div>
                                     <br>
                                     <br>
                                     <hr>
                                     <div class="row">
                                         <div class="col-sm-6" style="border-right: 1px solid grey">
-                                            <span class="important-data-level-1">
+                                            <span class="">
                                                 ผู้สอบเทียบ/ผู้ตรวจสอบ
                                             </span>
                                         </div>
                                         <div class="col-sm-6" style="border-left: 1px solid grey">
-                                            <span class="important-data-level-1">
+                                            <span class="">
                                                 ผู้อนุมัติ
                                             </span>
                                         </div>

@@ -48,6 +48,35 @@
                         </div>
                     </div>
                     <div class="row centralize-flex">
+                        <div class="col-md-6">
+                            <div class="col-md-6">
+                                <spring:message code="model.resolution" text="message not found"/>:
+                            </div>
+                            <div class="col-md-6">
+                                <form:input type="number" path="resolution" step="any" required="required"  class="form-control"/>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="col-md-6">
+                                <spring:message code="model.uncertainty" text="message not found"/>:
+                            </div>
+                            <div class="col-md-6">
+                                <form:input type="number" path="uncertainty" step="any" required="required"  class="form-control"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row centralize-flex">
+                        <div class="col-md-6">
+                            <div class="col-md-6">
+                                <spring:message code="model.dueDate" text="message not found"/>:
+                            </div>
+                            <div class="col-md-6">
+                                <form:input type="text" path="dueDate" required="required"  class="form-control"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row centralize-flex">
                         <div class="col-md-12">
                             <div class="col-md-3">
                                 <spring:message code="model.locationBy" text="message not found"/>:

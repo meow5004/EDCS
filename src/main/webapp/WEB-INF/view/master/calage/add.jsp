@@ -20,7 +20,7 @@
                     <div class="row centralize-flex">
                         <div class="col-md-6">
                             <div class="col-md-6">
-                                <spring:message code="user.user" text="message not found"/>:
+                                <spring:message code="calage.calage" text="message not found"/>:
                             </div>
                             <div class="col-md-6">
                                 <form:input path="calAge"   type = "number" class="form-control" required="required" />

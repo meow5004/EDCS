@@ -110,22 +110,10 @@
                 {"data": "dueDate", "target": 4, render: function (data, type, row, meta) {
                         if (data != null) {
                             var date = formatDateFromJavaDateJSONEncoded(data);
-                            var end = moment(date, "DD/MM/YY");
+                            var end = moment(date, "DD/MM/YYYY");
                             return date + "<br/> (" + end.fromNow() + ")";
                         } else {
                             return "-";
-                        }
-                    },
-                    "createdCell": function (td, cellData, rowData, row, col) {
-                        if (cellData != null) {
-                            var date = formatDateFromJavaDateJSONEncoded(cellData);
-                            var end = moment(date, "DD/MM/YY");
-                            if (end.isBefore(moment().add('days', 30))) {
-                                $(td).css("color", "red");
-                            }
-                            if (end.isBefore()) {
-                                $(td).css("font-weight", "bolder");
-                            }
                         }
                     }},
                 {"data": "requestBy", "target": 5, render: function (data, type, row, meta) {
@@ -148,13 +136,19 @@
                     }, "searchable": false}
             ],
             "createdRow": function (row, data, index) {
-
-                var time = moment.utc(data.dueDate).add(1900, 'y');
-                var dueDay = time.get("date") - moment().get("date");
+                var dataDate = data.dueDate;
                 if (data.calId < 1) {
                     $(row).addClass('newData');
-                } else if (dueDay < 0) {
-                    $(row).addClass('danger-alert');
+                }
+                if (dataDate != null) {
+                    var date = formatDateFromJavaDateJSONEncoded(data.dueDate);
+                    var time = moment(date, "DD/MM/YYYY");
+                    var dueDay = time.diff(moment(), 'days');
+                    if (dueDay < 30 && dueDay > 0) {
+                        $(row).addClass('warning');
+                    } else if (dueDay <= 0) {
+                        $(row).addClass('danger-alert');
+                    }
                 }
             },
             "ajax": {

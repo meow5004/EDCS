@@ -113,7 +113,6 @@
                     {
                         "data": "associateCalibrationAttachStatusByUser", target: "5", render: function (data, type, row, meta) {
                             var date = formatDateFromJavaDateJSONEncoded(row.calibrationAttachStatusOn);
-                            console.log(date);
                             return date + " <br/>" + data.userName;
                         }, "createdCell": function (td, cellData, rowData, row, col) {
                             if (rowData.calibrationAttachStatusOn != null) {
@@ -169,22 +168,10 @@
                     {"data": "dueDate", "target": 7, render: function (data, type, row, meta) {
                             if (data != null) {
                                 var date = formatDateFromJavaDateJSONEncoded(data);
-                                var end = moment(date, "DD/MM/YY");
+                                var end = moment(date, "DD/MM/YYYY");
                                 return date + "<br/> (" + end.fromNow() + ")";
                             } else {
                                 return "-";
-                            }
-                        },
-                        "createdCell": function (td, cellData, rowData, row, col) {
-                            if (cellData != null) {
-                                var date = formatDateFromJavaDateJSONEncoded(cellData);
-                                var end = moment(date, "DD/MM/YY");
-                                if (end.isBefore(moment().add('days', 30))) {
-                                    $(td).css("color", "red");
-                                }
-                                if (end.isBefore()) {
-                                    $(td).css("font-weight", "bolder");
-                                }
                             }
                         }},
                     {target: 8, "data": function (data, type, row, meta) {
@@ -208,18 +195,30 @@
                             $(td).find("select").trigger("change");
                             $(td).css("white-space", "normal");
                             var comment = rowData.conditionComment;
-                            console.log(comment);
                             if (comment.length > 0) {
                                 $(td).find("button[id*='comment']").addClass("btn-success");
                             }
                         }, "searchable": false
                     }, {
                         data: function (data, type, row, meta) {
-                            return  "<input type='checkbox' id='sendRow-" + meta.row + "' name='receivceCalId[]' data-row='" + meta.row + "'data-equipconcomment='" + data.conditionComment + "' data-equipconId='" + data.equipConId + "' value='" + data.calId + "'>";
+                            return  "<input type='checkbox' id='sendRow-" + meta.row + "' name='sendCalId[]' data-row='" + meta.row + "'data-equipconcomment='" + data.conditionComment + "' data-equipconId='" + data.equipConId + "' value='" + data.calId + "'>";
                         }
                     }
-                ],
-                "createdRow": function (row, data, index) {
+                ], "createdRow": function (row, data, index) {
+                    var dataDate = data.dueDate;
+                    if (data.calId < 1) {
+                        $(row).addClass('newData');
+                    }
+                    if (dataDate != null) {
+                        var date = formatDateFromJavaDateJSONEncoded(data.dueDate);
+                        var time = moment(date, "DD/MM/YYYY");
+                        var dueDay = time.diff(moment(), 'days');
+                        if (dueDay < 30 && dueDay > 0) {
+                            $(row).addClass('warning');
+                        } else if (dueDay <= 0) {
+                            $(row).addClass('danger-alert');
+                        }
+                    }
                 },
                 "ajax": {
                     "url": "../ajaxHelper/getStickerPrintedDevice.htm"

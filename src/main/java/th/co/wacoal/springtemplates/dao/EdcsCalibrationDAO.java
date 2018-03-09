@@ -5,6 +5,7 @@
  */
 package th.co.wacoal.springtemplates.dao;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import th.co.wacoal.springtemplates.domain.EdcsCalibration;
@@ -54,7 +55,6 @@ public interface EdcsCalibrationDAO {
 
     public void markCalibrationForApproval(int thisCalId, String approverId);
 
-
     public List<EdcsCalibration> listStickeredDevicesCalibration();
 
     public List<EdcsCalibration> listLabAppovedCalibration();
@@ -75,5 +75,6 @@ public interface EdcsCalibrationDAO {
 
     public void returnedDeviceCheck(calibrationDeviceCheckModel recModel);
 
+    List<EdcsCalibration> listOldCalibStickerPrintedBetween(Date start, Date end);
 
 }

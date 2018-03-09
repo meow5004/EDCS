@@ -16,6 +16,8 @@
 <link href="../css/normalize.css" rel="stylesheet" type="text/css"/>
 <link href="../css/component.css" rel="stylesheet" type="text/css"/>
 <link href="../css/demo.css" rel="stylesheet" type="text/css"/>
+<!--paper.css-->
+<link href="../css/paper.css" rel="stylesheet" type="text/css"/>
 <!--datatable-->
 <link href="../plugins/bootstrap-select/bootstrap-select.min.css" rel="stylesheet" type="text/css"/>
 <link href="../plugins/dataTable/jquery.dataTables.min.css" rel="stylesheet" type="text/css"/>
@@ -191,7 +193,7 @@
 
     function highlightData(/*array of object*/ ids, columnToSearch, table) {
         table.ajax.reload(function () {
-            console.log("length=" + ids.length);
+            //console.log("length=" + ids.length);
             for (var i = 0; i < ids.length; i++) {
                 var pos = table.column(columnToSearch, {order: 'index'}).data().indexOf(ids[0]);
                 if (pos >= 0) {
@@ -285,17 +287,18 @@
         background-color:#ffdb99!important;
     }
     .danger-alert{
-        background-color:red;
-         color:white;
+        background-color:red!important;
+        color:white!important;
     }
     .alert{
-        background-color:#bc4f5e;
-        color:white;
+        background-color:#bc4f5e!important;
+        color:white!important;
     }
 
     /*add red color if link = #*/
     a[href="#"]{
         color:red;
+        display:none;
     }
     .ui-datepicker{ z-index: 9999 !important;}
 

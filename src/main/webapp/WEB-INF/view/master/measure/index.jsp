@@ -188,8 +188,8 @@
                 unAvailableTable = $('#unavailableMeasureTable').DataTable({
                     "columns": [
                         {"data": "measureId", "target": 0, "visible": false},
-                         {"data": "measureGroupName", "target": 1},
-                             {"data": "depName", "target": 2},
+                        {"data": "measureGroupName", "target": 1},
+                        {"data": "depName", "target": 2},
                         {"data": "measureCode", "target": 3},
                         {"data": "measureName", "target": 4},
                         {"data": "calpointId", "target": 5},
@@ -213,7 +213,15 @@
                     "ajax": "./getUnavailableMeasure.htm?depId=" + depId + "&measureGroupId=" + groupId,
                     "dom": '<lftip>',
                     "order": [[0, 'asc']],
-                    "displayLength": 10});
+                    "displayLength": 10,
+                    fnDrawCallback: function () {
+                        if ($(this).find('.dataTables_empty').length > 0) {
+                            $(this).closest(".dataTables_wrapper").hide();
+                        } else {
+                            $(this).closest(".dataTables_wrapper").show();
+                        }
+                    }
+                });
             } else {
                 //if already initlize then reload data
                 availableTable.ajax.url("./getAvailableMeasure.htm?depId=" + depId + "&measureGroupId=" + groupId).load();
@@ -303,7 +311,7 @@
             });
             $inputs.trigger("input");
         });
-        $(window).scrollTop(0);
+        $(window).scrollTop(0);$("input").first().focus();
         return false;
     }
 
@@ -316,7 +324,7 @@
             });
             $inputs.trigger("input");
         });
-        $(window).scrollTop(0);
+        $(window).scrollTop(0);$("input").first().focus();
         return false;
     }
 

@@ -105,7 +105,7 @@
                     }
                 })
                         .autocomplete("instance")._renderItem = function (ul, item) {
-                    console.log(item);
+                    //console.log(item);
                     return $("<li>")
                             .append("<div>" + item.label + " " + item.value + "</div></li>")
                             .appendTo(ul);

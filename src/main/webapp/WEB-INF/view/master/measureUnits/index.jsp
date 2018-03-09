@@ -111,7 +111,15 @@
             "ajax": "./getUnavailableMeasureUnit.htm",
             "dom": '<lftip>',
             "order": [[0, 'asc']],
-            "displayLength": 10});
+            "displayLength": 10,
+            fnDrawCallback: function () {
+                if ($(this).find('.dataTables_empty').length > 0) {
+                    $(this).closest(".dataTables_wrapper").hide();
+                } else {
+                    $(this).closest(".dataTables_wrapper").show();
+                }
+            }
+        });
 
         $(document).on("click", ".addData,.editData", showFormByClick);
         $(document).on("submit", "#addForm,#editForm", sendDataPOSTByAction);
@@ -132,7 +140,7 @@
             });
             $inputs.trigger("input");
         });
-        $(window).scrollTop(0);
+        $(window).scrollTop(0);$("input").first().focus();
         return false;
     }
 
@@ -145,7 +153,7 @@
             });
             $inputs.trigger("input");
         });
-        $(window).scrollTop(0);
+        $(window).scrollTop(0);$("input").first().focus();
         return false;
     }
 
@@ -280,7 +288,7 @@
             }
         }
         if (valid === 1) {
-            console.log(valid);
+            //console.log(valid);
             var form = $(this); //wrap this in jQuery
             var url = form.prop('action'); // the script where you handle the form input.
             $.ajax({
