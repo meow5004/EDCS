@@ -45,7 +45,7 @@ import th.co.wacoal.springtemplates.domain.calibrationRequestModel;
  * @author admin
  */
 public class EdcsCalibrationDAOImpI implements EdcsCalibrationDAO {
-
+    
     private Database db;
     DateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.US);//sql datetime format
     EdcsMasMeasureDAO masDao = null;
@@ -58,10 +58,10 @@ public class EdcsCalibrationDAOImpI implements EdcsCalibrationDAO {
     EdcsMasDepartmentDAO depDAO = null;
     EdcsCalibrationAttachHeadDAO headDAO = null;
     EdcsMasUserDAO userDAO = null;
-
+    
     public EdcsCalibrationDAOImpI(Database db) {
         this.db = db;
-
+        
         masDao = new EdcsMasMeasureDAOImpI(db);
         calageDAO = new EdcsMasCalageDAOImpI(db);
         statusCalDocDAO = new EdcsMasStatusCaldocDAOImpl(db);
@@ -73,17 +73,17 @@ public class EdcsCalibrationDAOImpI implements EdcsCalibrationDAO {
         headDAO = new EdcsCalibrationAttachHeadDAOImpI(db);
         userDAO = new EdcsMasUserDAOImpI(db);
     }
-
+    
     @Override
     public int update(EdcsCalibration calib) {
-
+        
         String sql = "";
-
+        
         int rs = db.update(sql);
-
+        
         return rs;
     }
-
+    
     @Override
     public int add(EdcsCalibration calib) {
         // insert
@@ -144,7 +144,7 @@ public class EdcsCalibrationDAOImpI implements EdcsCalibrationDAO {
         );
         return res;
     }
-
+    
     @Override
     public int addNewCalibrationCombineWithPreviousCalibrationIfAny(EdcsCalibration baseCalib) {
         int measureId = baseCalib.getMeasureId();
@@ -175,15 +175,15 @@ public class EdcsCalibrationDAOImpI implements EdcsCalibrationDAO {
             p.setDepId(p.getAssociateMeasure().getDepId());
         }
         p.setCalCode(getRunningCode());
-
+        
         p.setRequestOn(new Date());
-
+        
         p.setRequestApproverStatus("0");
         p.setFlagActive("1");
         add(p);
         return 1;
     }
-
+    
     @Override
     public void saveCalibrationHeader(EdcsCalibration calibration) {
         String sql = "UPDATE EDCS_CALIBRATION SET "
@@ -215,7 +215,7 @@ public class EdcsCalibrationDAOImpI implements EdcsCalibrationDAO {
                 calibration.getCalibrationLocation(),
                 calibration.getCalId());
     }
-
+    
     @Override
     public void finalizeDataAndMarkCalibrationAsComplete(EdcsCalibration calib) {
         String findCalage = "select CAL_AGE FROM EDCS_MAS_CALAGE WHERE CAL_AGE_ID=?";
@@ -240,7 +240,7 @@ public class EdcsCalibrationDAOImpI implements EdcsCalibrationDAO {
                 + "WHERE CAL_ID=?";
         try {
             PreparedStatement pstmt = db.connect.prepareStatement(sql);
-
+            
             pstmt.setInt(1, calib.getStatusCaldocId());
             pstmt.setString(2, calib.getComment());
             pstmt.setString(3, calib.getCalibrationAttachStatusBy());
@@ -249,12 +249,12 @@ public class EdcsCalibrationDAOImpI implements EdcsCalibrationDAO {
             pstmt.setDate(6, new java.sql.Date(dueDate.getTimeInMillis()));
             pstmt.setInt(7, calib.getCalId());
             pstmt.executeUpdate();
-
+            
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
-
+    
     @Override
     public void markCalibrationForApproval(int thisCalId, String approverId) {
         String sql = "";
@@ -266,13 +266,13 @@ public class EdcsCalibrationDAOImpI implements EdcsCalibrationDAO {
             db.update(sql, thisCalId);
         }
     }
-
+    
     @Override
     public void disapproveLabResult(int calId, String userId) {
         String sql = "UPDATE EDCS_CALIBRATION SET APPROVE_STATUS=4,APPROVE_STATUS_BY =? WHERE CAL_ID=?";
         int result = db.update(sql, userId, calId);
     }
-
+    
     @Override
     public void approveLabResult(int calId, String userId) {
         db.beginTransaction();
@@ -285,7 +285,7 @@ public class EdcsCalibrationDAOImpI implements EdcsCalibrationDAO {
         db.update(sql, userId, calId);
         db.commit();
     }
-
+    
     @Override
     public void approverRequested(calibrationRequestModel approvingReqModel) {
         String reqComment = approvingReqModel.getRequestComment();
@@ -294,34 +294,34 @@ public class EdcsCalibrationDAOImpI implements EdcsCalibrationDAO {
         String sql = "UPDATE EDCS_CALIBRATION SET REQUEST_COMMENT=?,REQUEST_APPROVER_BY=?,REQUEST_APPROVER_ON=(getdate()),REQUEST_APPROVER_STATUS=1 WHERE CAL_ID=?";
         int result = db.update(sql, reqComment, approver, calId);
     }
-
+    
     @Override
     public void receivedDevice(calibrationDeviceCheckModel recModel) {
         //find old calib
         String sql = "UPDATE EDCS_CALIBRATION SET RECEIVE_STATUS_BY=?,RECEIVE_STATUS_ON=(getdate()),RECEIVE_STATUS=1,EQUIP_CON_ID=?,CONDITION_COMMENT=? WHERE CAL_ID=?";
         int result = db.update(sql, recModel.getInspector(), recModel.getEquipConId(), recModel.getConditionComment(), recModel.getCalId());
     }
-
+    
     @Override
     public void printedStickerCheck(int calId, String userId) {
         String stickerStatusBy = userId;
         String sql = "UPDATE EDCS_CALIBRATION SET STICKER_PRINT=STICKER_PRINT+1,STICKER_STATUS=1,STICKER_STATUS_BY=?,STICKER_STATUS_ON=(getdate()) WHERE CAL_ID=?";
         int result = db.update(sql, stickerStatusBy, calId);
     }
-
+    
     @Override
     public void returnedDeviceCheck(int calId, String userId) {
         String returnBy = userId;
         String sql = "UPDATE EDCS_CALIBRATION SET RETURN_STATUS_BY=?,RETURN_STATUS_ON=(getdate()),RETURN_STATUS=1 WHERE CAL_ID=?";
         int result = db.update(sql, returnBy, calId);
     }
-
+    
     @Override
     public void returnedDeviceCheck(calibrationDeviceCheckModel checkedModel) {
         String sql = "UPDATE EDCS_CALIBRATION SET EQUIP_CON_ID=?,CONDITION_COMMENT=?,RETURN_STATUS_BY=?,RETURN_STATUS_ON=(getdate()),RETURN_STATUS=1 WHERE CAL_ID=?";
         int result = db.update(sql, checkedModel.getEquipConId(), checkedModel.getConditionComment(), checkedModel.getInspector(), checkedModel.getCalId());
     }
-
+    
     @Override
     public List<EdcsCalibration> findAll() {
         String sql = "select * from EDCS_CALIBRATION";
@@ -333,7 +333,7 @@ public class EdcsCalibrationDAOImpI implements EdcsCalibrationDAO {
         }
         return ret;
     }
-
+    
     @Override
     public EdcsCalibration find(int id) {
         String sql = "select * from EDCS_CALIBRATION where CAL_ID = ?";
@@ -344,7 +344,7 @@ public class EdcsCalibrationDAOImpI implements EdcsCalibrationDAO {
         }
         return p;
     }
-
+    
     @Override
     public EdcsCalibration findByCode(int id) {
         String sql = "select * from EDCS_CALIBRATION where CAL_CODE = ?";
@@ -355,7 +355,7 @@ public class EdcsCalibrationDAOImpI implements EdcsCalibrationDAO {
         }
         return p;
     }
-
+    
     @Override
     public List<EdcsCalibration> findByFlag(int flag) {
         String sql = "select * from EDCS_CALIBRATION where FLAG_DEL=?";
@@ -367,7 +367,7 @@ public class EdcsCalibrationDAOImpI implements EdcsCalibrationDAO {
         }
         return ret;
     }
-
+    
     @Override
     public List<EdcsCalibration> getNewAndNearExpireCalibration(int dayCountToExpired) {
         Database db = new Database("sqlServer");
@@ -403,17 +403,17 @@ public class EdcsCalibrationDAOImpI implements EdcsCalibrationDAO {
             p.setAssociateDep(depList.get(p.getAssociateMeasure().getDepId()));
             ret.add(p);
         }
-
+        
         return ret;
     }
-
+    
     @Override
     public List<EdcsCalibration> getRequestedApprover(String approverId) {
         Database db = new Database("sqlServer");
         EdcsMasMeasureDAO masDao = new EdcsMasMeasureDAOImpI(db);
         //get measure Mapping data
         Map<Integer, EdcsMasMeasure> measureList = masDao.findByFlagListMappingById(0);
-
+        
         String sql = "select * from EDCS_CALIBRATION WHERE DUE_DATE IS NULL  AND REQUEST_APPROVER_BY=? AND REQUEST_APPROVER_STATUS =0 AND REQUEST_STATUS = 1 AND FLAG_ACTIVE=1";
         List<Map<String, Object>> rs = db.queryList(sql, approverId);
         List<EdcsCalibration> ret = new ArrayList<>();
@@ -422,17 +422,17 @@ public class EdcsCalibrationDAOImpI implements EdcsCalibrationDAO {
             temp.setAssociateMeasure(measureList.get(temp.getMeasureId()));
             ret.add(temp);
         }
-
+        
         return ret;
     }
-
+    
     @Override
     public List<EdcsCalibration> getApprovedDevice() {
         Database db = new Database("sqlServer");
         EdcsMasMeasureDAO masDao = new EdcsMasMeasureDAOImpI(db);
         //get measure Mapping data
         Map<Integer, EdcsMasMeasure> measureList = masDao.findByFlagListMappingById(0);
-
+        
         String sql = "select * from EDCS_CALIBRATION WHERE DUE_DATE IS NULL  AND RECEIVE_STATUS IS NULL AND REQUEST_APPROVER_STATUS = 1 AND FLAG_ACTIVE=1";
         List<Map<String, Object>> rs = db.queryList(sql);
         List<EdcsCalibration> ret = new ArrayList<>();
@@ -442,17 +442,17 @@ public class EdcsCalibrationDAOImpI implements EdcsCalibrationDAO {
             System.out.println(temp);
             ret.add(temp);
         }
-
+        
         return ret;
     }
-
+    
     @Override
     public List<EdcsCalibration> listNonFinishCalibration() {
         Database db = new Database("sqlServer");
         EdcsMasMeasureDAO masDao = new EdcsMasMeasureDAOImpI(db);
         //get measure Mapping data
         Map<Integer, EdcsMasMeasure> measureList = masDao.findByFlagListMappingById(0);
-
+        
         String sql = "select * from EDCS_CALIBRATION WHERE RECEIVE_STATUS =1 AND FLAG_ACTIVE=1  AND APPROVE_STATUS IS NULL";
         List<Map<String, Object>> rs = db.queryList(sql);
         List<EdcsCalibration> ret = new ArrayList<>();
@@ -461,17 +461,17 @@ public class EdcsCalibrationDAOImpI implements EdcsCalibrationDAO {
             temp.setAssociateMeasure(measureList.get(temp.getMeasureId()));
             ret.add(temp);
         }
-
+        
         return ret;
     }
-
+    
     @Override
     public List<EdcsCalibration> listDisapprovedCalibration() {
         Database db = new Database("sqlServer");
         EdcsMasMeasureDAO masDao = new EdcsMasMeasureDAOImpI(db);
         //get measure Mapping data
         Map<Integer, EdcsMasMeasure> measureList = masDao.findByFlagListMappingById(0);
-
+        
         String sql = "select * from EDCS_CALIBRATION WHERE  APPROVE_STATUS =4 AND FLAG_ACTIVE=1";
         List<Map<String, Object>> rs = db.queryList(sql);
         List<EdcsCalibration> ret = new ArrayList<>();
@@ -480,17 +480,17 @@ public class EdcsCalibrationDAOImpI implements EdcsCalibrationDAO {
             temp.setAssociateMeasure(measureList.get(temp.getMeasureId()));
             ret.add(temp);
         }
-
+        
         return ret;
     }
-
+    
     @Override
     public List<EdcsCalibration> listFinishCalibrationWaitForApproval(String approverId) {
         Database db = new Database("sqlServer");
         EdcsMasMeasureDAO masDao = new EdcsMasMeasureDAOImpI(db);
         //get measure Mapping data
         Map<Integer, EdcsMasMeasure> measureList = masDao.findByFlagListMappingById(0);
-
+        
         String sql = "select * from EDCS_CALIBRATION WHERE APPROVE_STATUS =0 AND FLAG_ACTIVE=1 AND APPROVE_STATUS_BY=?";
         List<Map<String, Object>> rs = db.queryList(sql, approverId);
         List<EdcsCalibration> ret = new ArrayList<>();
@@ -499,17 +499,17 @@ public class EdcsCalibrationDAOImpI implements EdcsCalibrationDAO {
             temp.setAssociateMeasure(measureList.get(temp.getMeasureId()));
             ret.add(temp);
         }
-
+        
         return ret;
     }
-
+    
     @Override
     public List<EdcsCalibration> listLabAppovedCalibration() {
         Database db = new Database("sqlServer");
         EdcsMasMeasureDAO masDao = new EdcsMasMeasureDAOImpI(db);
         //get measure Mapping data
         Map<Integer, EdcsMasMeasure> measureList = masDao.findByFlagListMappingById(0);
-
+        
         String sql = "select * from EDCS_CALIBRATION WHERE APPROVE_STATUS =1 AND FLAG_ACTIVE=1 AND ( STICKER_STATUS=0 OR STICKER_STATUS IS NULL ) AND  CAL_ID NOT IN (SELECT CAL_ID FROM STICKER_RESERVE) ";
         List<Map<String, Object>> rs = db.queryList(sql);
         List<EdcsCalibration> ret = new ArrayList<>();
@@ -518,17 +518,17 @@ public class EdcsCalibrationDAOImpI implements EdcsCalibrationDAO {
             temp.setAssociateMeasure(measureList.get(temp.getMeasureId()));
             ret.add(temp);
         }
-
+        
         return ret;
     }
-
+    
     @Override
     public List<EdcsCalibration> listStickeredDevicesCalibration() {
         Database db = new Database("sqlServer");
         EdcsMasMeasureDAO masDao = new EdcsMasMeasureDAOImpI(db);
         //get measure Mapping data
         Map<Integer, EdcsMasMeasure> measureList = masDao.findByFlagListMappingById(0);
-
+        
         String sql = "select * from EDCS_CALIBRATION WHERE STICKER_STATUS=1 AND FLAG_ACTIVE=1 AND ( RETURN_STATUS=0 OR RETURN_STATUS IS NULL )";
         List<Map<String, Object>> rs = db.queryList(sql);
         List<EdcsCalibration> ret = new ArrayList<>();
@@ -537,10 +537,10 @@ public class EdcsCalibrationDAOImpI implements EdcsCalibrationDAO {
             temp.setAssociateMeasure(measureList.get(temp.getMeasureId()));
             ret.add(temp);
         }
-
+        
         return ret;
     }
-
+    
     @Override
     public List<EdcsCalibration> listOldCalibStickerPrintedBetween(Date start, Date end) {
         Database db = new Database("sqlServer");
@@ -567,10 +567,10 @@ public class EdcsCalibrationDAOImpI implements EdcsCalibrationDAO {
             EdcsCalibration temp = mappingResultSetToCalibration(map);
             ret.add(temp);
         }
-
+        
         return ret;
     }
-
+    
     @Override
     public List<EdcsCalibration> getCalibrationListInSystem() {
         Database db = new Database("sqlServer");
@@ -581,14 +581,14 @@ public class EdcsCalibrationDAOImpI implements EdcsCalibrationDAO {
             EdcsCalibration temp = mappingResultSetToCalibration(map);
             ret.add(temp);
         }
-
+        
         return ret;
     }
-
+    
     @Override
     public EdcsCalibration mappingResultSetToCalibration(Map<String, Object> map) {
         EdcsCalibration p = new EdcsCalibration();
-
+        
         Integer MeasureId = map.get("MEASURE_ID") != null ? (Integer) map.get("MEASURE_ID") : null;
         Integer calageId = map.get("CAL_AGE_ID") != null ? (Integer) map.get("CAL_AGE_ID") : null;
         Integer statDocId = map.get("STATUS_CALDOC_ID") != null ? (Integer) map.get("STATUS_CALDOC_ID") : null;
@@ -614,35 +614,35 @@ public class EdcsCalibrationDAOImpI implements EdcsCalibrationDAO {
         if (requestByUser != null) {
             p.setAssociateRequestByUser(userMap.get(requestByUser));
         }
-
+        
         if (calibrationAttachStatusByUser != null) {
             p.setAssociateCalibrationAttachStatusByUser(userMap.get(calibrationAttachStatusByUser));
         }
-
+        
         if (requestApproverByUser != null) {
             p.setAssociateRequestApproverByUser(userMap.get(requestApproverByUser));
         }
-
+        
         if (calibratorByUser != null) {
             p.setAssociateCalibratorByUser(userMap.get(calibratorByUser));
         }
-
+        
         if (receiveStatusByUser != null) {
             p.setAssociateReceiveStatusByUser(userMap.get(receiveStatusByUser));
         }
-
+        
         if (calibrationStatusByUser != null) {
             p.setAssociateCalibrationStatusByUser(userMap.get(calibrationStatusByUser));
         }
-
+        
         if (approveStatusByUser != null) {
             p.setAssociateApproveStatusByUser(userMap.get(approveStatusByUser));
         }
-
+        
         if (stickerStatusByUser != null) {
             p.setAssociateStickerStatusByUser(userMap.get(stickerStatusByUser));
         }
-
+        
         if (returnStatusByUser != null) {
             p.setAssociateReturnStatusByUser(userMap.get(returnStatusByUser));
         }
@@ -651,61 +651,63 @@ public class EdcsCalibrationDAOImpI implements EdcsCalibrationDAO {
         p.setCalCode((String) map.get("CAL_CODE"));
         p.setCalAgeId(calageId);
         p.setCalError((Double) map.get("CAL_ERROR"));
-
+        
         p.setDepId(depId);
-
+        
         p.setMeasureId(MeasureId);
-
+        
         p.setModelId(modelId);
         p.setProcessId(processId);
         p.setUnitId(unitId);
-
+        
         p.setCalibrationLocation((String) map.get("CALIBRATION_LOCATION"));
-
+        
         p.setDueDate((Date) map.get("DUE_DATE"));
         p.setEquipConId(equipConId);
         p.setStatusCaldocId(statDocId);
         p.setComment((String) map.get("COMMENT"));
         p.setConditionComment((String) map.get("CONDITION_COMMENT"));
-
+        
         p.setApproveStatus((String) map.get("APPROVE_STATUS"));
         p.setApproveStatusBy((String) map.get("APPROVE_STATUS_BY"));
         p.setApproveStatusOn((Date) map.get("APPROVE_STATUS_ON"));
-
+        
         p.setCalibrationStatus((String) map.get("CALIBRATION_STATUS"));
         p.setCalibrationStatusBy((String) map.get("CALIBRATION_STATUS_BY"));
         p.setCalibrationStatusOn((Date) map.get("CALIBRATION_STATUS_ON"));
         p.setCalibratorBy((String) map.get("CALIBRATOR_BY"));
         p.setCalibratorOn((Date) map.get("CALIBRATOR_ON"));
-
+        
         p.setCreateBy((String) map.get("CREATE_BY"));
         p.setCreateOn((Date) map.get("CREATE_ON"));
-
+        
         p.setReceiveStatus((String) map.get("RECEIVE_STATUS"));
         p.setReceiveStatusBy((String) map.get("RECEIVE_STATUS_BY"));
         p.setReceiveStatusOn((Date) map.get("RECEIVE_STATUS_ON"));
-
+        
         p.setRequestApproverBy((String) map.get("REQUEST_APPROVER_BY"));
         p.setRequestApproverOn((Date) map.get("REQUEST_APPROVER_ON"));
         p.setRequestApproverStatus((String) map.get("REQUEST_APPROVER_STATUS"));
-
+        
         p.setRequestBy((String) map.get("REQUEST_BY"));
         p.setRequestOn((Date) map.get("REQUEST_ON"));
         p.setRequestStatus((String) map.get("REQUEST_STATUS"));
         p.setRequestComment((String) map.get("REQUEST_COMMENT"));
-
+        
         p.setReturnStatus((String) map.get("RETURN_STATUS"));
         p.setReturnStatusBy((String) map.get("RETURN_STATUS_BY"));
         p.setReturnStatusOn((Date) map.get("RETURN_STATUS_ON"));
-
+        
         p.setStickerPrint((Integer) map.get("STICKER_PRINT"));
         p.setStickerStatus((String) map.get("STICKER_STATUS"));
         p.setStickerStatusBy((String) map.get("STICKER_STATUS_BY"));
         p.setStickerStatusOn((Date) map.get("STICKER_STATUS_ON"));
-
+        
         p.setCalibrationAttachStatus((String) map.get("CALIBRATION_ATTACH_STATUS"));
         p.setCalibrationAttachStatusBy((String) map.get("CALIBRATION_ATTACH_STATUS_BY"));
         p.setCalibrationAttachStatusOn((Date) map.get("CALIBRATION_ATTACH_STATUS_ON"));
+        
+        p.setFlagActive((String) map.get("FLAG_ACTIVE"));
         //extended properties 
         if (MeasureId != null) {
             p.setAssociateMeasure(masDao.find(MeasureId));
@@ -717,31 +719,31 @@ public class EdcsCalibrationDAOImpI implements EdcsCalibrationDAO {
         } else {
             p.setAssociateCalage(new EdcsMasCalage());
         }
-
+        
         if (statDocId != null) {
             p.setAssociateStatusCaldoc(statusCalDocDAO.find(statDocId));
         } else {
             p.setAssociateStatusCaldoc(new EdcsMasStatusCaldoc());
         }
-
+        
         if (equipConId != null) {
             p.setAssociateEquipCon(equipConDAO.find(equipConId));
         } else {
             p.setAssociateEquipCon(new EdcsMasEquipcon());
         }
-
+        
         if (unitId != null) {
             p.setAssociateUnit(measureUnitDAO.find(unitId));
         } else {
             p.setAssociateUnit(new EdcsMasMeasureUnit());
         }
-
+        
         if (processId != null) {
             p.setAssociateProcess(processDAO.find(processId));
         } else {
             p.setAssociateProcess(new EdcsMasProcess());
         }
-
+        
         if (modelId != null) {
             EdcsMasModel thisModel = modelDAO.find(modelId);
             p.setAssociateModel(thisModel);
@@ -750,22 +752,22 @@ public class EdcsCalibrationDAOImpI implements EdcsCalibrationDAO {
             } else {
                 p.setAssociateModelMeasure(new EdcsMasMeasure());
             }
-
+            
         } else {
             p.setAssociateModel(new EdcsMasModel());
             p.setAssociateModelMeasure(new EdcsMasMeasure());
         }
-
+        
         if (depId != null) {
             p.setAssociateDep(depDAO.find(depId));
         } else {
             p.setAssociateDep(new EdcsMasDepartment());
         }
-
+        
         p.setEdcsCalibrationAttachHeadList(headDAO.findByCalibrationId(p.getCalId()));
         return p;
     }
-
+    
     @Override
     public String getRunningCode() {
         String code = "";
@@ -787,5 +789,5 @@ public class EdcsCalibrationDAOImpI implements EdcsCalibrationDAO {
         }
         return code;
     }
-
+    
 }

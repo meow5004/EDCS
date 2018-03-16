@@ -22,56 +22,62 @@
                     <h3 class="box-title"><i class="fa fa-cog"></i> <spring:message code="model.title" text="message not found"/></h3>
             </div>
             <div class="box-body">
-
-                <div id="ajaxCRUDfield">
+                <div class="row">
+                    <div id="ajaxCRUDfield">
+                    </div>
                 </div>
-                <table id="availableModelTable" class="dataTable hover cell-border nowrap compact">
-                    <thead>
-                        <tr>
-                            <th colspan="14" style="text-align: center"><spring:message code="model.table.avaliable" text="message not found"/></th>
-                        </tr>
-                        <tr class="alt" >
-                            <th><spring:message code="model.modelId" text="message not found"/></th>
-                            <th><spring:message code="model.modelCode" text="message not found"/></th>
-                            <th><spring:message code="model.measureId" text="message not found"/></th>
-                            <th><spring:message code="model.measureCode" text="message not found"/></th>
-                            <th><spring:message code="model.measureName" text="message not found"/></th>
-                            <th><spring:message code="model.resolution" text="message not found"/></th>
-                            <th><spring:message code="model.uncertainty" text="message not found"/></th>
-                            <th><spring:message code="model.cerNo" text="message not found"/></th>
-                            <th><spring:message code="model.locationBy" text="message not found"/></th>
-                            <th><spring:message code="model.locationReturn" text="message not found"/></th>
-                            <th><spring:message code="model.duedate" text="message not found"/></th>
-                            <th><spring:message code="model.activate" text="message not found"/></th>
-                            <th></th>
-                            <th><button class="deleteMultiple btn btn-danger"><spring:message code="model.delete" text="message not found"/><i class="fa fa-trash-o" aria-hidden="true"></i></button></th>
-                        </tr> 
-                    </thead>
-                </table>
                 <br/>
-                <table id="unavailableModelGroup" class="dataTable hover cell-border compact">
-                    <thead>
-                        <tr>
-                            <th colspan="13" style="text-align: center"><spring:message code="model.table.unavaliable" text="message not found"/></th>
-                        </tr>
-                        <tr class="alt" >
-                            <th><spring:message code="model.modelId" text="message not found"/></th>
-                            <th><spring:message code="model.modelCode" text="message not found"/></th>
-                            <th><spring:message code="model.measureId" text="message not found"/></th>
-                            <th><spring:message code="model.measureCode" text="message not found"/></th>
-                            <th><spring:message code="model.measureName" text="message not found"/></th>
-                            <th><spring:message code="model.resolution" text="message not found"/></th>
-                            <th><spring:message code="model.uncertainty" text="message not found"/></th>
-                            <th><spring:message code="model.cerNo" text="message not found"/></th>
-                            <th><spring:message code="model.locationBy" text="message not found"/></th>
-                            <th><spring:message code="model.locationReturn" text="message not found"/></th>
-                            <th><spring:message code="model.duedate" text="message not found"/></th>
+                <div class="table-responsive row">
+                    <table id="availableModelTable" class="dataTable hover cell-border nowrap compact">
+                        <thead>
+                            <tr>
+                                <th colspan="14" style="text-align: center"><spring:message code="model.table.avaliable" text="message not found"/></th>
+                            </tr>
+                            <tr class="alt" >
+                                <th><spring:message code="model.modelId" text="message not found"/></th>
+                                <th><spring:message code="model.modelCode" text="message not found"/></th>
+                                <th><spring:message code="model.measureId" text="message not found"/></th>
+                                <th><spring:message code="model.measureCode" text="message not found"/></th>
+                                <th><spring:message code="model.measureName" text="message not found"/></th>
+                                <th><spring:message code="model.resolution" text="message not found"/></th>
+                                <th><spring:message code="model.uncertainty" text="message not found"/></th>
+                                <th><spring:message code="model.cerNo" text="message not found"/></th>
+                                <th><spring:message code="model.locationBy" text="message not found"/></th>
+                                <th><spring:message code="model.locationReturn" text="message not found"/></th>
+                                <th><spring:message code="model.duedate" text="message not found"/></th>
+                                <th><spring:message code="model.activate" text="message not found"/></th>
+                                <th></th>
+                                <th><button class="deleteMultiple btn btn-danger"><spring:message code="model.delete" text="message not found"/><i class="fa fa-trash-o" aria-hidden="true"></i></button></th>
+                            </tr> 
+                        </thead>
+                    </table>
+                </div>
+                <br/>
+                <div class="table-responsive row">
+                    <table id="unavailableModelGroup" class="dataTable hover cell-border compact">
+                        <thead>
+                            <tr>
+                                <th colspan="13" style="text-align: center"><spring:message code="model.table.unavaliable" text="message not found"/></th>
+                            </tr>
+                            <tr class="alt" >
+                                <th><spring:message code="model.modelId" text="message not found"/></th>
+                                <th><spring:message code="model.modelCode" text="message not found"/></th>
+                                <th><spring:message code="model.measureId" text="message not found"/></th>
+                                <th><spring:message code="model.measureCode" text="message not found"/></th>
+                                <th><spring:message code="model.measureName" text="message not found"/></th>
+                                <th><spring:message code="model.resolution" text="message not found"/></th>
+                                <th><spring:message code="model.uncertainty" text="message not found"/></th>
+                                <th><spring:message code="model.cerNo" text="message not found"/></th>
+                                <th><spring:message code="model.locationBy" text="message not found"/></th>
+                                <th><spring:message code="model.locationReturn" text="message not found"/></th>
+                                <th><spring:message code="model.duedate" text="message not found"/></th>
 
-                            <th><button class="reuseMultiple btn btn-success"><spring:message code="model.reuse" text="message not found"/><i class="fa fa-recycle" aria-hidden="true"></i></button></th>
-                            <th><button class="realDeleteMultiple btn btn-danger"><spring:message code="model.realDelete" text="message not found"/><i class="fa fa-remove" aria-hidden="true"></i></button></th>
-                        </tr> 
-                    </thead>
-                </table>
+                                <th><button class="reuseMultiple btn btn-success"><spring:message code="model.reuse" text="message not found"/><i class="fa fa-recycle" aria-hidden="true"></i></button></th>
+                                <th><button class="realDeleteMultiple btn btn-danger"><spring:message code="model.realDelete" text="message not found"/><i class="fa fa-remove" aria-hidden="true"></i></button></th>
+                            </tr> 
+                        </thead>
+                    </table>
+                </div>
             </div>
         </div>
 
@@ -90,11 +96,7 @@
 
 
         availableTable = $('#availableModelTable').DataTable({
-            responsive: {
-                details: {
-                    type: 'inline'
-                }
-            },
+
             "columns": [
                 {"data": "modelId", "target": 0, "visible": false},
                 {"data": "modelCode", "target": 1},
@@ -134,11 +136,7 @@
             }
         });
         unAvailableTable = $('#unavailableModelGroup').DataTable({
-            responsive: {
-                details: {
-                    type: 'inline'
-                }
-            },
+
             "columns": [
                 {"data": "modelId", "target": 0, "visible": false},
                 {"data": "modelCode", "target": 1},

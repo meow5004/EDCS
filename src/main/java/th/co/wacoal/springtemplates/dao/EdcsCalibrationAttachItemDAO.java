@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import th.co.wacoal.springtemplates.domain.EdcsCalibration;
 import th.co.wacoal.springtemplates.domain.EdcsCalibrationAttachItem;
+import th.co.wacoal.springtemplates.domain.lineCalculationModel;
 
 /**
  *
@@ -25,5 +26,7 @@ public interface EdcsCalibrationAttachItemDAO {
     public List<EdcsCalibrationAttachItem> createAttachItemInputTemplateForAttachHeadModelFromCalibration(EdcsCalibration calibration);
 
     public EdcsCalibrationAttachItem mappingResult(Map<String, Object> map);
+
+    public List<lineCalculationModel> listLineByHeaderId(int headId, String side);
 
 }

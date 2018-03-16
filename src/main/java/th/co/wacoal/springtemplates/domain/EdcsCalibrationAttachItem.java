@@ -27,6 +27,9 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "EdcsCalibrationAttachItem.findAll", query = "SELECT e FROM EdcsCalibrationAttachItem e")})
 public class EdcsCalibrationAttachItem implements Serializable {
 
+    @Column(name = "LINE_EXPAND_UNCERTAINTY")
+    private Double lineExpandUncertainty;
+
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected EdcsCalibrationAttachItemPK edcsCalibrationAttachItemPK;
@@ -115,6 +118,14 @@ public class EdcsCalibrationAttachItem implements Serializable {
     @Override
     public String toString() {
         return "th.co.wacoal.springtemplates.domain.EdcsCalibrationAttachItem[ edcsCalibrationAttachItemPK=" + edcsCalibrationAttachItemPK + " ]";
+    }
+
+    public Double getLineExpandUncertainty() {
+        return lineExpandUncertainty;
+    }
+
+    public void setLineExpandUncertainty(Double lineExpandUncertainty) {
+        this.lineExpandUncertainty = lineExpandUncertainty;
     }
     
 }

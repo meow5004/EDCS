@@ -116,8 +116,9 @@ public class EdcsMasModelDAOImpI implements EdcsMasModelDAO {
         db.beginTransaction();
         int rs = 0;
         try {
-            String disactivateOld = "UPDATE SET FLAG_ACTIVE=0 WHERE MODEL_CODE=?";
+            String disactivateOld = "UPDATE EDCS_MAS_MODEL SET FLAG_ACTIVE=0 WHERE MODEL_CODE=?";
             PreparedStatement pstmtDO = db.connect.prepareStatement(disactivateOld);
+            pstmtDO.setString(1, model.getModelCode());
             pstmtDO.executeUpdate();
             // insert
             String sql = "INSERT INTO EDCS_MAS_MODEL "
@@ -138,20 +139,19 @@ public class EdcsMasModelDAOImpI implements EdcsMasModelDAO {
                     + "?,?,"
                     + "?,?,"
                     + "?,"
-                    + ",0,1)";
+                    + "0,1)";
 
             PreparedStatement pstmt = db.connect.prepareStatement(sql);
-
-            pstmt.setString(1, model.getChangeBy());
-            pstmt.setInt(2, model.getMeasureId());
-            pstmt.setString(3, model.getLocationBy());
-            pstmt.setString(4, model.getLocationReturn());
-            pstmt.setString(5, model.getcerNo());
-            pstmt.setString(6, model.getModelCode());
-            pstmt.setDouble(7, model.getResolution());
-            pstmt.setDouble(8, model.getUncertainty());
-            pstmt.setDate(9, new java.sql.Date(model.getDueDate().getTime()));
-            pstmt.setInt(10, model.getModelId());
+            pstmt.setString(1, model.getCreateBy());
+            pstmt.setString(2, model.getChangeBy());
+            pstmt.setInt(3, model.getMeasureId());
+            pstmt.setString(4, model.getLocationBy());
+            pstmt.setString(5, model.getLocationReturn());
+            pstmt.setString(6, model.getcerNo());
+            pstmt.setString(7, model.getModelCode());
+            pstmt.setDouble(8, model.getResolution());
+            pstmt.setDouble(9, model.getUncertainty());
+            pstmt.setDate(10, new java.sql.Date(model.getDueDate().getTime()));
 
             pstmt.executeUpdate();
             db.commit();
@@ -211,10 +211,24 @@ public class EdcsMasModelDAOImpI implements EdcsMasModelDAO {
     }
 
     @Override
-    public List<EdcsMasModel> findByMeasureIdByFlag(int id, String flag) {
+    public List<EdcsMasModel> findByMeasureIdByFlag(int id, int flag) {
 
         String sql = "select * from EDCS_MAS_MODEL where FLAG_DEL=? AND MEASURE_ID=?";
         List<Map<String, Object>> rs = db.queryList(sql, flag, id);
+        List<EdcsMasModel> ret = new ArrayList<>();
+        for (Map<String, Object> map : rs) {
+            ret.add(mappingResultSet(map));
+        }
+        return ret;
+    }
+
+    @Override
+    public List<EdcsMasModel> findByMeasureGroupIdByFlag(int id, int flag) {
+
+        String sql = "SELECT * "
+                + "  FROM EDCS_MAS_MODEL model join (select MEASURE_ID,MEASURE_GROUP_ID from EDCS_MAS_MEASURE) measure on model.MEASURE_ID=measure.MEASURE_ID "
+                + "  WHERE MEASURE_GROUP_ID = ? AND FLAG_DEL=?";
+        List<Map<String, Object>> rs = db.queryList(sql, id, flag);
         List<EdcsMasModel> ret = new ArrayList<>();
         for (Map<String, Object> map : rs) {
             ret.add(mappingResultSet(map));

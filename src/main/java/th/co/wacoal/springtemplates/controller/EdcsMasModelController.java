@@ -19,10 +19,13 @@ import javax.servlet.http.HttpSession;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -50,7 +53,16 @@ public class EdcsMasModelController {
 
     DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss", Locale.US);
     DateFormat dfnt = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
-
+    
+ @InitBinder
+    public void dataBinding(WebDataBinder binder) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
+        dateFormat.setLenient(false);
+        //for attachHeader
+        binder.registerCustomEditor(java.sql.Date.class, new CustomDateEditor(dateFormat, true));
+        binder.registerCustomEditor(java.util.Date.class, new CustomDateEditor(dateFormat, true));
+    }
+    
     @RequestMapping("/index")
     public ModelAndView modelCRUD(Model model, HttpSession session) {
         return new ModelAndView("master/model/index");

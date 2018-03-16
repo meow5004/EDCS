@@ -106,7 +106,7 @@ public class IndexController {
             EdcsMasUser calibrator = userDAO.find(calibration.getCalibratorBy());
             model.addAttribute("departments", depDAO.findByFlag(0));
             model.addAttribute("processes", proDAO.findByFlag(0));
-            model.addAttribute("models", modelDAO.findByFlag(0));
+            model.addAttribute("models", modelDAO.findByMeasureGroupIdByFlag(calibration.getAssociateMeasure().getMeasureGroupId(),0));
             model.addAttribute("units", unitDAO.findByFlag(0));
             model.addAttribute("equipConditions", equipConDAO.findByFlag(0));
             model.addAttribute("calibration", calibration);
@@ -190,7 +190,7 @@ public class IndexController {
     }
 
     @RequestMapping("/stickerTableTemplate.htm")
-    public String stickerTableTemplate(Model model, HttpSession session) {
+    public String stickerTableTemplate(@RequestParam String type, Model model, HttpSession session) {
         Database db = new Database("sqlServer");
         EdcsMasUser user = (EdcsMasUser) session.getAttribute("user");
         try {
@@ -201,7 +201,13 @@ public class IndexController {
             System.out.println(ex.getMessage());
         } finally {
             db.close();
-            return "stickerTableTemplate";
+            if (type.equals("1")) {
+                return "stickerTableTemplate";
+            } else if (type.equals("2")) {
+
+                return "stickerTableTemplateType2";
+            }
+            return "login";
         }
 
     }

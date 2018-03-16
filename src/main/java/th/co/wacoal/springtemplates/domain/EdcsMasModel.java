@@ -35,7 +35,7 @@ public class EdcsMasModel implements Serializable {
     @Column(name = "FLAG_ACTIVE")
     private String flagActive;
     @Column(name = "DUE_DATE")
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date dueDate;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "RESOLUTION")
@@ -240,5 +240,5 @@ public class EdcsMasModel implements Serializable {
     public void setUncertainty(Double uncertainty) {
         this.uncertainty = uncertainty;
     }
-    
+
 }

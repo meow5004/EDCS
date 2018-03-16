@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import net.sf.json.JSONArray;
@@ -30,6 +32,7 @@ import th.co.wacoal.springtemplates.dao.EdcsMasMeasureDAO;
 import th.co.wacoal.springtemplates.dao.EdcsMasModelDAO;
 import th.co.wacoal.springtemplates.dao.EdcsMasProcessDAO;
 import th.co.wacoal.springtemplates.dao.EdcsMasUserDAO;
+import th.co.wacoal.springtemplates.dao.impl.EdcsCalibrationAttachitemDAOImpl;
 import th.co.wacoal.springtemplates.dao.impl.EdcsCalibrationDAOImpI;
 import th.co.wacoal.springtemplates.dao.impl.EdcsMasMeasureDAOImpI;
 import th.co.wacoal.springtemplates.dao.impl.EdcsMasModelDAOImpI;
@@ -37,10 +40,12 @@ import th.co.wacoal.springtemplates.dao.impl.EdcsMasProcessDAOImpI;
 import th.co.wacoal.springtemplates.dao.impl.EdcsMasUserDAOImpI;
 import th.co.wacoal.springtemplates.db.Database;
 import th.co.wacoal.springtemplates.domain.EdcsCalibration;
+import th.co.wacoal.springtemplates.domain.EdcsCalibrationAttachHead;
 import th.co.wacoal.springtemplates.domain.EdcsMasMeasure;
 import th.co.wacoal.springtemplates.domain.EdcsMasModel;
 import th.co.wacoal.springtemplates.domain.EdcsMasProcess;
 import th.co.wacoal.springtemplates.domain.EdcsMasUser;
+import th.co.wacoal.springtemplates.domain.lineCalculationModel;
 
 /**
  *
@@ -171,6 +176,7 @@ public class mainAjaxUtilController {
             //Go to view
             responResult = "{" + "\"size\":\"" + approveCalib.size() + "\",\"data\":" + jsonString + "}";
         } catch (Exception ex) {
+            Logger.getLogger(mainAjaxUtilController.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println(ex.getMessage());
         } finally {
             db.close();
@@ -298,10 +304,26 @@ public class mainAjaxUtilController {
         Database db = new Database("sqlServer");
         try {
             EdcsCalibrationDAO calibDAO = new EdcsCalibrationDAOImpI(db);
+            EdcsCalibrationAttachitemDAOImpl itemDAO = new EdcsCalibrationAttachitemDAOImpl(db);
             EdcsCalibration previewed = calibDAO.find(Integer.parseInt(calId));
-            // Do somethin
+            Integer MeasureTime = previewed.getAssociateMeasure().getMeasureTimes();
+            //create line for table display
+            //side A
+            List<lineCalculationModel> sideALine = new ArrayList<>();
+            List<lineCalculationModel> sideBLine = new ArrayList<>();
+
+            for (EdcsCalibrationAttachHead head : previewed.getEdcsCalibrationAttachHeadList()) {
+                if (head.getAbType().equals("A")) {
+                    sideALine = itemDAO.listLineByHeaderId(head.getCalAttachHeadId(), "A");
+                }
+                if (head.getAbType().equals("B")) {
+                    sideBLine = itemDAO.listLineByHeaderId(head.getCalAttachHeadId(), "B");
+                }
+            }
 
             model.addAttribute("calibration", previewed);
+            model.addAttribute("sideALine", sideALine);
+            model.addAttribute("sideBLine", sideBLine);
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         } finally {

@@ -5,6 +5,7 @@
  */
 package th.co.wacoal.springtemplates.dao.impl;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +14,7 @@ import th.co.wacoal.springtemplates.db.Database;
 import th.co.wacoal.springtemplates.domain.EdcsCalibration;
 import th.co.wacoal.springtemplates.domain.EdcsCalibrationAttachItem;
 import th.co.wacoal.springtemplates.domain.EdcsCalibrationAttachItemPK;
+import th.co.wacoal.springtemplates.domain.lineCalculationModel;
 
 /**
  *
@@ -37,17 +39,19 @@ public class EdcsCalibrationAttachitemDAOImpl implements EdcsCalibrationAttachIt
                 + "CAL_TIME,"
                 + "CALPOINT_MIN,"
                 + "CALPOINT_MAX,"
-                + "CALPOINT_VALUE )"
+                + "CALPOINT_VALUE,"
+                + "LINE_EXPAND_UNCERTAINTY )"
                 + " VALUES ("
-                + " ? , ? ,? , ? , ? , ? "
+                + " ? , ? ,? , ? , ? , ? ,?"
                 + ")";
         int res = db.add(sql,
                 attachItem.getEdcsCalibrationAttachItemPK().getCalAttachHeadId(),
                 attachItem.getEdcsCalibrationAttachItemPK().getCalAttachLine(),
                 attachItem.getEdcsCalibrationAttachItemPK().getCalTime(),
                 attachItem.getCalpointMin(),
-                attachItem.getCalpointMin(),
-                attachItem.getCalpointMax());
+                attachItem.getCalpointMax(),
+                attachItem.getCalpointValue(),
+                attachItem.getLineExpandUncertainty());
 
         return res;
     }
@@ -58,7 +62,7 @@ public class EdcsCalibrationAttachitemDAOImpl implements EdcsCalibrationAttachIt
         String sql = "update EDCS_CALIBRATION_ATTACH_ITEM  "
                 + "SET "
                 + "CALPOINT_MIN =?,CALPOINT_MAX=?,"
-                + "CALPOINT_VALUE =? "
+                + "CALPOINT_VALUE =? ,LINE_EXPAND_UNCERTAINTY=?"
                 + " where CAL_ATTACH_HEAD_ID=? AND"
                 + " CAL_ATTACH_LINE=? AND"
                 + " CAL_TIME=?";
@@ -67,6 +71,7 @@ public class EdcsCalibrationAttachitemDAOImpl implements EdcsCalibrationAttachIt
                 attachItem.getCalpointMin(),
                 attachItem.getCalpointMax(),
                 attachItem.getCalpointValue(),
+                attachItem.getLineExpandUncertainty(),
                 attachItem.getEdcsCalibrationAttachItemPK().getCalAttachHeadId(),
                 attachItem.getEdcsCalibrationAttachItemPK().getCalAttachLine(),
                 attachItem.getEdcsCalibrationAttachItemPK().getCalTime()
@@ -83,11 +88,12 @@ public class EdcsCalibrationAttachitemDAOImpl implements EdcsCalibrationAttachIt
         p.setCalpointMax((Integer) map.get("CALPOINT_MAX"));
         p.setCalpointMin((Integer) map.get("CALPOINT_MIN"));
         p.setCalpointValue((Double) map.get("CALPOINT_VALUE"));
-
+        p.setLineExpandUncertainty((Double) map.get("LINE_EXPAND_UNCERTAINTY"));
         pk.setCalAttachHeadId((Integer) map.get("CAL_ATTACH_HEAD_ID"));
         pk.setCalAttachLine((Integer) map.get("CAL_ATTACH_LINE"));
         pk.setCalTime((Integer) map.get("CAL_TIME"));
         p.setEdcsCalibrationAttachItemPK(pk);
+
         return p;
     }
 
@@ -129,4 +135,24 @@ public class EdcsCalibrationAttachitemDAOImpl implements EdcsCalibrationAttachIt
         }
         return lists;
     }
+
+    @Override
+    public List<lineCalculationModel> listLineByHeaderId(int headId, String side) {
+        String sql = "select cast(AVG(CALPOINT_VALUE)as decimal(10,2)) as MEAN , cast(AVG(LINE_EXPAND_UNCERTAINTY)as decimal(10,2)) as LINE_EXPAND_UNCERTAINTY,CAL_ATTACH_LINE from EDCS_CALIBRATION_ATTACH_ITEM where CAL_ATTACH_HEAD_ID = ? GROUP BY CAL_ATTACH_LINE ORDER BY CAL_ATTACH_LINE ASC";
+        List<Map<String, Object>> rs = db.queryList(sql, headId);
+        List<lineCalculationModel> p = new ArrayList<>();
+        for (Map<String, Object> map : rs) {
+            if (map != null) {
+                lineCalculationModel line = new lineCalculationModel();
+                line.setLine((Integer) map.get("CAL_ATTACH_LINE"));
+                line.setUncertaintyCombined(((BigDecimal) map.get("LINE_EXPAND_UNCERTAINTY")).doubleValue());
+                line.setMean(((BigDecimal) map.get("MEAN")).doubleValue());
+                line.setABtype(side);
+                line.setHeadId(headId);
+                p.add(line);
+            }
+        }
+        return p;
+    }
+
 }

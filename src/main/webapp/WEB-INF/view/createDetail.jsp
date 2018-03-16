@@ -144,10 +144,14 @@
                                 <div class="col-sm-12">
                                     <hr>
                                 </div>
+                                <c:set var="resolution" value="${calibration.associateModel.resolution}"/>
+                                <c:set var="uncertainty" value="${calibration.associateModel.uncertainty}"/>
+                                <input type="hidden"  id="resolution" value="${resolution}"/>
+                                <input type="hidden"  id="uncertainty" value="${uncertainty}"/>
                                 <c:set var="measureTimes" value="${calibration.associateMeasure.measureTimes}"/>
-                                <c:set var="useRangeMax" value="${calibration.associateMeasure.useRangeMax}"/>
-                                <c:set var="useRangeMin" value="${calibration.associateMeasure.useRangeMin}"/>
-                                <c:set var="diffRange" value="${useRangeMax-useRangeMin}"/>
+                                <fmt:parseNumber var = "useRangeMax"  integerOnly = "true"  type = "number" value = "${calibration.associateMeasure.useRangeMax}" />
+                                <fmt:parseNumber var = "useRangeMin"  integerOnly = "true"  type = "number" value = "${calibration.associateMeasure.useRangeMin}" />
+                                <fmt:parseNumber var = "diffRange"  integerOnly = "true"  type = "number" value = "${useRangeMax-useRangeMin}" />
                                 <c:forEach items="${calibration.edcsCalibrationAttachHeadList}" var="head" varStatus="theBigCount">
                                     <hr  style="width: 60%;border: 1px solid black">
                                     <div class="container-fluid">
@@ -155,7 +159,7 @@
                                             <form:hidden path="edcsCalibrationAttachHeadList[${theBigCount.index}].abType" required="required"/>
                                             <form:hidden path="edcsCalibrationAttachHeadList[${theBigCount.index}].calDate" />
                                             <form:hidden path="edcsCalibrationAttachHeadList[${theBigCount.index}].calAttachHeadId" required="required"/>
-                                            <div class="col-md-2 col-md-offset-5 no-padding important-data-level-1">เอกสารแนบ หน้า ${calibration.edcsCalibrationAttachHeadList[theBigCount.index].abType} (หน่วย : ${calibration.associateUnit.unitShortEn})</div>
+                                            <div class="col-md-3 col-md-offset-5 no-padding important-data-level-1">เอกสารแนบ หน้า ${calibration.edcsCalibrationAttachHeadList[theBigCount.index].abType} (หน่วย : ${calibration.associateUnit.unitShortEn})</div>
                                         </div>
                                         <br/>
                                         <div class="row">
@@ -208,6 +212,7 @@
                                                         <c:forEach var = "i" begin = "1" end = "10">
                                                             <tr>
                                                                 <td>
+                                                                    <fmt:parseNumber var = "blockMax"  integerOnly = "true"  type = "number" value = "${useRangeMin+(i*(diffRange/10))}" />
                                                                     <fmt:formatNumber value="${useRangeMin}"
                                                                                       maxFractionDigits="0" />
                                                                     -
@@ -218,11 +223,13 @@
                                                                 <c:forEach var = "j" begin = "1" end = "${measureTimes}">
                                                                     <td>
                                                                         <form:input path="edcsCalibrationAttachHeadList[${theBigCount.index}].edcsCalibrationAttachItemList[${count}].calpointValue" type="tel" required="required" class="table-${theBigCount.index}row-${i}col-${j}-inputCell"/>
+
+                                                                        <form:hidden path="edcsCalibrationAttachHeadList[${theBigCount.index}].edcsCalibrationAttachItemList[${count}].lineExpandUncertainty" required="required" class="table-${theBigCount.index}row-${i}-inputUncertaintyCell"/>
+                                                                        <form:hidden path="edcsCalibrationAttachHeadList[${theBigCount.index}].edcsCalibrationAttachItemList[${count}].calpointMin" value="${useRangeMin}"/>
+                                                                        <form:hidden path="edcsCalibrationAttachHeadList[${theBigCount.index}].edcsCalibrationAttachItemList[${count}].calpointMax" value="${blockMax}"/>
                                                                         <form:hidden path="edcsCalibrationAttachHeadList[${theBigCount.index}].edcsCalibrationAttachItemList[${count}].edcsCalibrationAttachItemPK.calAttachLine" />
                                                                         <form:hidden path="edcsCalibrationAttachHeadList[${theBigCount.index}].edcsCalibrationAttachItemList[${count}].edcsCalibrationAttachItemPK.calTime" />
                                                                         <form:hidden path="edcsCalibrationAttachHeadList[${theBigCount.index}].edcsCalibrationAttachItemList[${count}].edcsCalibrationAttachItemPK.calAttachHeadId" />
-                                                                        <form:hidden path="edcsCalibrationAttachHeadList[${theBigCount.index}].edcsCalibrationAttachItemList[${count}].calpointMin"/>
-                                                                        <form:hidden path="edcsCalibrationAttachHeadList[${theBigCount.index}].edcsCalibrationAttachItemList[${count}].calpointMax" />
                                                                     </td>
                                                                     <c:set var="count"  scope="page" value="${count+1}"/>
                                                                 </c:forEach>
@@ -258,10 +265,12 @@
                                                         <th class="rowSpanDependOnInputTable">ค่าระบุ</th>
                                                         <th  class="spanDependOnInputTable" >ค่าวัดได้</th>
                                                         <th  class="spanDependOnInputTable" >ค่าความผิดพลาด( ค่าแก้ )</th>                                     
-                                                        <th  class="rowSpanDependOnInputTable" >ค่าความไม่แน่นอน</th>
+                                                        <th  class="spanDependOnInputTable" >ค่าความไม่แน่นอน</th>
                                                     </tr>
                                                     <c:if test="${tableAmount > 1}">
                                                         <tr>
+                                                            <th>A</th>
+                                                            <th>B</th>
                                                             <th>A</th>
                                                             <th>B</th>
                                                             <th>A</th>
@@ -320,8 +329,24 @@
                                                                     </c:otherwise>
                                                                 </c:choose>
                                                             </c:forEach>
-                                                            <td class="row-${s}-uncertaintyCell">
-                                                            </td>
+                                                            <c:forEach var = "v" begin = "1" end = "${tableAmount}" varStatus="vStat">
+
+                                                                <c:choose>
+                                                                    <c:when test="${vStat.count == 1}">
+                                                                        <td class="table-${vStat.count-1}row-${s}-uncertaintyCell joinedColumnLeft">
+                                                                        </td>
+                                                                    </c:when>  
+                                                                    <c:when test="${vStat.count == 2}">
+                                                                        <td class="table-${vStat.count-1}row-${s}-uncertaintyCell joinedColumnRight">
+                                                                        </td>
+                                                                    </c:when>  
+                                                                    <c:otherwise>
+                                                                        <!--                                                                            /for fstsre sse when inpst table > 2-->
+                                                                        <td class="table-${vStat.count-1}row-${s}-uncertaintyCell joinedMiddle">
+                                                                        </td>
+                                                                    </c:otherwise>
+                                                                </c:choose>
+                                                            </c:forEach>
 
 
                                                         </tr>
@@ -450,6 +475,7 @@
             //            var cellPointer = classInformation.match(/table-(10|[0-9])row-(10|[0-9])col-(10|[0-9])/)[0];
             var rowPointer = classInformation.match(/table-(10|[0-9])row-(10|[0-9])/)[0];
             var row = rowPointer.match(/row-(.*)/)[1];
+            var table = rowPointer.match(/table-(.*)row/)[1];
             //get value in row
             var sumOfCalValue = 0;
             var count = 0;
@@ -485,11 +511,11 @@
                     sumOfDataMinusMeanPowerOfTwo += Math.pow(dataArray[i] - median, 2);
                 }
 
-                var variance = sumOfDataMinusMeanPowerOfTwo / count;
+                var variance = sumOfDataMinusMeanPowerOfTwo / (count - 1);
                 var std = Math.sqrt(variance);
                 $(stdCell).text(std.toFixed(2).replace(/\.?0*$/g, ''));
                 //calculate uncertainly
-                uncertainlyCalculate(row);
+                uncertainlyCalculate(table, row);
             }
         });
         //syncro input
@@ -533,16 +559,26 @@
                 }
             });
         });
+
+        $('input[class*="inputCell"]').focus(function (e) {
+            e.target.select();
+            jQuery(e.target).one('mouseup', function (e) {
+                e.preventDefault();
+            });
+        });
         $(document).on('keydown', "input[class*='inputCell']", ChangeCurrentCell);
         $(document).on('keyup change', "input[class*='inputCell']", enforceFloat);
         $("input[class*='inputCell']").trigger("change");
     });
-    function uncertainlyCalculate(rowTocalculate/*1-10*/) {
+    function uncertainlyCalculate(tableToCalculate, rowTocalculate/* table /row */) {
         //get value in row
+        console.log(tableToCalculate + " row" + rowTocalculate);
+        var resolution = $("#resolution").val();
+        var uncertaintyModel = $("#uncertainty").val();
         var sumOfCalValue = 0;
         var count = 0;
         var dataArray = [];
-        $("input:regex(table-(10|[0-9])row-" + rowTocalculate + "col-(10|[0-9])-inputCell)").each(function (index) {
+        $("input:regex(table-" + tableToCalculate + "row-" + rowTocalculate + "col-(10|[0-9])-inputCell)").each(function (index) {
             var value = $.trim($(this).val());
             if (value.length > 0) {
                 sumOfCalValue += parseFloat(value);
@@ -551,17 +587,24 @@
             }
         });
         if (sumOfCalValue > 0 && count > 0) {
-            var uncertaintyCell = $("td[class*='row-" + rowTocalculate + "-uncertaintyCell']");
+            var uncertaintyCell = $("td[class*='table-" + tableToCalculate + "row-" + rowTocalculate + "-uncertaintyCell']");
+            var inputUncertaintyCellClass = $("input[class*='table-" + tableToCalculate + "row-" + rowTocalculate + "-inputUncertaintyCell']");
             var median = parseFloat(sumOfCalValue / count);
             //calculate variance
             var sumOfDataMinusMeanPowerOfTwo = 0;
             for (var i = 0, l = dataArray.length; i < l; i++) {
                 sumOfDataMinusMeanPowerOfTwo += Math.pow(dataArray[i] - median, 2);
             }
-            var variance = sumOfDataMinusMeanPowerOfTwo / count;
-            var stdUncertainty = $("#standardUncertainty").val();
-            var uncertainty = Math.sqrt((variance + Math.pow((parseFloat(stdUncertainty) / 1.96), 2))) * 2.15;
-            $(uncertaintyCell).text(uncertainty.toFixed(2).replace(/\.?0*$/g, ''));
+            var variance = sumOfDataMinusMeanPowerOfTwo / (count - 1);
+            var std = Math.sqrt(variance);
+            var Ua = std / Math.sqrt(count);
+            var Ur1 = (resolution / 2) / Math.sqrt(3);
+            var Ur2 = uncertaintyModel / 1.96;
+//            console.log("std="+std+"&Ua="+Ua+"&ur1="+Ur1+"Ur2="+Ur2);
+            var effUncertainty = Math.sqrt(Math.pow(Ua, 2) + Math.pow(Ur1, 2) + Math.pow(Ur2, 2)) * 2.15;
+            var formattedEffUncertainty = effUncertainty.toFixed(7).replace(/\.?0*$/g, '');
+            $(uncertaintyCell).text(formattedEffUncertainty);
+            $(inputUncertaintyCellClass).val(formattedEffUncertainty);
         }
     }
     function ChangeCurrentCell(evt) {
@@ -601,9 +644,12 @@
             }
             newClassName = className.replace(/row-(.*?)col/, "row-" + currentRow + "col");
         }
-        var newClassSelector = "input[class*='" + newClassName + "']";
-        if ($(newClassSelector).length > 0) {
-            $(newClassSelector).focus();
+        if (charCode == 40 || charCode == 39 || charCode == 38 || charCode == 37) {
+            var newClassSelector = "input[class*='" + newClassName + "']";
+            if ($(newClassSelector).length > 0) {
+                $(newClassSelector).trigger("focus");
+                return false;
+            }
         }
         return true;
     }

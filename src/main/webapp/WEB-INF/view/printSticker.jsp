@@ -129,9 +129,13 @@
                 <div class="box-footer">
                     <div class="row">
                         <div class="col-xs-12 text-center" style="border-right: 1px solid #f4f4f4">
-                            <div class="col-sm-12">
-                                <button class="btn btn-primary btn-lg" id="printSticker" style="width: 100%;">พิมพ์สติกเกอร์</button>
+                            <div class="col-sm-6">
+                                <button class="btn btn-primary " id="printStickerType1" style="width: 50%;">พิมพ์สติกเกอร์ ประเภทหนึ่ง</button>
                             </div>
+                            <div class="col-sm-6">
+                                <button class="btn btn-primary " id="printStickerType2" style="width: 50%;">พิมพ์สติกเกอร์ ประเภทสอง</button>
+                            </div>
+
                         </div>
                     </div><!-- /.row -->
                 </div><!-- /.box-footer -->
@@ -410,11 +414,18 @@
             });
             return false;
         });
-        $("#printSticker").on("click", function () {
+        $("#printStickerType1").on("click", function () {
             setTimeout(function () {
                 reserveTable.ajax.reload();
             }, 10000);
-            window.open('../index/stickerTableTemplate.htm');
+            window.open('../index/stickerTableTemplate.htm?type=1');
+            return false;
+        });
+        $("#printStickerType2").on("click", function () {
+            setTimeout(function () {
+                reserveTable.ajax.reload();
+            }, 10000);
+            window.open('../index/stickerTableTemplate.htm?type=2');
             return false;
         });
         $("#reserveSticker").on("click", function () {

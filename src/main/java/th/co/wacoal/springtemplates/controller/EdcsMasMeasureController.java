@@ -344,7 +344,7 @@ public class EdcsMasMeasureController {
         String responseMessage = "";
         PrintWriter out = response.getWriter();
         Integer measureGroupId = (measureGroupIdString == null || measureGroupIdString.length() <= 0 || measureGroupIdString.equalsIgnoreCase("null")) ? null : Integer.parseInt(measureGroupIdString);
-        if (depId != null && depId.trim().length() <= 0) {
+        if (depId != null && (depId.trim().length() <= 0 || depId.trim().equalsIgnoreCase("null"))) {
             depId = null;
         }
         try {
@@ -392,7 +392,7 @@ public class EdcsMasMeasureController {
                 p.put("actionLink", actionLink);
 
                 String deleteCheckbox = "<font color='red'>มีแม่แบบใช้งานอยู่ <br/>ไม่สามารถลบได้</font>";
-                if (modelDAO.findByMeasureIdByFlag(row.getMeasureId(), "0").size() <= 0) {
+                if (modelDAO.findByMeasureIdByFlag(row.getMeasureId(), 0).size() <= 0) {
                     deleteCheckbox = " <input type=\"checkbox\" name=\"deletedmeasureId\" value=\"" + row.getMeasureId() + "\">";
                 }
 
@@ -487,7 +487,7 @@ public class EdcsMasMeasureController {
 
                 p.put("reuseCheck", reuseCheckbox);
                 String realDeleteCheckbox = "<font color='red'>มีแม่แบบในระบบ <br/>ไม่สามารถลบออกนอกระบบได้</font>";
-                if (modelDAO.findByMeasureIdByFlag(row.getMeasureId(), "1").size() <= 0) {
+                if (modelDAO.findByMeasureIdByFlag(row.getMeasureId(), 1).size() <= 0) {
                     realDeleteCheckbox = " <input type=\"checkbox\" name=\"realDeletedmeasureId\" value=\"" + row.getMeasureId() + "\">";
                 }
 

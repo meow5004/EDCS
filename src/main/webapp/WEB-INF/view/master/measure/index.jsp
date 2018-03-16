@@ -41,7 +41,7 @@
                 <div class="col-md-1">
                     เลือกแผนก :
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <select id="departmentFilter" class="datatableFilterSelection">
                         <option value="" selected disabled="disabled"></option>
                         <option value="">ทุกแผนก</option>
@@ -53,7 +53,7 @@
                 <div class="col-md-2">
                     เลือกกลุ่มเครื่องวัด :
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <select id="measureGroupFilter" class="datatableFilterSelection">
                         <option value="" selected disabled="disabled"></option>
                         <option value="">ทุกกลุ่ม</option>
@@ -311,7 +311,8 @@
             });
             $inputs.trigger("input");
         });
-        $(window).scrollTop(0);$("input").first().focus();
+        $(window).scrollTop(0);
+        $("input").first().focus();
         return false;
     }
 
@@ -324,7 +325,8 @@
             });
             $inputs.trigger("input");
         });
-        $(window).scrollTop(0);$("input").first().focus();
+        $(window).scrollTop(0);
+        $("input").first().focus();
         return false;
     }
 
@@ -355,8 +357,9 @@
                                     callback: function () { /* your callback code */
                                     }
                                 });
-                                refreshDataAndJumpTo(idArray[0], 0);
-                                highlightData(idArray, 0, unAvailableTable);
+//                                refreshDataAndJumpTo(idArray[0], 0);
+//                                highlightData(idArray, 0, unAvailableTable);
+                                location.reload();
                             }
                         });
                     }
@@ -393,8 +396,9 @@
                                     callback: function () { /* your callback code */
                                     }
                                 });
-                                refreshDataAndJumpTo(idArray[0], 0);
-                                highlightData(idArray, 0, availableTable);
+//                                refreshDataAndJumpTo(idArray[0], 0);
+//                                highlightData(idArray, 0, availableTable);
+                                location.reload();
                             }
                         });
                     }

@@ -51,4 +51,52 @@ public class HelperFunction {
         return filteredCalib;
     }
 
+//    protected static List<uncertaintyCalculationModelLine> calculationCalibrationReport(EdcsCalibration calib, String side) {
+//        Double resolution = calib.getAssociateModel().getResolution();
+//        Double uncertainty = calib.getAssociateModel().getUncertainty();
+//        Integer measureTime = calib.getAssociateMeasure().getMeasureTimes();
+//        List<uncertaintyCalculationModelLine> result = new ArrayList<>();
+////get sum of line of side A/B
+//        for (EdcsCalibrationAttachHead head : calib.getEdcsCalibrationAttachHeadList()) {
+//            if (head.getAbType().equals("side")) {
+//                for (int cal = 1; cal <= 10; cal++) {
+//                    uncertaintyCalculationModelLine resultLine = new uncertaintyCalculationModelLine();
+//                    for (int i = 1; i <= measureTime; i++) {
+//                        int sum = 0;
+//                        for (EdcsCalibrationAttachItem item : head.getEdcsCalibrationAttachItemList()) {
+//                            if (item.getEdcsCalibrationAttachItemPK().getCalAttachLine() == i) {
+//                                sum += item.getCalpointValue();
+//                            }
+//                            Integer mean = sum / measureTime;
+//                            Double Sx = 0.0;
+//                            int sumOfXValueminusMean = 0;
+//                            for (int j = 1; j <= measureTime; j++) {
+//                                for (EdcsCalibrationAttachItem item2 : head.getEdcsCalibrationAttachItemList()) {
+//                                    if (item.getEdcsCalibrationAttachItemPK().getCalAttachLine() == i) {
+//                                        sumOfXValueminusMean += item2.getCalpointValue() - mean;
+//                                    }
+//                                }
+//                            }
+//                            Sx = (Math.pow(sumOfXValueminusMean, 2)) / (measureTime - 1);
+//                            Double typeAUncertainty = Sx / Math.sqrt(measureTime);
+//                            Double resolutionUr1 = (resolution / 2) * Math.sqrt(3);
+//                            Double certResolutionUr2 = (uncertainty) / 1.96;//coverage factor95%
+//                            Double combinedUncertainty = Math.pow(typeAUncertainty, 2) + Math.pow(resolutionUr1, 2) + Math.pow(certResolutionUr2, 2);
+//                            Double effCombinedUncertainy = combinedUncertainty * 2.15;
+//                            resultLine.setABtype(side);
+//                            resultLine.setLine(cal);
+//                            resultLine.setMean(mean.doubleValue());
+//                            resultLine.setUncertaintyA(typeAUncertainty);
+//                            resultLine.setUncertaintyB(Math.pow(typeAUncertainty, 2) + Math.pow(resolutionUr1, 2));
+//                            resultLine.setUncertaintyCombined(effCombinedUncertainy);
+//                        }
+//                        result.add(resultLine);
+//                    }
+//
+//                }
+//            }
+//        }
+//
+//        return result;
+//    }
 }

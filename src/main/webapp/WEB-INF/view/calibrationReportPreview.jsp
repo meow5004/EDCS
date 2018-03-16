@@ -1,517 +1,426 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<jsp:include page="include/include_header.jsp" flush="true"></jsp:include>
+<jsp:include page="include/include_script.jsp" flush="true"></jsp:include>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>   
 <%@ taglib uri = "http://java.sun.com/jsp/jstl/fmt" prefix = "fmt" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
-
-
-
-<div class="row">
-    <div class="col-lg-12" style="text-align: left;">
-        <form:form id="previewForm"   modelAttribute="calibration" >        
-            <input type="hidden"  id="standardUncertainty" value="0.05"/>
-            <form:hidden path="calId" value="${calId}"/>
-
-            <div class="box box-primary" id="loading-example">
-                <div class="box-header">
-                    <!-- tools box -->
-                    <i class="fa fa-cloud"></i>
-
-                    <h3 class="box-title">รายละเอียดผลการสอบเทียบ </h3>
-                </div><!-- /.box-header -->
-                <div class="col-sm-12">
-                    <hr>
-                </div>
-                <div class="row">
-                    <div class="col-sm-2 col-md-offset-1">
-                        รายงานหมายเลข
-                    </div>
-                    <div class="col-sm-2">
-                        <input disabled value="${calibration.calCode}"/>
-                    </div>
-                </div>
-                <hr/>
-                <div class="row">
-                    <div class="col-sm-2 col-md-offset-1">
-                        เครื่องวัด/ทดสอบ รหัส 
-                    </div>
-                    <div class="col-sm-4 ">
-                        <input class="" disabled value="${calibration.associateMeasure.measureCode}">
-                    </div>
-                    <div class="col-sm-4">
-                        <input class="" disabled value="${calibration.associateMeasure.fullName}">
-                    </div>
-                </div>
-                <hr/>
-                <div class="row">
-                    <div class="col-sm-2 col-sm-offset-1">
-                        สถานะเครื่อง 
-                    </div>
-                    <div class="col-sm-2 ">
-                        <input class="" disabled value="${calibration.associateEquipCon.fullName}">
-                    </div>
-                    <c:if test="${calibration.conditionComment !=null&&calibration.conditionComment !='' }">
-                        <div class="col-sm-1 col-sm-offset-1">
-                            เนื่องจาก
-                        </div>
-                        <div class="col-sm-4 ">
-                            <textarea style="width: 100%" class="" disabled>${calibration.conditionComment}</textarea>
-                        </div>
-                    </c:if>
-                </div>
-                <hr/>
-                <div class="row">
-                    <div class="col-sm-2 col-md-offset-1">
-                        สอบเทียบที่  
-                    </div>
-                    <div class="col-sm-4">
-                        <c:if test="${calibration.calibrationLocation =='inside'}">
-                            <input class="" disabled value="สถานสอบเทียบภายใน">
-                        </c:if>
-                        <c:if test="${calibration.calibrationLocation =='outside'}">
-                            <input class="" disabled value="สถานสอบเทียบภายนอก">
-                        </c:if>
-
-                    </div>
-                </div>
-                <hr/>
-                <div class="row">
-                    <div class="col-sm-2 col-md-offset-1">
-                        แม่แบบ รหัส 
-                    </div>
-                    <div class="col-sm-4 ">
-                        <input class="" disabled value="${calibration.associateModel.modelCode}">
-                    </div>
-                    <div class="col-sm-4">
-                        <input class="" disabled value="${calibration.associateModelMeasure.fullName}">
-                    </div>
-                </div>
-                <hr/>
-                <div class="row">
-                    <div class="col-sm-2 col-md-offset-1">
-                        รายงานหมายเลข
-                    </div>
-                    <div class="col-sm-2 ">
-                        <input class="" disabled value="${calibration.associateModel.cerNo}">
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-2 col-md-offset-1">
-                        ออกโดย
-                    </div>
-                    <div class="col-sm-4">
-                        <input class="" disabled value="${calibration.associateModel.locationBy}">
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-2 col-sm-offset-1">
-                        การสอบกลับ
-                    </div>
-                    <div class="col-sm-4">
-                        <input class="" disabled value="${calibration.associateModel.locationReturn}">
-                    </div>
-                </div>
-                <hr/>
-                <div class="row">
-                    <div class="col-sm-2 col-md-offset-1">
-                        วิธีวัด 
-                    </div>
-                    <div class="col-sm-2">
-                        <input class="" value="${calibration.associateProcess.processCode}" disabled/> 
-                    </div>
-                    <div class="col-sm-1 col-md-offset-1">
-                        เรื่อง
-                    </div>
-                    <div class="col-sm-4">
-                        <input class="" value="${calibration.associateProcess.processSubject}" disabled/>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-2 col-md-offset-1">
-                        วัดโดย
-                    </div>
-                    <div class="col-sm-8">
-                        <textarea style="width: 100%" class="" disabled>${calibration.associateProcess.processBy}</textarea>
-                    </div>
-                </div>
-                <div class="box-body container">
-
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <div class="pad">
-
-
-                                <div class="col-sm-12">
-                                    <hr>
-                                </div>
-                                <c:set var="measureTimes" value="${calibration.associateMeasure.measureTimes}"/>
-                                <c:set var="useRangeMax" value="${calibration.associateMeasure.useRangeMax}"/>
-                                <c:set var="useRangeMin" value="${calibration.associateMeasure.useRangeMin}"/>
-                                <c:set var="diffRange" value="${useRangeMax-useRangeMin}"/>
-                                <div class="row">
-                                    <div class="col-md-10 col-md-offset-1">
-                                        <c:set var="tableAmount" value="${calibration.edcsCalibrationAttachHeadList.size()}" scope="page" />
-                                        <div id="summaryPreview" class="table-responsive">
-                                            <table class="summaryTable">
-                                                <thead>
-                                                    <tr>
-                                                        <th class="rowSpanDependOnInputTable">ค่าระบุ</th>
-                                                        <th  class="spanDependOnInputTable" >ค่าวัดได้</th>
-                                                        <th  class="spanDependOnInputTable" >ค่าความผิดพลาด( ค่าแก้ )</th>                                     
-                                                        <th  class="rowSpanDependOnInputTable" >ค่าความไม่แน่นอน</th>
-                                                    </tr>
-                                                    <c:if test="${tableAmount > 1}">
-                                                        <tr>
-                                                            <th>A</th>
-                                                            <th>B</th>
-                                                            <th>A</th>
-                                                            <th>B</th>
-                                                        </tr>
-                                                    </c:if>
-                                                </thead>
-                                                <tbody>
-
-
-                                                    <c:forEach var = "s" begin = "1" end = "10">
-                                                        <tr>
-                                                            <td>
-                                                                <fmt:formatNumber value="${useRangeMin}"
-                                                                                  maxFractionDigits="0" />
-                                                                -
-                                                                <fmt:formatNumber value="${useRangeMin+(s*(diffRange/10))}"
-                                                                                  maxFractionDigits="0" />
-                                                            </td>
-                                                            <c:forEach var = "t" begin = "1" end = "${tableAmount}" varStatus="tStat">
-
-                                                                <!--                                                                tableId start at zero-->
-                                                                <c:choose>
-                                                                    <c:when test="${tStat.count == 1}">
-                                                                        <td class="table-${tStat.count-1}row-${s}-medianCell joinedColumnLeft ">
-                                                                        </td>
-                                                                    </c:when>  
-                                                                    <c:when test="${tStat.count == 2}">
-                                                                        <td class="table-${tStat.count-1}row-${s}-medianCell joinedColumnRight">
-                                                                        </td>
-                                                                    </c:when>  
-                                                                    <c:otherwise>
-                                                                        <!--  /for future use when input table > 2 now it is only palceholder -->
-                                                                        <td class="table-${tStat.count-1}row-${s}-medianCell joinedMiddle">  
-                                                                        </td>
-                                                                    </c:otherwise>
-                                                                </c:choose>
-
-                                                            </c:forEach>
-
-                                                            <c:forEach var = "u" begin = "1" end = "${tableAmount}" varStatus="uStat">
-
-                                                                <c:choose>
-                                                                    <c:when test="${uStat.count == 1}">
-                                                                        <td class="table-${uStat.count-1}row-${s}-errorCell joinedColumnLeft">
-                                                                        </td>
-                                                                    </c:when>  
-                                                                    <c:when test="${uStat.count == 2}">
-                                                                        <td class="table-${uStat.count-1}row-${s}-errorCell joinedColumnRight">
-                                                                        </td>
-                                                                    </c:when>  
-                                                                    <c:otherwise>
-                                                                        <!--                                                                            /for future use when input table > 2-->
-                                                                        <td class="table-${uStat.count-1}row-${s}-errorCell joinedMiddle">
-                                                                        </td>
-                                                                    </c:otherwise>
-                                                                </c:choose>
-                                                            </c:forEach>
-
-                                                            <td class="row-${s}-uncertaintyCell">
-                                                            </td>
-
-                                                        </tr>
-                                                    </c:forEach>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-
-                                </div>
-                                <br>
-                                <div class="col-sm-12">
-
-                                    <div class="col-sm-3">
-                                        ค่าความผิดพลาดที่ยอมรับได้</div>
-                                    <div class="col-sm-1 ">
-                                        &PlusMinus;${calibration.calError}
-                                        <form:hidden path="calError" />
-                                    </div>
-                                    <div class="unitLabel">
-                                        ${calibration.associateUnit.unitNameTh}<%--${calibration.associateUnit.unitNameEn}--%>
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="col-sm-2">ผลสรุป</div>
-                                    <span class="">
-                                        ${calibration.associateStatusCaldoc.statusCaldocName}  
-                                        <c:if test="${calibration.comment!=null&&calibration.comment.trim() !=''}">
-                                            ( ${calibration.comment} )
-                                        </c:if>
-                                    </span>
-                                </div>
-                                <div class="col-sm-6">
-                                    <div style="width:100%; float: left;" >ปีที่ใช้งานผลสอบเทียบ <span class=""><fmt:formatNumber maxFractionDigits="0" value="${calibration.associateCalage.calAge}"></fmt:formatNumber></span> ปี</div>
-                                    </div>
-                                    <br>
-                                    <br>
-                                    <hr>
-                                    <div class="row">
-                                        <div class="col-sm-6" style="border-right: 1px solid grey">
-                                            <span class="">
-                                                ผู้สอบเทียบ/ผู้ตรวจสอบ
-                                            </span>
-                                        </div>
-                                        <div class="col-sm-6" style="border-left: 1px solid grey">
-                                            <span class="">
-                                                ผู้อนุมัติ
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-sm-6" style="border-right: 1px solid grey">
-                                            <span>
-                                            ${calibration.calibrationStatusBy}
-                                            ${calibration.associateCalibrationStatusByUser.userName}
-                                        </span>
-                                    </div>
-                                    <div class="col-sm-6" style="border-left: 1px solid grey">
-                                        <span>
-                                            ${calibration.approveStatusBy}
-                                            ${calibration.associateApproveStatusByUser.userName}
-                                        </span>
-                                    </div>
-                                </div>
-                                <hr>
-                                <div class="panel-group">
-                                    <c:forEach items="${calibration.edcsCalibrationAttachHeadList}" var="head" varStatus="theBigCount">
-                                        <div class="panel panel-default">
-                                            <div class="panel-heading">
-                                                <h4 class="panel-title">
-                                                    <a data-toggle="collapse" href="#collapse${theBigCount.index}">
-                                                        เอกสารแนบ หน้า ${calibration.edcsCalibrationAttachHeadList[theBigCount.index].abType}
-                                                    </a>
-                                                </h4>
-                                            </div>
-                                            <div id="collapse${theBigCount.index}" class="panel-collapse collapse">
-                                                <div class="panel-body container-fluid">
-                                                    <div class="row">
-                                                        <form:hidden path="edcsCalibrationAttachHeadList[${theBigCount.index}].abType" required="required"/>
-                                                        <form:hidden path="edcsCalibrationAttachHeadList[${theBigCount.index}].calAttachHeadId" required="required"/>
-                                                        <div class="col-md-3 col-md-offset-5 no-padding important-data-level-1">เอกสารแนบ หน้า ${calibration.edcsCalibrationAttachHeadList[theBigCount.index].abType} (หน่วย : ${calibration.associateUnit.unitShortEn})</div>
-                                                        <br/>
-                                                    </div>
-                                                    <div class="row">
-                                                        <form:hidden path="edcsCalibrationAttachHeadList[${theBigCount.index}].calId"  class="form-control" required="required" value="${calibration.calId}" />
-                                                        <div class="col-md-1 col-md-offset-2 no-padding">อุณหภูมิ</div><div class="col-md-1 no-padding">${calibration.edcsCalibrationAttachHeadList[theBigCount.index].temperature}°C</div>
-                                                        <div class="col-md-2 no-padding col-md-offset-1">ความชื้นสัมพันธ์</div><div class="col-md-1 no-padding">${calibration.edcsCalibrationAttachHeadList[theBigCount.index].humidity} % RH</div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-md-1 col-md-offset-2 no-padding">วันที่สอบเทียบ</div><div class="col-md-2 no-padding">${calibration.edcsCalibrationAttachHeadList[theBigCount.index].calDate}</div> 
-                                                        <div class="col-md-2 col-md-offset-1 no-padding">สภาวะการสอบเทียบ</div><div class="col-md-1 no-padding">${calibration.edcsCalibrationAttachHeadList[theBigCount.index].calState} </div>
-                                                    </div>
-
-                                                    <div class="row">
-                                                        <div class="col-md-1 col-md-offset-2 no-padding">พิสัยใช้งาน</div><div class="col-md-2 no-padding">${calibration.edcsCalibrationAttachHeadList[theBigCount.index].activeRange} </div>
-                                                        <div class="col-md-2 no-padding col-md-offset-1">
-                                                            พิกัด</div><div class="col-md-1 no-padding">
-                                                            ${calibration.edcsCalibrationAttachHeadList[theBigCount.index].coordinate} 
-                                                        </div>
-                                                    </div>
-                                                    <br/>
-                                                    <div class="row">
-                                                        <div class="col-md-1 col-md-offset-2 no-padding">ค่าการยอมรับ</div>
-                                                        <div class="col-md-1 important-data-level-1">
-                                                            &PlusMinus;${calibration.calError}  
-                                                            <form:hidden path="edcsCalibrationAttachHeadList[${theBigCount.index}].acceptance"  class="form-control" required="required"   value="${calibration.calError}"/>
-                                                        </div> 
-                                                        <div class="col-md-1">
-                                                            ${calibration.associateUnit.unitNameTh}  <%--${calibration.associateUnit.unitNameEn}--%>
-                                                        </div> 
-
-                                                    </div>
-                                                    <br/>
-                                                    <div class="row">
-                                                        <div class="col-md-10 col-md-offset-1 table-responsive">
-                                                            <table class="inputTable table${calibration.edcsCalibrationAttachHeadList[theBigCount.index].abType}">
-                                                                <thead>
-                                                                    <tr>
-                                                                        <th>
-                                                                            จุดสอบเทียบ
-                                                                        </th>
-                                                                        <c:forEach var = "h" begin = "1" end = "${measureTimes}">
-                                                                            <th>X${h}</th>
-                                                                            </c:forEach>
-                                                                        <th>ค่าเฉลี่ย</th>
-                                                                        <th>ค่าความผิดพลาด( ค่าแก้ )</th>
-                                                                        <th>ค่าความเบี่ยงเบนมาตรฐาน</th>
-                                                                    </tr>
-                                                                </thead>
-                                                                <tbody>
-                                                                    <c:set var="count" value="0" scope="page" />
-                                                                    <c:forEach var = "i" begin = "1" end = "10">
-                                                                        <tr>
-                                                                            <td>
-                                                                                <fmt:formatNumber value="${useRangeMin}"
-                                                                                                  maxFractionDigits="0" />
-                                                                                -
-                                                                                <fmt:formatNumber value="${useRangeMin+(i*(diffRange/10))}"
-                                                                                                  maxFractionDigits="0" />
-                                                                                <input type="hidden" class="table-${theBigCount.index}row-${i}-DesignateValue" value="${useRangeMin+(i*(diffRange/10))}" disabled/>
-                                                                            </td>
-                                                                            <c:forEach var = "j" begin = "1" end = "${measureTimes}">
-                                                                                <td>
-                                                                                    ${calibration.edcsCalibrationAttachHeadList[theBigCount.index].edcsCalibrationAttachItemList[count].calpointValue}
-                                                                                    <form:hidden path="edcsCalibrationAttachHeadList[${theBigCount.index}].edcsCalibrationAttachItemList[${count}].calpointValue" required="required" class="table-${theBigCount.index}row-${i}col-${j}-inputCell"/>
-                                                                                    <form:hidden path="edcsCalibrationAttachHeadList[${theBigCount.index}].edcsCalibrationAttachItemList[${count}].edcsCalibrationAttachItemPK.calAttachLine" />
-                                                                                    <form:hidden path="edcsCalibrationAttachHeadList[${theBigCount.index}].edcsCalibrationAttachItemList[${count}].edcsCalibrationAttachItemPK.calTime" />
-                                                                                    <form:hidden path="edcsCalibrationAttachHeadList[${theBigCount.index}].edcsCalibrationAttachItemList[${count}].edcsCalibrationAttachItemPK.calAttachHeadId" />
-                                                                                    <form:hidden path="edcsCalibrationAttachHeadList[${theBigCount.index}].edcsCalibrationAttachItemList[${count}].calpointMin"/>
-                                                                                    <form:hidden path="edcsCalibrationAttachHeadList[${theBigCount.index}].edcsCalibrationAttachItemList[${count}].calpointMax" />
-                                                                                </td>
-                                                                                <c:set var="count"  scope="page" value="${count+1}"/>
-                                                                            </c:forEach>
-                                                                            <td class="table-${theBigCount.index}row-${i}-medianCell">
-                                                                            </td>
-
-                                                                            <td class="table-${theBigCount.index}row-${i}-errorCell">
-                                                                            </td>
-
-                                                                            <td class="table-${theBigCount.index}row-${i}-stdCell">
-                                                                            </td>
-                                                                        </tr>
-                                                                    </c:forEach>
-                                                                </tbody>
-                                                            </table>
-                                                        </div> 
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </c:forEach>
-                                </div>
-                                <div class="col-sm-12">
-                                    <hr>
-                                </div>
-
-
-                                <div class="col-sm-12">
-                                    <hr>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div><!-- /.row - inside box -->
-                </div><!-- /.box-body -->
-
-                <div class="box-footer">
-                </div><!-- /.box-footer -->
-            </div><!-- /.box -->        
-        </form:form>
-    </div>
-
-</div>
-
-<script>
-    $(document).ready(function () {
-
-
-//adjust result table colspan
-        $(".summaryTable .spanDependOnInputTable").attr("colspan", $("table.inputTable ").length);
-        $(".summaryTable .rowSpanDependOnInputTable").attr("rowspan", $("table.inputTable ").length);
-
-
-
-//create median column when input
-
-        var tableCount = $(".inputTable").length;
-
-        for (tableC = 0; tableC < tableCount; tableC++) {
-            for (measureC = 1; measureC <= 10; measureC++) {
-                var rowPointer = "table-" + tableC + "row-" + measureC;
-                var row = rowPointer.match(/row-(.*)/)[1];
-                //get value in row
-                var sumOfCalValue = 0;
-                var count = 0;
-                var dataArray = [];
-                $("input:regex(" + rowPointer + "col-(10|[0-9])-inputCell)").each(function (index) {
-                    var value = $.trim($(this).val());
-                    if (value.length > 0) {
-                        sumOfCalValue += parseFloat(value);
-                        dataArray.push(parseFloat(value));
-                        count++;
-                    }
-                });
-                if (sumOfCalValue > 0 && count > 0) {
-                    var medianCell = $("td[class*='" + rowPointer + "-medianCell']");
-                    var errorCell = $("td[class*='" + rowPointer + "-errorCell']");
-                    var stdCell = $("td[class*='" + rowPointer + "-stdCell']");
-
-
-                    var designateValueHiddenInput = $("input[class*='" + rowPointer + "-DesignateValue']");
-                    //decimal to 2 remove unneeded 0
-                    var median = parseFloat(sumOfCalValue / count);
-                    //add col to selector to differentiate between row 1 and row 10 td
-                    $(medianCell).text(median.toFixed(2).replace(/\.?0*$/g, ''));
-                    var desinagteValue = parseFloat($(designateValueHiddenInput).val());
-                    var error = desinagteValue - median;
-                    $(errorCell).text(error.toFixed(2).replace(/\.?0*$/g, ''));
-                    var acceptance = parseFloat($("#calError").val());
-
-                    if (Math.abs(error) > acceptance) {
-                        $(errorCell).addClass("alert");
-                    } else {
-                        $(errorCell).removeClass("alert");
-                    }
-
-                    //calculate variance
-                    var sumOfDataMinusMeanPowerOfTwo = 0;
-                    for (var i = 0, l = dataArray.length; i < l; i++) {
-                        sumOfDataMinusMeanPowerOfTwo += Math.pow(dataArray[i] - median, 2);
-                    }
-                    var variance = sumOfDataMinusMeanPowerOfTwo / count;
-                    var std = Math.sqrt(variance);
-                    $(stdCell).text(std.toFixed(2).replace(/\.?0*$/g, ''));
-                    //calculate uncertainly
-                    uncertainlyCalculate(row);
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<head>
+    <script>
+        $(document).ready(function () {
+            var error = parseFloat($("#errorTolerance").val());
+            $.each($(".errorCell"), function (key, value) {
+                if (Math.abs(parseFloat($(this).text())) > error) {
+                    $(this).css("background-color", "red");
+                    $(this).css("color", "white");
                 }
-            }
-        }
-    });
-    function uncertainlyCalculate(rowTocalculate/*1-10*/) {
-        //get value in row
-        var sumOfCalValue = 0;
-        var count = 0;
-        var dataArray = [];
-        $("input:regex(table-(10|[0-9])row-" + rowTocalculate + "col-(10|[0-9])-inputCell)").each(function (index) {
-            var value = $.trim($(this).val());
-            if (value.length > 0) {
-                sumOfCalValue += parseFloat(value);
-                dataArray.push(parseFloat(value));
-                count++;
-            }
+            });
         });
-        if (sumOfCalValue > 0 && count > 0) {
-            var uncertaintyCell = $("td[class*='row-" + rowTocalculate + "-uncertaintyCell']");
-            var median = parseFloat(sumOfCalValue / count);
-            //calculate variance
-            var sumOfDataMinusMeanPowerOfTwo = 0;
-            for (var i = 0, l = dataArray.length; i < l; i++) {
-                sumOfDataMinusMeanPowerOfTwo += Math.pow(dataArray[i] - median, 2);
-            }
-            var variance = sumOfDataMinusMeanPowerOfTwo / count;
-            var stdUncertainty = $("#standardUncertainty").val();
-            var uncertainty = Math.sqrt((variance + Math.pow((parseFloat(stdUncertainty) / 1.96), 2))) * 2.15;
-            $(uncertaintyCell).text(uncertainty.toFixed(2).replace(/\.?0*$/g, ''));
+    </script>
+    <style>
+        @page {
+            size: A4;
+            margin: 0;
+            -webkit-print-color-adjust: exact;
         }
-    }
+        @media print{
+            body {
+                .errorCell{
+                    background-color: white;
+                    color: black;
+                }
+                -webkit-print-color-adjust: exact !important; /*   Chrome, Safari */
+                color-adjust: exact !important;                /* Firefox*/
+            }
+        }
+        .summaryTable{
+            margin:0px;
+            padding:0px;
+        }
+        .size13font{
+            font-size: 13px;
+        }
+        .stripeless tr{
+            background-color: white;
+        }
+        .stripeless td{
+            background-color: white;
+        }
+        .stripeless{
+            background-color: white;
+        }
+
+        .outerTable>tbody>tr>td{
+            width: 50%;
+        }
+        .white-bordered{
+            border:2px white solid;
+        }
+    </style>
+</head>
 
 
-</script>
-<jsp:include page="include/include_footer.jsp" flush="true"></jsp:include>
+
+
+<body class="A4">
+    <section class="sheet padding-10mm">
+
+        <c:set var="measureTimes" value="${calibration.associateMeasure.measureTimes}"/>
+        <c:set var="useRangeMax" value="${calibration.associateMeasure.useRangeMax}"/>
+        <c:set var="useRangeMin" value="${calibration.associateMeasure.useRangeMin}"/>
+        <c:set var="diffRange" value="${useRangeMax-useRangeMin}"/>
+        <c:set var="tableAmount" value="${calibration.edcsCalibrationAttachHeadList.size()}" scope="page" />
+        <c:set var="error" value="${calibration.calError}" ></c:set>
+        <input type="hidden" value="${error}" id="errorTolerance"/>
+        <table class="table-condensed stripeless outerTable" style="border: 1px solid black">
+            <tr class="white-bordered">
+                <td  style="font-size: 15px;font-weight: bold;" colspan="2">
+                    บริษัท ไทยวาโก้ จำกัด (มหาชน)
+                </td>
+            </tr>
+            <tr  class="white-bordered">
+                <td  style="font-size:10px" colspan="2">
+                    132 ซอยเจริญราษฎร์ 7 แขวงบางโคล่ เขตบางคอแหลม กรุงเทพฯ 10120 TEL 289-3100
+                </td>
+            </tr>
+            <tr  class="white-bordered">
+                <td  class="size13font" colspan="2">
+                    <div style="width: 70%;display: inline-block">
+                    </div>
+                    <div style="width: 10%;display: inline-block;text-align: right" >
+                        เลขที่ 
+                    </div>
+                    <div style="width: 19%;display: inline-block;text-align: right" >
+                        <span style="font-weight: bold;">${calibration.calCode}</span> 
+                    </div>
+                </td>
+            </tr>
+            <tr class="white-bordered">
+                <td  class="size13font" colspan="2" style="font-size: 15px;text-align: center;font-weight: bold">   
+                    รายงานผลการสอบเทียบ
+                </td>
+            </tr>
+            <tr style="border-left: 2px white solid;border-right: 2px white solid;">
+                <td  class="size13font" colspan="2">
+                    <div style="width: 70%;display: inline-block">
+
+                    </div>
+                    <div style="width: 10%;display: inline-block;text-align: right" >
+                        วันที่รายงาน 
+                    </div>
+                    <div style="width: 19%;display: inline-block;text-align: right" >
+                        <span style="font-weight: bold;"><fmt:formatDate value="${calibration.calibrationAttachStatusOn}" pattern="dd/MM/yyyy" /></span> 
+                    </div>
+                </td>
+            </tr>
+
+            <tr style="border-bottom: 1px solid black;border-top: 1px black solid">
+                <td  class="size13font" colspan="2">
+                    หน่วยงาน/บริษัท <span style="font-weight: bold;">${calibration.associateDep.fullName}</span> 
+                </td>
+            </tr>
+            <tr>
+                <td  class="size13font">
+                    <span style="font-weight: bold;">
+                        ชื่อเครื่องวัด/ทดสอบ
+                    </span> 
+                </td>
+                <td  class="size13font">
+                    <span style="font-weight: bold;">
+                        รหัสเครื่องวัดและทดสอบ
+                    </span>
+                </td>
+            </tr>
+            <tr style="border-bottom: 1px solid black">
+                <td  class="size13font">
+                    <span style="">
+                        ${calibration.associateMeasure.fullName}
+                    </span> 
+                </td>
+                <td  class="size13font">
+                    <span style="">
+                        ${calibration.associateMeasure.measureCode}
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td  class="size13font" colspan="2">
+                    <span style="font-weight: bold;">มาตรฐานเปรียบเทียบอ้างอิง</span> 
+                </td>
+            </tr>
+            <tr>
+                <td  class="size13font" colspan="2">
+                    <div style="width: 16%;display: inline-block">
+                        รายงานเลขที่ :
+                    </div>
+                    <div style="width: 32%;display: inline-block">
+                        <span style="font-weight: bold;">${calibration.associateModel.cerNo}</span> 
+                    </div>
+                    <div style="width: 16%;display: inline-block">
+                        โดย :
+                    </div>
+                    <div style="width: 32%;display: inline-block;word-break: break-all;">
+                        <span style="font-weight: bold;">${calibration.associateModel.locationBy}</span> 
+                    </div>
+
+                </td>
+            </tr>
+            <tr>
+                <td  class="size13font" colspan="2">
+                    <div style="width: 16%;display: inline-block">
+                        แม่แบบ  รหัส :
+                    </div>
+                    <div style="width: 32%;display: inline-block">
+                        <span style="font-weight: bold;">${calibration.associateModel.modelCode}</span> 
+                    </div>
+                    <div style="width: 16%;display: inline-block">
+                        ชื่อ :
+                    </div>
+                    <div style="width: 32%;display: inline-block;word-break: break-all;">
+                        <span style="font-weight: bold;">${calibration.associateModelMeasure.fullName}
+                    </div>
+                </td>
+            </tr>
+            <tr style="border-bottom: 1px solid black">
+                <td  class="size13font" colspan="2">
+                    <div style="width: 16%;display: inline-block">
+                        การสอบกลับ :
+                    </div>
+                    <div style="width: 32%;display: inline-block;word-break: break-all;">
+                        <span style="font-weight: bold;">${calibration.associateModel.locationReturn}</span> 
+                    </div>
+                    <div style="width: 16%;display: inline-block">
+                        CER.NO :
+                    </div>
+                    <div style="width: 32%;display: inline-block">
+                        <span style="font-weight: bold;">${calibration.associateModel.cerNo}</span> 
+                    </div>
+                </td>
+            </tr>
+
+            <tr style="border-bottom: 1px solid black">
+                <td  class="size13font" colspan="2">
+                    <div style="width: 16%;display: inline-block">
+                        วันที่สอบเทียบ :
+                    </div>
+                    <div style="width: 14%;display: inline-block">
+                        <span style="font-weight: bold;"><fmt:formatDate value="${calibration.calibratorOn}" pattern="dd/MM/yyyy" /></span> 
+                    </div>
+                    <div style="width: 7%;display: inline-block">
+                        อุณหภูมิ :
+                    </div>
+                    <div style="width: 10%;display: inline-block">
+                        <span style="font-weight: bold;">${calibration.edcsCalibrationAttachHeadList[0].temperature}</span> &#8451;
+                    </div>
+                    <div style="width: 14%;display: inline-block;">
+                        ความชื้นสัมพัทธ์ :
+                    </div>
+                    <div style="width: 16%;display: inline-block">
+                        <span style="font-weight: bold;">${calibration.edcsCalibrationAttachHeadList[0].humidity}</span>% RH
+                    </div>
+                </td>
+            </tr>
+            <tr >
+                <td  class="size13font" colspan="2">
+                    <div style="width: 16%;display: inline-block;">
+                        วิธีการวัด/ทดสอบ :
+                    </div>
+                    <div style="width: 32%;display: inline-block;text-align: left">
+                        <span style="font-weight: bold"> ${calibration.associateProcess.processCode}</span>
+                    </div>
+                    <div style="width: 16%;display: inline-block;">
+                        เรื่อง :
+                    </div>
+                    <div style="width: 32%;display: inline-block;word-break: break-all;">
+                        <span style="font-weight: bold"> ${calibration.associateProcess.processSubject}</span>
+                    </div>
+                </td>
+            </tr>
+            <tr style="border-bottom: 1px solid black">
+                <td  class="size13font" colspan="2">
+                    <div style="width: 16%;display: inline-block;">
+                        โดย :
+                    </div>
+                    <div style="width: 82%;display: inline-block;word-break: break-all;">
+                        <span style="font-weight: bold"> ${calibration.associateProcess.processBy}</span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td  class="size13font" colspan="2">
+                    <div style="width: 16%;display: inline-block;">
+                        ผลการสอบเทียบ
+                    </div>
+                    <div style="width: 32%;display: inline-block;word-break: break-all;">
+                        (หน่วยวัด : <span style="font-weight: bold"> ${calibration.associateUnit.unitNameTh})</span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td  class="size13font" colspan="2">
+                    <div style="width: 16%;display: inline-block;">
+                        สภาพภายนอก
+                    </div>
+                    <div style="width: 32%;display: inline-block;word-break: break-all;">
+                        <span style="font-weight: bold">${calibration.associateEquipCon.fullName} ${calibration.conditionComment}</span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" style="padding:0px;border: 0px">
+                    <table class="summaryTable table-condensed size13font" >
+                        <thead>
+                            <tr>
+                                <th rowspan="${tableAmount}">ค่าระบุ</th>
+                                <th  colspan="${tableAmount}" >ค่าวัดได้</th>
+                                <th colspan="${tableAmount}">ค่าความผิดพลาด( ค่าแก้ )</th>                                     
+                                <th colspan="${tableAmount}" >ค่าความไม่แน่นอน</th>
+                            </tr>
+                            <c:if test="${tableAmount > 1}">
+                                <tr>
+                                    <th>A</th>
+                                    <th>B</th>
+                                    <th>A</th>
+                                    <th>B</th>
+                                    <th>A</th>
+                                    <th>B</th>
+                                </tr>
+                            </c:if>
+                        </thead>
+                        <tbody>
+                            <c:forEach var = "s" begin = "1" end = "10">
+                                <tr>
+                                    <td style="text-align: left">
+                                        <fmt:formatNumber value="${useRangeMin}"
+                                                          maxFractionDigits="0" />
+                                        -
+                                        <fmt:formatNumber value="${useRangeMin+(s*(diffRange/10))}"
+                                                          maxFractionDigits="0" />
+                                    </td>
+                                    <c:set var="lineValue" value="${useRangeMin+(s*(diffRange/10))}" ></c:set>
+                                        <!--                                                                tableId start at zero-->
+                                    <c:set var="lineAValue" value="${sideALine[s-1]}" ></c:set>
+                                    <c:set var="lineBValue" value="${sideBLine[s-1]}" ></c:set>
+
+
+                                        <td class="joinedColumnLeft " style="text-align: right">
+                                        ${lineAValue.mean}
+                                    </td>
+                                    <c:if test="${tableAmount == 2}">
+                                        <td class="joinedColumnRight" style="border-left: 1px solid black;text-align: right">
+                                            ${lineBValue.mean}
+                                        </td>
+                                    </c:if>  
+                                    <td class="joinedColumnLeft errorCell" style="text-align: right">
+                                        <fmt:formatNumber value=" ${lineValue - lineAValue.mean}"
+                                                          maxFractionDigits="2" />
+                                    </td>
+                                    <c:if test="${tableAmount == 2}">
+                                        <td class="joinedColumnRight errorCell" style="border-left: 1px solid black;text-align: right">
+                                            <fmt:formatNumber value=" ${lineValue - lineBValue.mean}"
+                                                              maxFractionDigits="2" />
+
+                                        </td>
+                                    </c:if>  
+
+                                    <td class="joinedColumnLeft" style="text-align: right">
+                                        <fmt:formatNumber value="${lineAValue.uncertaintyCombined}"
+                                                          maxFractionDigits="2" />
+                                    </td>
+                                    <c:if test="${tableAmount == 2}">
+                                        <td class="joinedColumnRight" style="border-left: 1px solid black;text-align: right">
+                                            <fmt:formatNumber value="${lineBValue.uncertaintyCombined}"
+                                                              maxFractionDigits="2" />
+                                        </td>
+                                    </c:if>  
+                                </tr>
+                            </c:forEach>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            <tr style="border-top: 2px solid black">
+                <td class="size13font" colspan="2" style="padding-top: 10px">
+                    <div style="width: 50%;display: inline-block;">
+                        ค่าความผิดพลาดที่ยอมรับได้ น้อยกว่า หรือ เท่ากับ : (+ / -) 
+                    </div>
+                    <div style="width: 10%;display: inline-block;word-break: break-all;">
+                        <span style=";font-weight: bold">${calibration.calError}</span> 
+                    </div>
+                    <div style="width: 20%;display: inline-block;word-break: break-all;">
+                        ${calibration.associateUnit.unitNameTh}
+                    </div>
+
+                </td>
+            </tr>
+            <tr>
+                <td class="size13font" style="border-right: 0px;padding-bottom: 10px">
+                    <c:choose>
+                        <c:when test="${calibration.statusCaldocId == 1}">
+                            <div style="width: 16%;display: inline-block;">
+                                ผลสรุป
+                            </div>
+                            <div style="width: 32%;display: inline-block;word-break: break-all;">
+                                <span style="font-weight: bolder;font-size: 15px">ผ่าน  ${calibration.comment}</span>
+                            </div>
+
+                        </c:when>
+                        <c:otherwise>
+                            <div style="width: 16%;display: inline-block;">
+                                ผลสรุป
+                            </div>
+                            <div style="width: 32%;display: inline-block;word-break: break-all;">
+                                <span style="font-weight: bolder;font-size: 15px">ไม่ผ่าน  ${calibration.comment}</span>
+                            </div>
+                        </c:otherwise>
+                    </c:choose>
+                </td>
+                <td class="size13font" style="border-left: 0px;padding-bottom: 10px">
+                    <div style="width: 50%;display: inline-block;">
+                        วันที่หมดอายุ (DUE Date)Date
+                    </div>
+                    <div style="width: 40%;display: inline-block;word-break: break-all;">
+                        <span style="font-weight: bolder;font-size: 15px"><fmt:formatDate value="${calibration.dueDate}" pattern="dd/MM/yyyy" /></span>
+                    </div>
+                </td>
+            </tr>
+            <tr style="border-top: 2px solid black">
+                <td class="size13font" style="font-weight: bolder">
+                    ผู้สอบเทียบ / ผู้ตรวจสอบ
+                </td>
+                <td class="size13font" style="font-weight: bolder">
+                    ผู้อนุมัติ
+                </td>
+            </tr>
+            <tr>
+                <td class="size13font" style="text-align: center">
+                    ${calibration.associateCalibratorByUser.userName}
+                </td>
+                <td class="size13font" style="text-align: center">
+                    ${calibration.associateApproveStatusByUser.userName}
+                </td>
+            </tr>
+            <tr>
+                <td class="size13font" style="text-align: center;text-decoration: overline;">
+                    พนักงานควบคุมเครื่องวัด
+                </td>
+                <td class="size13font" style="text-align: center;text-decoration: overline">
+                    ผู้บังคับบัญชาแผนก/สูงกว่า
+                </td>
+            </tr>
+
+        </table>
+    </section>
+</body>
+
+
+
+
+
+
+
+
+
+
 

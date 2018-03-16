@@ -37,11 +37,13 @@ public interface EdcsMasModelDAO {
 
     public int isExistCount(String id);
 
-    public List<EdcsMasModel> findByMeasureIdByFlag(int id, String flag);
+    public List<EdcsMasModel> findByMeasureIdByFlag(int id, int flag);
 
     public EdcsMasModel mappingResultSet(Map<String, Object> map);
 
     public void disactivate(int id);
 
     public void activate(int id);
+
+    public List<EdcsMasModel> findByMeasureGroupIdByFlag(int id, int flag);
 }
